@@ -1,0 +1,20 @@
+h1{
+				font-family: titleFont;
+			}
+			body{
+				background: #222629;
+				margin: 0px;
+				padding: 0px;
+			}
+			.header{
+				padding: 1px;
+				font-size: 50px;
+  				text-align: center;
+  				background: #87C236;
+  				color: #618930;
+  				line-height: 0;
+  			}
+			@font-face {
+  				font-family: titleFont;
+ 				src: url(font.ttf);
+			}
