@@ -4,15 +4,14 @@
 			body{
 				background: #222629;
 				margin: 0px;
-				padding: 0px;
 			}
 			.header{
-				padding: 1px;
+				background: #87C236;
+  				color: #618930;
+				padding: 5px;
 				font-size: 50px;
   				text-align: center;
-  				background: #87C236;
-  				color: #618930;
-  				line-height: 0;
+  				line-height: 0;  				
   			}
 			@font-face {
   				font-family: titleFont;
