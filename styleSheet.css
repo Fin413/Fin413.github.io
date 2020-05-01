@@ -1,5 +1,5 @@
 			h1{
-				font-family: titleFont;
+				font-family: ProzaLibre;
 			}
 			body{
 				background: #222629;
@@ -11,9 +11,55 @@
 				padding: 5px;
 				font-size: 50px;
   				text-align: center;
-  				line-height: 0;  				
+  				line-height: 0px;
+  			}
+  			.indent{
+				margin-left: 45px;
+			}
+  			.cog{
+				position: absolute; 
+				top: 15px; 
+				animation-name: Spin;
+				animation-play-state: running;
+				animation-duration: 2s;
+				animation-timing-function: ease-in-out;
+ 				animation-iteration-count: 1;
+ 				overflow: hidden;
+			}
+			#button{
+				background: #87C236;
+				color: white;
+				text-decoration: none;
+				font-size: 25px;
+				border-radius: 10px;
+				padding: 10px;
+				border: 2px solid #87C236;
+				font-family: ProzaLibre;
+				transition: all 200ms ease-in-out;
+			}
+			#button:hover{
+				box-shadow: 0 0 0 3px white;
+			}
+  			h3{
+  				font-size: 20px;
+  				font-family: ProzaLibre;
+  				bottom: 0px;
+  				padding: 15px;
   			}
 			@font-face {
-  				font-family: titleFont;
- 				src: url(font.ttf);
+  				font-family: ProzaLibre;
+ 				src: url(ProzaLibre-Regular.ttf);
+ 				
 			}
+			@font-face {
+				font-family: OpenSans;
+				src: url(OpenSans-Regular.ttf);			
+ 			}
+ 			@keyframes Spin {
+				from {
+					transform: rotate(0deg);
+				}
+				to {
+					transform: rotate(360deg);
+				}
+			}	
