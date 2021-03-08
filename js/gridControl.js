@@ -7,6 +7,7 @@ for (var i = 0; i < 9; i++) {
         var txtInput = document.createElement("input");
         txtInput.type = "text";
         txtInput.pattern = "[0-9]*";
+        txtInput.inputMode = "numeric";
         txtInput.className = "row" + (i + 1) + " " + "column" + (j + 1);
         if (j == 2 || j == 5) {
             txtInput.classList.add("spaceRight");
