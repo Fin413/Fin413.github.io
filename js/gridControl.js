@@ -97,7 +97,7 @@ function showModal(type) {
         setMaskHeight();
         
         setTimeout(function() {
-            innerContent.style.top = "30%";
+            innerContent.style.top = line.offsetTop + line.offsetHeight + 50 + "px";
         }, 800);
     }
 
