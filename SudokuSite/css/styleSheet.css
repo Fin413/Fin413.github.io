@@ -1,0 +1,265 @@
+/******** Modal Formatting ********/
+
+#modalBackground {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    animation-name: fade;
+    animation-duration: 0.4s;
+}
+
+#hintPopup {
+    display: none;
+    position: relative;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    min-width: 17rem;
+    border: 1px solid #888;
+    width: 20%;
+ 
+    animation-name: dropDown;
+    animation-duration: 0.4s;
+}
+
+#hintInput {
+    width: 5rem;
+    height: 2rem;
+    font-size: 1.5rem;
+}
+
+.modalBtn {
+    color: black;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 0.4rem 0.5rem 0.3rem;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 200ms ease-in-out;
+}
+
+.modalBtn:hover {
+    color: rgb(135, 135, 135);
+    cursor: pointer;
+}
+
+#themes, #settings, #info, #save {
+    position: absolute;
+    z-index: -2;
+    top: -500px;
+    width: 30%;
+    min-width: 208px;
+    transition: top 1s;
+}
+
+#settings, #info {
+    width: 50%;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    white-space: nowrap;
+    justify-content: space-between;
+}
+
+.numBtn {
+    width: fit-content;
+    height: fit-content;
+    font-weight: bold;
+}
+
+.swabContainer {
+    display: flex;
+    cursor: pointer;
+    margin-bottom: 10px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    border: 3px solid black;
+    transition: all 200ms ease-in-out;
+}
+
+.swabContainer:hover {
+    transform: scale(1.2, 1.2);
+}
+
+.colorSwab {
+    width: 100%;
+    height: 25px;
+}
+
+.close {
+    font-size: 1.5rem;
+    margin-top: 10%;
+}
+
+.settingsTitle {
+    font-size: 2rem;
+}
+
+#line {
+    visibility: hidden;
+    width: 0px;
+    height: 2px;
+    transition: width 1s ease-in-out;
+
+    /* -webkit-box-shadow: 0 8px 6px -6px black;
+	-moz-box-shadow: 0 8px 6px -6px black; */
+    box-shadow: 0 5px 9px 1px black;
+
+}
+
+/******** Animation ********/
+
+.fadeOut {
+    opacity: 0;
+    transition: display 0ms 350ms, opacity 400ms ease-out;
+}
+
+@keyframes fade {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
+
+@keyframes dropDown {
+    from { top: -300px }
+    to { top: 0 }
+}
+
+
+
+/******** Text Input Grid Formatting ********/
+
+.spaceRight {
+    margin: 2px 1rem 2px 2px;
+}
+
+.spaceBottom {
+    margin: 2px 2px 1rem 2px;
+}
+
+.normal {
+    margin: 2px;
+}
+
+input[type=text] {
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    /* transition: all 200ms ease; <--- might look cool */
+}
+
+
+#txtGrid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.txtRow {
+    display: flex;
+    flex-direction: row;
+}
+
+
+/******** button formatting ********/
+
+#control {
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 50%;
+    min-width: 480px;
+    margin-top: -10px;
+    
+}
+
+#hide {
+    z-index: 0;
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    transition: opacity 500ms ease-in;
+}
+
+html {
+    height: 95%;
+    display: flex;
+    align-items: center;
+}
+
+body {
+    z-index: -5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: arial;
+    width: 100%;
+}
+
+h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    line-height: 0;
+}
+
+#title{
+    margin: 20px;
+}
+
+#titleMask{
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    width: 100%;
+}
+
+.controlBtn {
+    font-weight: bold;
+    line-height: 0px;
+    cursor: pointer;
+    transition: all 200ms ease-in-out;
+}
+
+.noHighlight{
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+#skipBtn {
+    font-weight: bold;
+    text-align: center;
+    line-height: 0;
+    letter-spacing: 1px;
+    margin-top: 30px;
+    transition: all 200ms ease-in-out;
+}
+
+#controlContainer {
+    display: flex;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    justify-content: space-between;
+}
