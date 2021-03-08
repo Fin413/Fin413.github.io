@@ -6,6 +6,7 @@ for (var i = 0; i < 9; i++) {
     for (var j = 0; j < 9; j++) {
         var txtInput = document.createElement("input");
         txtInput.type = "text";
+        txtInput.pattern="\d*";
         txtInput.className = "row" + (i + 1) + " " + "column" + (j + 1);
         if (j == 2 || j == 5) {
             txtInput.classList.add("spaceRight");
