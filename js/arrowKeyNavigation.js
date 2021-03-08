@@ -38,7 +38,7 @@ document.onkeydown = function(e) {
         if (!isNaN(e.key)) {
             setTimeout(function() {
                 focusNext(row, column+1);
-            }, 1);
+            }, 10);
         }else {
             focusNext(row, column);
         }
