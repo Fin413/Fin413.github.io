@@ -1,5 +1,3 @@
-alert(document.body.style.width);
-
 for (var i = 0; i < 9; i++) {
     var div = document.createElement("div");
     div.className = "txtRow";
@@ -247,6 +245,7 @@ function drawGrid(grid) {
 }
 
 function clearGrid() {
+    alert(document.body.clientWidth);
     var i = 0;
     var speed = 10;
     var printGrids = setInterval(loop, speed);
