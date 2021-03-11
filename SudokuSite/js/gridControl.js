@@ -1,3 +1,5 @@
+alert(document.body.style.width);
+
 for (var i = 0; i < 9; i++) {
     var div = document.createElement("div");
     div.className = "txtRow";
