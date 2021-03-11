@@ -1,0 +1,69 @@
+:root {
+    --base: #363636;
+    --light: #8a8a8a; 
+    --highlight: #EB6743;
+}
+
+/* background */
+body {
+    background-color: var(--base);
+}
+
+/* title */
+h1 {
+    color: var(--highlight);
+}
+
+#titleMask {
+    background-color: var(--base);
+}
+
+/* skip btn */
+#skipBtn {
+    color: var(--highlight);
+}
+
+#skipBtn:hover {
+    color: var(--light);
+}
+
+/* main btns */
+.controlBtn, .disabledControlBtn {
+    color: var(--light);
+}
+
+.controlBtn:hover {
+    color: var(--highlight);
+}
+
+.fas {
+    color: var(--light);
+}
+
+/* main btn seperators */
+h3 {
+    color: var(--highlight);
+}
+
+input[type=text] {
+    background-color: var(--light);
+    border: 1px solid var(--light);
+    color: black;
+}
+
+input[type=text]:focus {
+    background-color: var(--highlight);
+    border: 1px solid var(--highlight);
+    outline: none;
+}
+
+/* settings */
+
+.settingsTitle, .close{
+    background-color: var(--base);
+    color: var(--light);
+}
+
+#line {
+    background-color: var(--highlight);
+}
