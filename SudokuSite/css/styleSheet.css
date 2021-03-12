@@ -184,17 +184,16 @@ h1 {
 /******** Input Grid Formatting ********/
 
 input[type=text] {
-    width: 6vw;
-    height: 6vw;
+    width: 1.5em;
+    height: 1.5em;
     text-align: center;
-    font-size: 5vw;
-    border-radius: 10px;
+    font-size: 4vw;
+    border-radius: 0;
 }
 
 @media only screen and (min-width: 450px) {
     input[type=text] {
         width: 2rem;
-	    border-radius: 0px;
         height: 2rem;
         font-size: 1.2em;
     }
