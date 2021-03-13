@@ -3,7 +3,8 @@
 
     <head>
 
-        <title>Finlay</title>
+        <title>Home</title>
+        <meta charset="utf-8">
 
         <style>
             html {
@@ -12,10 +13,10 @@
             body {
                 display: flex;
                 flex-direction: column;
-                width: 100%;
-                height: 100%;
                 justify-content: center;
                 align-items: center;
+                width: 100%;
+                height: 100%;
                 font-family: arial;
                 overflow: hidden;
             }
@@ -25,17 +26,50 @@
                 line-height: 0;
             }
             #links {
+                width: 100%;
+                opacity: 0;
+                transition: all 1s;
+            }
+            #name, #links {
                 display: flex;
                 flex-direction: row;
-                width: 100%;
                 justify-content: center;
                 align-items: center;
             }
+            #fin {
+                margin-top: 500px;
+                opacity: 0;
+                transition: margin 1s ease-out, opacity 1s ease-in;
+            }
+            #lay {
+                margin-bottom: 500px;
+                opacity: 0;
+                transition: margin 1s ease-out, opacity 1s ease-in;
+            }
         </style>
+
+        <script>            
+            function animation() {
+                let fin = document.getElementById("fin");
+                let lay =  document.getElementById("lay");
+                let links = document.getElementById("links");
+            
+                fin.style.margin = 0;
+                lay.style.margin = 0;
+                fin.style.opacity = 1;
+                lay.style.opacity = 1;
+                setTimeout(()=>{ 
+                    links.style.opacity = 1;
+                    links.style.marginTop = "100px";
+                }, 1000);
+            }
+        </script>
     </head>
 
-    <body>
-        <h1>FINLAY</h1>
+    <body onload="animation()">
+        <div id="name">
+            <h1 id="fin">FIN</h1><h1 id="lay">LAY</h1>
+        </div>
         <div id="links">
             <a href="../Sudoku">Sudoku Solver</a>
         </div>
