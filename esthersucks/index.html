@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <title>Esther Sucks</title>
+        <meta charset="utf-8">
+
+        <style>
+            html {
+                height: 100%;
+            }
+            body {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+                font-family: arial;
+                overflow: hidden;
+            }
+            h1 {
+                font-size: 10rem;
+                margin-top: 10px;
+                line-height: 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1 id="change">Esther Sucks</h1>
+        <script>      
+            var count = 0;
+            let content = document.querySelector("h1");
+            colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
+            setInterval(function(){ 
+                if(count > colors.length) count = 0;
+                content.style.color = colors[count];
+                count ++;
+                console.log(count)
+            }, 100);
+        </script>
+    </body>
+
+</html>
