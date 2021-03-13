@@ -23,7 +23,12 @@ for (var i = 0; i < 9; i++) {
 var line = document.getElementById("line");
 var mask = document.getElementById("titleMask");
 
+let vh = window.innerHeight * 0.01;
+document.documentElement.style.setProperty('--vh', `${vh}px`);
+
 function setMaskHeight() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
     if(mask.style.display != "none"){
         mask.style.height = (line.offsetTop + line.offsetHeight)+"px";
     }
