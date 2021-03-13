@@ -189,7 +189,7 @@ input[type=text] {
     text-align: center;
 /*     font-size: 2vw;
     font-size: 2vw\w;  */
-    font-size: calc(var(--vw, 1vw) * 4);
+    font-size: calc(var(--vw, 1vw) * 3);
     border-radius: 0;
 }
 
