@@ -184,6 +184,7 @@ input[type=text] {
     height: 1.5em;
     text-align: center;
     border-style: solid;
+    box-shadow: none;
     border-radius: 0;
     font-size: 3vw;
     font-size: calc(var(--vw, 1vw) * 3);
