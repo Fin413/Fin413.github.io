@@ -27,8 +27,6 @@
             }
             #links {
                 width: 100%;
-                opacity: 0;
-                transition: all 1s;
             }
             #name, #links {
                 display: flex;
@@ -38,13 +36,20 @@
             }
             #fin {
                 margin-top: 500px;
-                opacity: 0;
-                transition: margin 1s ease-out, opacity 1s ease-in;
             }
             #lay {
                 margin-bottom: 500px;
+            }
+
+            #lay, #fin, #links {
                 opacity: 0;
-                transition: margin 1s ease-out, opacity 1s ease-in;
+                position: relative;
+                -webkit-transition: all 1s;
+                -moz-transition: all 1s;
+                -ms-transition: all 1s;
+                -o-transition: all 1s;
+                -webkit-transition: all 1s;
+                transition: all 1s;
             }
         </style>
 
@@ -59,8 +64,8 @@
                 fin.style.opacity = 1;
                 lay.style.opacity = 1;
                 setTimeout(()=>{ 
-                    links.style.opacity = 1;
                     links.style.marginTop = "100px";
+                    links.style.opacity = 1;
                 }, 1000);
             }
         </script>
