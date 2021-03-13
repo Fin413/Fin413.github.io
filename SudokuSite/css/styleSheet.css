@@ -187,8 +187,7 @@ input[type=text] {
     width: 1.5em;
     height: 1.5em;
     text-align: center;
-/*     font-size: 2vw;
-    font-size: 2vw\w;  */
+    font-size: 3vw;
     font-size: calc(var(--vw, 1vw) * 3);
     border-radius: 0;
 }
