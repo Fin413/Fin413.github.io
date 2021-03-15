@@ -92,7 +92,7 @@ function showModal(type) {
 
     var closeButtons = document.getElementsByClassName("close");
     let hide = document.getElementById("hide");
-
+    console.log(closeButtons);
     const fadeOut = () => {
         innerContent.classList.add("fadeOut");
         
