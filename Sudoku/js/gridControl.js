@@ -169,7 +169,7 @@ function showModal(type) {
     } else if(type == "settings"){
         dropIn();
         closeButtons[1].onclick = () => {dropOut();}
-    }else {
+    }else if(type == "info"){
         dropIn();
         closeButtons[2].onclick = () => {dropOut();}
     }
