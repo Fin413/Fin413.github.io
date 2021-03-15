@@ -92,7 +92,7 @@ function showModal(type) {
 
     var closeButtons = document.getElementsByClassName("close");
     let hide = document.getElementById("hide");
-    console.log(closeButtons);
+
     const fadeOut = () => {
         innerContent.classList.add("fadeOut");
         
@@ -135,6 +135,7 @@ function showModal(type) {
     innerContent = document.getElementById(type);
 
     if(type == "hintPopup"){
+        console.log(innerContent);
         innerContent.style.display = "flex";        
 
         var buttons = document.getElementsByClassName("controlBtn");
@@ -156,6 +157,14 @@ function showModal(type) {
                 return;
             } else {
                 input.style.backgroundColor = "red";
+            }
+        }
+
+        innerContent.onclick = (e) => {
+            var senderElement = e.target;
+            if(senderElement == innerContent){
+                fadeOut();
+                input.style.backgroundColor = "";
             }
         }
 
