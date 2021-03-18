@@ -1,5 +1,4 @@
-
-let isMobile = window.matchMedia("only screen and (max-width: 600px)").matches;
+let isMobile = typeof window.orientation !== "undefined" || window.matchMedia("only screen and (max-width: 400px)").matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 if(isMobile) document.getElementById("noMobile").remove();
 
 for (var i = 0; i < 9; i++) {
