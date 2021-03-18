@@ -195,6 +195,8 @@ input[type=text] {
     height: 1.5em;
     text-align: center;
     border-style: solid;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
     box-shadow: none;
     border-radius: 0;
     font-size: 3vw;
