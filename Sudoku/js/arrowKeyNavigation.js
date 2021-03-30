@@ -3,9 +3,8 @@ document.onkeydown = function(e) {
     var activeClass = document.activeElement.className.split(' ');
 
     if (document.getElementById("hintInput") == activeElement && e.key == "Enter") {
-        console.log("to")
         document.getElementById("hintInput").blur();
-        document.getElementsByClassName("modalBtn")[0].click();
+        document.getElementsByClassName("controlBtn")[0].click();
     }
 
     if (activeElement.parentNode.className == "txtRow") {
