@@ -98,7 +98,7 @@ h1 {
     overflow: hidden;
 }
 
-#solveSpeedInput{    
+#speedInput{    
     display: inline-flex;
     width: auto; 
     border-radius: 0;
@@ -113,6 +113,55 @@ h1 {
     min-width: 10px;
     word-wrap: break-word;
 }
+
+/* input[range]{
+    width: 50%;
+    background-color: #899fa9;
+
+}
+
+input[range]::-webkit-slider-thumb {
+    background-color: #4CADE7;
+    
+} */
+
+input[type='range'] {
+    width: 75%;
+    border-radius: 8px;
+    outline: none;
+    height: 8px;
+    -webkit-appearance: none;
+}
+
+#sliderText{
+    width: 3em;
+    text-align: right;
+}
+
+/* .tooltip {
+    position: relative;
+    display: inline-block;
+}
+  
+.tooltip .tooltipcontent {
+    visibility: hidden;
+    opacity: 0;
+    width: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #899fa9;
+    text-align: center;
+    padding: 5px 5px;
+    border-radius: 6px;
+    position: absolute;
+    bottom: 2em;
+    z-index: 1;
+    transition: opacity 500ms;
+}
+
+.visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+} */
 
 input[checkbox]{
     border-radius: 0;
@@ -180,7 +229,8 @@ li {
 
 #title{
     margin: 20px;
-    margin-bottom: 25px;
+    margin-top: 30px;
+    margin-bottom: 40px;
 }
 
 #titleMask{
@@ -215,13 +265,13 @@ li {
 /******** Input Grid Formatting ********/
 
 input[type=text] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     width: 1.5em;
     height: 1.5em;
     text-align: center;
     border-style: solid;
-    -webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
     border-radius: 0;
     font-size: 3vw;
     font-size: calc(var(--vw, 1vw) * 3);
