@@ -46,8 +46,7 @@
             #lay {
                 margin-bottom: 500px;
             }
-            #lay, #fin, #links {
-                opacity: 0;
+            #lay, #fin, #links, #name {
                 position: relative;
                 -webkit-transition: all 1s;
                 -moz-transition: all 1s;
@@ -56,10 +55,73 @@
                 -webkit-transition: all 1s;
                 transition: all 1s;
             }
+            #name{
+                opacity: 0;
+            }
             #links {
+                opacity: 0;
                 width: 25%;
                 justify-content: space-between;
             }
+            #formContainer{
+                display: flex;
+                opacity: 0;
+                position: absolute;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                bottom: -300px;
+                width: 100%;
+                transition: bottom 1s, opacity 1s;
+            }
+            #emailForm{
+                display: flex;
+                flex-direction: column;
+                width: 300px;
+            }
+            textarea{
+                resize: none;
+                font-family: Arial;
+                max-height: 100px;
+                border: 1px solid black;
+                margin-bottom: 15px;
+                outline: none;
+                height: 44px;
+                padding: 3px 0px 3px 3px;
+
+            }
+            input[type="email"]{
+                width: 50%;
+                border-color: black;
+                border-width: 0 0 2px 0;
+                margin-bottom: 5px;
+                transition: all 500ms;
+                outline: none;
+                padding: 3px 0px 2px 3px;
+            }
+            #toTop{
+                position: absolute;
+                top: -100px;
+                width: 50px; 
+                cursor: pointer;
+                transition: opacity 400ms;
+            }
+            #toTop:hover{
+                opacity: 0.5;
+            }
+            button{
+                border: 2px solid black;
+                border-top: none;
+                border-bottom: none;
+                cursor: pointer;
+                padding: 3px 3px 3px 3px;
+                transition: opacity 200ms;
+                outline: none;
+            }
+            button:hover{
+                opacity: 0.5;
+            }
+
         </style>
     </head>
 
@@ -68,27 +130,68 @@
             <h1 id="fin">Fin</h1><h1 id="lay">lay</h1>
         </div>
         <div id="links">
-            <a href="javascript:void(0)" onclick="emailForm()">Contact Me</a>
+            <a href="javascript:void(0)" onclick="showEmailForm()">Contact Me</a>
             <a href="../Sudoku/index.html">Sudoku Solver</a>
         </div>
 
-        <div id="email" style="display: none">
-            <textarea name="message"></textarea>
-            <input onclick="sendEmail()" type="button" value="submit">
-            <p id="response"></p>
+            
+        <div id="formContainer">     
+            <img src="toTop.png" onclick="hideEmailForm()" id="toTop">
+            <form id="emailForm" action="https://formspree.io/f/xrgrzdpk" method="POST">
+                <input placeholder="Your Email" type="email" name="email" />
+                <textarea placeholder="Message" name="message" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+                <button id="form-button">Submit</button>
+                <p id="form-status" style="opacity: 0; transition: all 1s;">&nbsp</p>
+            </form>
         </div>
+        
+                    
+        <script>
+            var form = document.getElementById("emailForm");
 
-        <script>      
+            async function handleSubmit(event) {
+                event.preventDefault();
+                var email = document.getElementsByName("email")[0].value;
+                var message = document.getElementsByName("message")[0].value;
+                var status = document.getElementById("form-status");
+
+                if(message == "" || email == ""){
+                    status.innerText = "Please fill out all fields.";
+                    status.style.opacity = 1;
+                    return;
+                }
+
+                var data = new FormData(event.target);
+
+                fetch(event.target.action, {
+                    method: form.method,
+                    body: data,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }).then(response => {
+                    status.innerHTML = "Message sent";
+                    status.style.opacity = 1;
+                    form.reset();
+                }).catch(error => {
+                    status.innerHTML = "Oops! There was a problem sending your message";
+                    status.style.opacity = 1;
+                    console.log(error);
+                });
+            }
+
+            form.addEventListener("submit", handleSubmit);
+              
             window.onunload = () => {};
             let fin = document.getElementById("fin");
             let lay =  document.getElementById("lay");
             let links = document.getElementById("links");
+            let fullName = document.getElementById("name");
         
             setTimeout(()=>{ 
                 fin.style.margin = 0;
                 lay.style.margin = 0;
-                fin.style.opacity = 1;
-                lay.style.opacity = 1;
+                fullName.style.opacity = 1;
             }, 1);
             
             setTimeout(()=>{ 
@@ -96,30 +199,25 @@
                 links.style.opacity = 1;
             }, 1000);
 
-            function emailForm() {
-                document.getElementById("email").style.display = "block";
+            var formContainer = document.getElementById("formContainer");
+            formContainer.style.bottom = formContainer.clientTop+"px";
+
+            function showEmailForm() {
+                links.style.marginBottom = (screen.height+500) + "px";
+                fullName.style.opacity = 0;
+                links.style.opacity = 0;               
+                formContainer.style.bottom = "35%";
+                formContainer.style.opacity = 1;
             }
 
-            function sendEmail(){
-                event.preventDefault();
-
-                var request = new XMLHttpRequest();
-                var url = "/sendEmail.php";
-                request.open("POST", url, true);
-                request.setRequestHeader("Content-Type", "application/json");
-                request.onreadystatechange = function () {
-                    if (request.readyState === 4 && request.status === 200) {
-                        document.getElementById("response").innerText = request.response;
-                    }
-                    console.log(request.readyState + " " + request.status + " " + request.response)
-                };
-
-                var message = document.getElementsByName("message")[0].value;
-                var data = JSON.stringify({"message": message});
-
-                request.send(data);
+            function hideEmailForm(){
+                formContainer.style.opacity = 0;
+                links.style.marginBottom = 0;
+                formContainer.style.bottom = formContainer.clientTop+"px";
+                document.getElementById("form-status").style.opacity = 0;
+                fullName.style.opacity = 1;
+                links.style.opacity = 1;     
             }
-
         </script>
     </body>
 
