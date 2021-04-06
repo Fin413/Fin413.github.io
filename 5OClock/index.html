@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>It's Five O' Clock Somewhere</title>
+        <link rel="shortcut icon" type="image/svg" href="clock.svg"/>
+
+        <style>
+            html{
+                height: 100%;
+            }
+            body{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                height: 90%;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            #ampm{
+                font-size: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>It's Five O' Clock Somewhere</h1>
+        <div style="display: flex; flex-direction: row; align-items: baseline; margin-bottom: 5px;">
+            <h1 id="time">5:00</h1><h1 id="ampm">PM</h1>
+        </div>
+        <p id="place">Locating...</p>
+        <script src="bundle.js"></script>
+    </body>
+</html>
