@@ -1,0 +1,32 @@
+/* background */
+body, #titleMask, #popupBody{
+    background-color: white;
+}
+
+#skipBtn:hover, .controlBtn:hover {
+    color: grey;
+}
+
+#line {
+    background-color: black;
+}
+
+input[type=text], #speedInput {
+    border: 1px solid black;
+}
+
+input[type=text]:focus {
+    background-color: black;
+    color: white;
+    outline: none;
+}
+
+input[type='range']{
+    border: 1px solid black;
+    background-color: var(--light);
+}
+
+input[type='range']::-webkit-slider-thumb { 
+    background: black;
+    border: 1px solid black;
+}

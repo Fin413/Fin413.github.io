@@ -1,0 +1,93 @@
+:root {
+    --base: #363636;
+    --light: #9b9b9b; 
+    --highlight: #EB6743;
+}
+
+/* background */
+body {
+    background-color: var(--base);
+}
+
+#speedInput { 
+    border: 1px solid var(--light);
+}
+
+input[slider]{
+    background-color: var(--light);
+}
+
+/* title */
+h1, p {
+    color: var(--highlight);
+}
+
+#titleMask {
+    background-color: var(--base);
+}
+
+/* skip btn */
+#skipBtn {
+    color: var(--highlight);
+}
+
+#skipBtn:hover {
+    color: var(--light);
+}
+
+/* main btns */
+.controlBtn, .disabledControlBtn {
+    color: var(--light);
+}
+
+.controlBtn:hover {
+    color: var(--highlight);
+}
+
+.fas, li{
+    color: var(--light);
+}
+
+/* main btn seperators */
+h3 {
+    color: var(--highlight);
+}
+
+
+#popupBody{
+    border:5px solid var(--light);
+    background-color: var(--base);
+    color: var(--light);
+}
+
+
+input[type=text] {
+    background-color: #797979;
+    border: 1px solid #797979;
+    color: black;
+}
+
+input[type=text]:focus {
+    background-color: var(--highlight);
+    border: 1px solid var(--highlight);
+    outline: none;
+}
+
+/* settings */
+
+.settingsTitle, .close{
+    background-color: var(--base);
+    color: var(--light);
+}
+
+#line {
+    background-color: var(--highlight);
+}
+
+input[type='range']{
+    background-color: var(--light);
+}
+
+input[type='range']::-webkit-slider-thumb { 
+    background: var(--highlight);
+}
