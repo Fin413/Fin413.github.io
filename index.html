@@ -8,7 +8,7 @@
         <link rel="shortcut icon" type="image/svg" href="favicon.svg"/>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Personal site for Finlay Soehn">
+        <meta name="description" content="A website for Finlay Soehn by Finlay Soehn all about Finlay Soehn.">
         <meta name="keywords" content="Finlay, Soehn, Finlay Soehn">
         <meta name="author" content="Finlay Soehn">
 
@@ -23,7 +23,7 @@
                 justify-content: center;
                 align-items: center;
                 font-family: Arial, Helvetica, sans-serif;
-                /* overflow: hidden; */
+                overflow: hidden;
             }
             h1 {
                 font-size: 30vw;
@@ -80,7 +80,7 @@
                 flex-direction: column;
                 bottom: -300px;
                 width: 100%;
-                transition: bottom 1s, opacity 1s;
+                transition: bottom 1s, opacity 800ms;
             }
             #emailForm{
                 display: flex;
@@ -153,7 +153,7 @@
 
             
         <div id="formContainer">     
-            <img src="toTop.png" onclick="hideEmailForm()" id="toTop">
+            <img src="toTop.png" id="toTop">
             <form id="emailForm" action="https://formspree.io/f/xrgrzdpk" method="POST">
                 <input placeholder="Your Email" type="email" name="email" />
                 <textarea placeholder="Message" name="message" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
@@ -217,7 +217,7 @@
             }, 1000);
 
             var formContainer = document.getElementById("formContainer");
-            formContainer.style.bottom = formContainer.clientTop+"px";
+            formContainer.style.bottom = (-formContainer.offsetHeight-110)+"px";
 
             function showEmailForm() {
                 links.style.marginBottom = (screen.height+500) + "px";
@@ -228,12 +228,13 @@
             }
 
             function hideEmailForm(){
+                console.log("yo");
                 formContainer.style.opacity = 0;
                 links.style.marginBottom = 0;
-                formContainer.style.bottom = formContainer.clientTop+"px";
+                formContainer.style.bottom = (-formContainer.offsetHeight-110)+"px";
                 document.getElementById("form-status").style.opacity = 0;
                 fullName.style.opacity = 1;
-                links.style.opacity = 1;     
+                links.style.opacity = 1;   
             }
         </script>
     </body>
