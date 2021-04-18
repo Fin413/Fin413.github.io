@@ -5,13 +5,12 @@
     <head>
 
         <title>Home</title>
-        <link rel="shortcut icon" type="image/svg" src="favicon.svg"/>
+        <link rel="shortcut icon" type="image/svg" href="favicon.svg"/>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="A website for Finlay Soehn by Finlay Soehn all about Finlay Soehn.">
         <meta name="keywords" content="Finlay, Soehn, Finlay Soehn">
         <meta name="author" content="Finlay Soehn">
-
         <style>
             html {
                 height: 100%;
@@ -67,6 +66,7 @@
             }
             #links {
                 opacity: 0;
+                margin-bottom: 0;
                 width: 25%;
                 min-width: 300px;
                 justify-content: space-between;
@@ -115,6 +115,12 @@
                 width: 50px; 
                 cursor: pointer;
                 transition: opacity 400ms;
+                user-drag: none; 
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-drag: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
             }
             #toTop:hover{
                 opacity: 0.5;
@@ -137,11 +143,24 @@
             button:hover{
                 opacity: 0.5;
             }
+            #psuedoBody{
+                /* overflow: hidden;
+                position: relative;
+                width: 100%;
+                height: 100%; */
+                
+            }
 
         </style>
     </head>
 
     <body>
+        <!-- 
+
+
+            SHIT IS FUCKED WHEN YOU RELOAD ON EMAIL FORM
+            FIX SCROLL SOMEHOW
+         -->
         <div id="name">
             <h1 id="fin">Fin</h1><h1 id="lay">lay</h1>
         </div>
@@ -152,20 +171,74 @@
         </div>
 
             
-        <div id="formContainer">     
-            <img src="toTop.png" onclick="hideEmailForm()" id="toTop">
-            <form id="emailForm" action="https://formspree.io/f/xrgrzdpk" method="POST">
-                <input placeholder="Your Email" type="email" name="email" />
-                <textarea placeholder="Message" name="message" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
-                <button id="form-button">Submit</button>
-                <p id="form-status" style="opacity: 0; transition: all 1s;">&nbsp</p>
-            </form>
-        </div>
-        
+            <div id="formContainer">
+                <img src="toTop.png" onclick="hideEmailForm()" id="toTop">
+                <form id="emailForm" action="https://formspree.io/f/xrgrzdpk" method="POST">
+                    <input placeholder="Your Email" type="email" name="email" />
+                    <textarea placeholder="Message" name="message" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+                    <button id="form-button">Submit</button>
+                    <p id="form-status" style="opacity: 0; transition: all 1s;">&nbsp</p>
+                </form>
+            </div>
                     
         <script>
-            var form = document.getElementById("emailForm");
+            setTimeout(()=>{ 
+                window.scrollTo(0, 0);
+                fin.style.margin = 0;
+                lay.style.margin = 0;
+                fullName.style.opacity = 1;
+            }, 50);
+            
+            setTimeout(()=>{ 
+                links.style.marginTop = "100px";
+                links.style.opacity = 1;
+            }, 1000);
 
+            window.onunload = () => {};
+            window.onorientationchange = () => {
+                window.scrollTo(0, 0);
+            };
+
+            let fin = document.getElementById("fin");
+            let lay =  document.getElementById("lay");
+            let links = document.getElementById("links");
+            let fullName = document.getElementById("name");
+
+            var formContainer = document.getElementById("formContainer");            
+            formContainer.style.bottom = (-formContainer.offsetHeight-110)+"px";
+
+            var transitionDone = true;
+
+            function showEmailForm() {
+                if(!transitionDone) return;
+                transitionTimer();
+                links.style.marginBottom = (screen.height+500) + "px";
+                links.style.opacity = 0;   
+                fullName.style.opacity = 0;            
+                formContainer.style.bottom = "35%";
+                formContainer.style.opacity = 1;
+            }
+
+            function hideEmailForm(){
+                if(!transitionDone) return;
+                transitionTimer();
+                formContainer.style.opacity = 0;
+                formContainer.style.bottom = (-formContainer.offsetHeight-110)+"px";
+                links.style.marginBottom = 0;
+                links.style.opacity = 1;   
+                fullName.style.opacity = 1;
+                document.getElementById("form-status").style.opacity = 0;
+            }
+
+            function transitionTimer(){
+                transitionDone = false;
+                setTimeout(()=>{
+                    transitionDone = true;
+                }, 1000);
+            }
+
+            var form = document.getElementById("emailForm");
+    
             async function handleSubmit(event) {
                 event.preventDefault();
                 var email = document.getElementsByName("email")[0].value;
@@ -198,44 +271,6 @@
             }
 
             form.addEventListener("submit", handleSubmit);
-              
-            window.onunload = () => {};
-            let fin = document.getElementById("fin");
-            let lay =  document.getElementById("lay");
-            let links = document.getElementById("links");
-            let fullName = document.getElementById("name");
-        
-            setTimeout(()=>{ 
-                fin.style.margin = 0;
-                lay.style.margin = 0;
-                fullName.style.opacity = 1;
-            }, 1);
-            
-            setTimeout(()=>{ 
-                links.style.marginTop = "100px";
-                links.style.opacity = 1;
-            }, 1000);
-
-            var formContainer = document.getElementById("formContainer");
-            formContainer.style.bottom = (-formContainer.offsetHeight-110)+"px";
-
-            function showEmailForm() {
-                links.style.marginBottom = (screen.height+500) + "px";
-                fullName.style.opacity = 0;
-                links.style.opacity = 0;               
-                formContainer.style.bottom = "35%";
-                formContainer.style.opacity = 1;
-            }
-
-            function hideEmailForm(){
-                console.log("yo");
-                formContainer.style.opacity = 0;
-                links.style.marginBottom = 0;
-                formContainer.style.bottom = (-formContainer.offsetHeight-110)+"px";
-                document.getElementById("form-status").style.opacity = 0;
-                fullName.style.opacity = 1;
-                links.style.opacity = 1;   
-            }
         </script>
     </body>
 
