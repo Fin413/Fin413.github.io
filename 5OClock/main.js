@@ -8,7 +8,6 @@ var timeZones;
 findPlace();
 countDown((60-new Date().getSeconds())*1000);
 
-
 function findPlace(){
     places = [];
     timeZones = zones.getTimeZones();
@@ -37,7 +36,7 @@ function findPlace(){
 
 function countDown(secs){
     setTimeout(function(){
-        countDown(60000);
+        countDown((60-new Date().getSeconds())*1000);
         let time = timeDisplay.innerText.substring(2, 4);
         if(time == 59) findPlace();
         else{
