@@ -6,6 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <style>
+            body{
+                padding-top: 150px;
+            }
             #header {
                 position: absolute;
                 top: 0;
@@ -37,8 +40,6 @@
                 position: relative;
             }
 
-            .dropdown:active .dropdown-content,
-            .dropdown:focus .dropdown-content,
             .dropdown:hover .dropdown-content{
                 display: flex;
             }
@@ -47,12 +48,16 @@
                 display: none;
                 position: absolute;
                 background: white;
-                width: fit-content;
+                width: 120px;
                 box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
                 flex-direction: column;
                 padding-top: 5px;
                 padding-bottom: 5px;
                 right: 0;
+            }
+
+            .showDropdown {
+                display: flex;
             }
 
             .dropdownBtn{
@@ -97,7 +102,6 @@
                 #logo{
                     width: 325px;
                 }
-
             }
 
             @media (min-width: 550px) {
@@ -143,9 +147,6 @@
                 }
             }
 
-
-           
-
             .btn{
                 border: none;
                 background-color: rgba(0, 0, 0, 0);
@@ -161,9 +162,11 @@
                 cursor: default;
                 opacity: 1;
             }
+
         </style>
     </head>
     <body>
+       
         <div id="header">
             <div id="logo">
                 <h1>Noise Cancelling</h1>
@@ -173,8 +176,8 @@
                 <button class="btn start">Start</button>
                 <button class="btn how">How it works</button>
                 <button class="btn help">Help</button>
-                <div class="dropdown btn">
-                    <img src="kabeb.svg" width="30px" onclick="showDropdown()">
+                <div class="dropdown btn"  onclick="showDropdown()">
+                    <img src="kabeb.svg" width="30px">
                     <div class="dropdown-content">
                         <button class="dropdownBtn s">Start</button>
                         <button class="dropdownBtn w">How it works</button>
@@ -183,7 +186,7 @@
                 </div>
             </div>
         </div>
-
+        
 
         <script src="main.js"></script>
         
