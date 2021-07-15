@@ -37,15 +37,17 @@
                 position: relative;
             }
 
-            /* .dropdown:hover .dropdown-content {
+            .dropdown:active .dropdown-content,
+            .dropdown:focus .dropdown-content,
+            .dropdown:hover .dropdown-content{
                 display: flex;
-            } */
+            }
 
             .dropdown-content {
                 display: none;
                 position: absolute;
                 background: white;
-                width: 110px;
+                width: 120px;
                 box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
                 flex-direction: column;
                 padding-top: 5px;
@@ -85,7 +87,6 @@
                 -moz-user-select: none; /* Firefox */
                 -ms-user-select: none; /* IE10+/Edge */
                 user-select: none; /* Standard */
-
             }
 
             #logo:hover{
