@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Fun with sound waves</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            html {
+                scroll-behavior: smooth;
+                /* width: 100%; */
+            }
+            body{
+                /* width: 100%; */
+                font-family: Arial, Helvetica, sans-serif;
+                margin: 0;
+                padding-top: 150px;
+                /* overflow-x: hidden; */
+            }
+
+            noscript{
+                display: flex;
+                margin: 0 auto;
+                width: 75%;
+                border-radius: 5px;
+                padding-right: 20px;
+                max-width: 600px;
+                background-color: rgba(255, 0, 0, 0.3);
+            }
+
+            /*      HEADER       */
+            #header {
+                position: absolute;
+                top: 0;
+                right:0;
+                left: 0;
+                width: 100%;
+                height: 100px;
+                display: flex;
+                background: white;
+                align-items: flex-end;
+                justify-content: space-around;
+                padding: 10px 0;
+                border-bottom: 2px solid black;
+                
+            }
+            #menu{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                width: max-content;
+                height: 90%;
+                overflow: none;
+            }
+
+            .dropdown{
+                display: block;
+                position: relative;
+            }
+
+            .dropdown:hover .dropdown-content{
+                display: flex;
+            }
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background: white;
+                width: 125px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+                flex-direction: column;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                right: 0;
+            }
+
+            .showDropdown {
+                display: flex;
+            }
+
+            .dropdownBtn{
+                text-align: left;
+                margin: 5px;
+                border: none;
+                background-color: rgba(0, 0, 0, 0);
+                font-size: 15px;
+            }
+
+            .dropdownBtn:hover{
+                cursor: pointer;
+                opacity: 0.5;
+            }
+
+            .help, .how, .start {
+                display: none;
+            }
+
+            .s, .w, .h {
+                display: block;
+            }
+
+            #logo{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 230px;
+                height: 100%;
+
+                -webkit-user-select: none; /* Safari */        
+                -moz-user-select: none; /* Firefox */
+                -ms-user-select: none; /* IE10+/Edge */
+                user-select: none; /* Standard */
+            }
+
+            #logo:hover{
+                cursor: default;
+            }
+            
+            @media (min-width: 400px) {
+                #logo{
+                    width: 325px;
+                }
+            }
+
+            @media (min-width: 550px) {
+                .start{
+                    display: block;
+                }
+                .s{
+                    display: none;
+                }
+                #menu{
+                    width: 25%;
+                    
+                }
+            }
+
+            @media (min-width: 700px) {
+                .how{
+                    display: block;
+                }
+                .w{
+                    display: none;
+                }
+                #menu{
+                    width: 35%;
+                }
+            }
+
+            @media (min-width: 850px) {
+                .dropdown{
+                    display: none;
+                }
+
+                .help {
+                    display: block;
+                }
+                .h{
+                    display: none;
+                }
+
+                #menu {
+                    width: 40%;
+                }
+            }
+
+            .btn{
+                border: none;
+                background-color: rgba(0, 0, 0, 0);
+                font-size: 20px;
+            }
+
+            .btn:hover{
+                cursor: pointer;
+                opacity: 0.5;
+            }
+
+            .dropdown:hover{
+                cursor: default;
+                opacity: 1;
+            }
+
+
+
+
+
+            /* canvas */
+
+            canvas{
+                /* border-top: 5px solid black;
+                border-bottom: 5px solid black; */
+                background-color: white;
+            }
+
+            #start{
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 275px;
+                width: 200px;
+                height: 150px;
+                font-size: 50px;
+                border: 2px solid black;
+                border-top-width: 0;
+                border-bottom-width: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: white;
+                transition: opacity 500ms;
+            }
+
+            #start:hover{
+                cursor: pointer;
+            }
+            #start:hover #playImg{
+                transform: scale(1.2);
+            }
+
+            #playImg{
+                transition: transform 500ms;
+            }
+
+
+
+
+
+            /*    INFO SECTION   */
+
+            #info{
+                margin: 0 7%;
+                font-size: 17px;
+            }
+
+            #links{
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+            }
+
+            .link{
+                margin: 5px;
+            }
+
+            .indent{
+                margin-left: 20px;
+            }
+
+            @media (min-width: 925px) {
+                #info{
+                    margin: 0 100px;
+                    font-size: 17px;
+                }
+
+                #links{
+                    justify-content: space-evenly;
+                    flex-direction: row;
+                }
+
+                .link{
+                    margin: 0;
+                }
+            }
+
+
+
+
+
+
+            /*      TOOL TIP       */
+
+            .tooltip {
+                position: relative; 
+                display: inline-block;
+            }
+
+            .dottedBottom{
+                border-bottom: 1px dashed #000;
+            }
+
+            .tooltip:before{
+               
+                content: attr(info);
+                position: absolute;
+                font-size: 15px;
+                top: -50px;
+                left: 50%;
+                transform: translateX(-50%);
+
+                width: max-content;
+                padding: 10px;
+                border-radius: 5px;
+                background: rgba(0,0,0,0.75);
+                color: white;
+                text-align: center;
+
+                opacity: 0;
+
+                visibility: hidden;
+                transition: opacity 500ms;
+
+            }
+
+            .tooltip:after {
+                content: " ";
+                position: absolute;
+                top: -13px;
+                left: 50%;
+                margin-left: -10px;
+                border-width: 10px;
+                border-style: solid;
+                border-color: rgba(0,0,0,0.75) transparent transparent transparent;
+                visibility: hidden;
+
+                opacity: 0;
+                transition: opacity 500ms;
+            }
+
+            .tooltip:hover:before, .tooltip:hover:after {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .tooltip:hover{
+                cursor: pointer;
+            }
+
+          
+
+
+
+
+            /* FOOTER */
+            #footer{
+                position: relative;
+                background-color: white;
+                margin-top: 100px;
+                width: 100%;
+                color: black;
+                text-align: center;
+                border-top: 2px solid black;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+        </style>
+    </head>
+    <body>
+        <audio id="audio" src="sound.mp3">
+            <source> 
+            (do we need the source element probably not)
+            Your browser does not support the audio element.
+        </audio>
+        <noscript>
+            <img src="error.svg" width="100px">
+            <p id="noScript">
+                Your browser doesn't seem to support JavaScript, which is needed to power this site!
+                Enable or install JavaScript to continue.
+            </p>
+        </noscript>
+       
+        <div id="header">
+            <div id="logo">
+                <h1>Noise Cancelling</h1>
+                <img src="headphones.svg" width="50px">
+            </div>
+            <div id="menu">
+                <button class="btn start">Start</button>
+                <button class="btn how" onclick="location.href='#info'">How it works</button>
+                <button class="btn help">Help</button>
+                <div class="dropdown btn">
+                    <img src="kabeb.svg" width="30px" onclick="showDropdown()">
+                    <div class="dropdown-content">
+                        <button class="dropdownBtn s">Start</button>
+                        <button class="dropdownBtn w">How it works</button>
+                        <button class="dropdownBtn h">Help</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <canvas id="canvas" height="400px"></canvas>
+            <button id="start" onclick="init()">
+                <img id="playImg" src="play.svg" width="75"/>
+            </button>
+        </div>
+                
+
+        <div id="info">
+            <!-- 
+                add diagrams (aniamted) 
+                solution for offscreen tooltips
+                overflow on mobile?
+                frequency not the right word?
+
+
+                for practical
+                Audio on a computer is represented by thousnads of data point per second
+                you computer samples the air blah blah
+            -->
+            <h1>How it Works</h1>
+
+
+            <!-- explain this better
+            
+                sound compresses and decompresses air
+                we can represent these compresstions and decompressions as high and low points on 
+                a wave
+            -->
+            <p>
+                <span class="indent">All</span> sounds are made up of waves travelling through the air. 
+                These waves make their way to your ears and cause your eardrums to vibrate at the same frequency as the sound wave. 
+                Through <span info="Click for more info" class="tooltip" ><a href="https://www.nidcd.nih.gov/health/how-do-we-hear">biology magic</a></span> 
+                your brain is able to process these vibrations into sound. 
+            </p>
+
+            <p>
+                <span info="Also known as ANC" class="tooltip indent dottedBottom">Active Noise-Cancellation</span> 
+                works by first listening to the incoming noises via a microphone. 
+                A program then processes these sound waves and plays back the <span info="Phase-inverted by 180°" class="tooltip dottedBottom">inverse</span> 
+                of that wave.
+                These two waves then <b>cancel</b> each other out. 
+                Your ears never receive the incoming sound wave, so you can't hear the noise. 
+                
+            </p>
+
+            <p>
+                <span class="indent">Of</span> course, the effectiveness of this technology is limited by many things. 
+                Such as a microphone's ability to pick up sounds or the speakers' ability to transmit the inverted wave. 
+                Despite these flaws, noise-cancelling is an practical and awesome real-world example of the physics of waves. 
+            </p>
+
+            <p>
+                Information from Mr. deBoer (my grade 11 Physics teacher)
+            </p>
+
+            <h3 style="text-align: center;">Further Reading</h3>
+
+            <div id="links">  
+                <span info="How do noise-cancelling headphones work?" class="tooltip link"><a href="https://www.soundguys.com/how-noise-cancelling-headphones-work-12380/">https://www.soundguys.com/</a></span>
+                <span info="Noise-cancelling headphones" class="tooltip link"><a href="https://en.wikipedia.org/wiki/Noise-cancelling_headphones">https://en.wikipedia.org/</a></span>
+                <span info="Noise-cancelling headphones: the secret survival tool for modern life" class="tooltip link"><a href="https://www.theguardian.com/technology/2017/mar/16/noise-cancelling-headphones-sound-modern-life">https://www.theguardian.com/</a></span>
+            </div>
+
+
+
+            <!-- add practical explaination including how you did it with code -->
+
+        </div>
+
+
+
+        <div id="footer">
+            <p>Site created by Finlay Soehn 2021</p>
+        </div>
+        
+        <script src="main.js"></script>
+        
+    </body>
+</html>
