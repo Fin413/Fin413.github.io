@@ -1,0 +1,14 @@
+{
+  "name": "worldgesr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fin",
+  "license": "ISC",
+  "dependencies": {
+    "jsvectormap": "^1.3.2"
+  }
+}
