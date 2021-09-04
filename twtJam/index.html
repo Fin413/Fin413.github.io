@@ -1,0 +1,134 @@
+<!-- jam started Friday Aug 15th, 4 weeks to finish. Submissions start Sept 5th. HARD deadline Monday Sep 12th (submit before)-->
+<!-- Main goal is to get people intrested in fitness and show them a few they can try at home!
+    making fitness approchable
+    fitness can be intimidating to start
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Galactic Gainz</title>
+        <link rel="icon" href="media/ship.svg">
+        <link rel="stylesheet" href="stylesheet.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body>
+        <!-- mime type? -->
+        <audio id="mainMusic"></audio>
+        <audio id="gameMusic"></audio>
+        
+        <div id="verticalBtnMenu">
+            <button class="picBtn home" onclick="window.location.href = './home.html'"></button>
+            <button class="picBtn settings"></button>
+            <button class="picBtn" id="soundBtn" state="paused"></button>
+        </div>
+       
+        <div id="container">
+           
+            <div id="canvasContainer">
+                <canvas id="canvas"></canvas>
+
+                <div id="dialContainer">
+                    <img id="dial" src="media/dial.svg" width="100px">
+                    <div id="dialIndicator"></div>
+                </div>
+
+                <div id="hungerContainer">
+                    <div class="hungerBar"></div>
+                </div>
+                
+                <div id="mainBtns">
+                    <button onclick="showExercise()" class="gameBtn">Workout</button>
+                    <button onclick="startGame()" class="gameBtn">Eat</button>
+                </div>
+                
+                <div id="pauseOverlay" class="overlay">
+                    <h1>Paused</h1>
+                    <button class="foodBtn" onclick="unpause()">continue</button>
+                </div>
+
+                <div id="transitionEl" class="overlay">
+                    <h1>Galactic<br/>Gainz</h1>
+                </div>
+
+            </div>
+
+            <div id="gameBtns">
+                <h2 id="hungerTitle">Hunger</h2>
+                <div id="hungerContainerSide">
+                    <div class="hungerBar"></div>
+                </div>
+
+                <h3 id="speedDisp"></h3>
+
+                <div id="dialContainerSide">
+                    <img src="media/dial.svg" width="100px">
+                    <div id="dialIndicatorSide"></div>
+                    <h1 id="dialText">Alien Weight</h1>
+                </div>
+                
+                <hr>
+
+                <h3 id="tip">Press <span style="font-size: 1.5em;">e</span> to exercise</h3>
+                
+                <p>Use WASD or arrow keys to move <br/><br/> p = pause <br/> esc = leave</p>
+
+                <button class="foodBtn" onclick="endGame()">Back</button>
+            </div>
+
+ 
+        </div>
+
+        <div id="tutorialPrompt">
+            <button class="xBtn" onclick="toggleTutorialPrompt()">+</button>
+            <h3>First time here?</h3>
+            <button class="foodBtn" onclick="startTutorial()">Take a tour</button>
+        </div>
+
+        <div id="exercise" class="overlay">
+            <h1 id="exerciseTitle">10 Squats</h1>
+            <img width="250" id="exerciseGraphic">
+            <h1 id="timer">0:00</h1>
+            <button onclick="hideExercise()" class="foodBtn">Done</button>
+            <p id="howTo">Don't know how?</p>
+
+        </div>
+        
+        <div id="workoutNotifContainer">
+            <h2 id="lastWorkout">Welcome back! Your last workout was ____</h2>
+            
+            <button class="xBtn" onclick="hideNotif()">+</button>
+        </div>
+
+        <svg class="overlay" id="tutorialOverlay">
+
+        </svg>
+
+        <!-- <div id="tutorialOverlay" class="overlay">
+            <div class="tutorialSection">
+                <h1>Welcome to the alien world of <span style="font-size: 1.5em;">Galactic Gains!</span></h1>
+                <h3><span id="name"></span> is an bloby alien from another planet where food was scarce and, exercise was nessecary to escape scary predators.</h3>
+
+                <h3>Now that they're on Earth it's your job to make sure they continue to exercise to stay in shape!</h3>
+            </div>
+            <div class="tutorialSection">
+                <h1>Your alien's weight and hunger will change every day so make sure to come back!</h1>
+                <h2>Workout to keep your alien's weight down and eat to fill them up!</h2>
+                <h2>Your alien's hunger and weight have a direct impact on their happiness</h2>
+
+                <div class="cutout">
+                    blah blah blah
+                </div>
+            </div>
+            <div class="tutorialSection">
+
+            </div>
+
+            <button class="foodBtn" onclick="nextSection()">Next</button>
+            <button id="skipTutorial" onclick="endTutorial()">Skip Tutorial</button>
+        </div> -->
+
+        <script src="main.js"></script>
+    </body>
+</html>
