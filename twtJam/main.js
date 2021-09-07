@@ -451,7 +451,7 @@ function startTutorial() {
     document.getElementsByClassName("tutorialSection")[0].style.display = "flex";
     document.getElementsByClassName("tutorialSection")[0].style.opacity = 1;
 
-    toggleTutorialPrompt();
+    if(window.getComputedStyle(document.getElementById("tutorialPrompt")).right == "0px") toggleTutorialPrompt();
 }
 
 function endTutorial() {
