@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pirate Geography</title>
+
+        <meta charset="utf=8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="shortcut icon" href="media/favicon.svg" />
+        <link rel="stylesheet" href="node_modules/jsvectormap/dist/css/jsvectormap.css" />
+        <script src="node_modules/jsvectormap/dist/js/jsvectormap.js"></script>
+
+        <style>
+            @font-face {
+                font-family: 'pirate';
+                src: url('media/font/Treasuremap.eot'); /* IE9 Compat Modes */
+                src: url('media/font/Treasuremap.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+                    url('media/font/Treasuremap.woff2') format('woff2'), /* Super Modern Browsers */
+                    url('media/font/Treasuremap.woff') format('woff'), /* Pretty Modern Browsers */
+                    url('media/font/Treasuremap.ttf')  format('truetype'); /* Safari, Android, iOS */
+            }
+
+            .noHighlight{
+                -webkit-user-select: none; /* Safari */        
+                -moz-user-select: none; /* Firefox */
+                -ms-user-select: none; /* IE10+/Edge */
+                user-select: none; /* Standard */
+            }
+
+            html,body{
+                height: 99%;
+
+            }
+
+            body{
+                padding-top: 5px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                font-family: 'pirate', Arial, Helvetica, sans-serif;
+                background-image: url("media/planks.jpg");
+                background-position: 0 15px;
+                background-color: #61503E;
+                color: white;
+            }
+
+            #typePrompt{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-evenly;
+                align-items: center;
+                position: relative;
+                width: 300px;
+            }
+
+            .gamebar{
+                opacity: 0;
+                height: 0px;
+                display: none;
+                transition: opacity 600ms, height 600ms;
+            }
+
+            #regionPrompt{
+                margin-bottom: -10px;
+            }
+
+            #clickPrompt{
+                display: none;
+                align-items:center;
+                flex-direction: column;
+            }
+
+            #mapContainer{
+                font-family: Arial, Helvetica, sans-serif;
+                transition: margin 500ms;
+                width: 900px; 
+                height: 538px;
+                position: relative;
+                clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+                transition: clip-path 1s ease-in-out;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #mapMenu, #mapBorder, #map, #stats {
+                clip-path: polygon(0% 0%, 13% 2%, 24% 0%, 37% 2%, 48% 0%, 61% 1%, 71% 3%, 77% 3%, 85% 2%, 92% 0, 100% 0%, 100% 8%, 99% 28%, 100% 37%, 99% 52%, 100% 70%, 100% 84%, 99% 93%, 100% 100%, 89% 99%, 78% 99%, 67% 100%, 54% 99%, 47% 99%, 41% 98%, 33% 98%, 28% 100%, 18% 100%, 11% 99%, 0% 100%, 0% 90%, 1% 81%, 0% 73%, 1% 60%, 0% 50%, 2% 35%, 0% 19%);
+            }
+
+            #mapMenu{
+                display: block;
+                /* display: none; */
+                font-family: 'pirate', Arial, Helvetica, sans-serif;
+                text-align: center;
+                background-color: #537285;
+                width: 800px;
+                height: 475px;
+            }
+
+            #mapSelection{
+                display: block;
+                margin-top: 40px;
+            }
+
+            .island {
+                outline: none;
+                width: 100px;
+                height: 100px;
+                clip-path: polygon(4% 91%, 19% 86%, 32% 75%, 56% 74%, 67% 76%, 80% 78%, 85% 80%, 94% 86%, 100% 100%, 0% 100%);
+                background-color: #b1893f;
+                cursor: pointer;
+                border: none;
+            }
+
+            .island:hover~.flag, .island:focus~.flag{
+                transform: rotate(0deg);
+                top: -10px;
+            }
+
+            .flag{
+                width: 100px;
+                height: 70px;
+                position: absolute;
+                top: 10px;
+                left: 40px;
+                transform: rotate(-10deg);
+                transition: transform 600ms, top 600ms;
+                transform-origin: bottom left;
+                z-index: -1;
+            }
+
+            /* .flag:hover{
+                transform: rotate(0deg);
+            } */
+
+            .pole {
+                width: 5px;
+                height: 70px;
+                background-color: grey;
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                z-index: -1;
+                border-radius: 5px;
+            }
+
+            .flagIcon{
+                position: absolute;
+                left: 5px;
+                top: 1px;
+            }
+
+            .canada{
+                margin-left: 475px;
+                position: relative;
+                width: fit-content;
+            }
+
+            .usa{
+                width: fit-content;
+
+                margin-left: 275px;
+                /* 475px; */
+                position: relative;
+            }
+
+            .world {
+                width: fit-content;
+
+                margin-left: 200px;
+                /* 275px; */
+                position: relative;
+
+            }
+
+            .mapLabel{
+                position: absolute;
+                top: 75px;
+                left: 0;
+                opacity: 0;
+                text-overflow:clip;
+                transition: opacity 600ms, top 500ms;
+                z-index: -1;
+                width: 100px;
+            }
+
+            .mapLabel:hover{
+                cursor: default;
+            }
+
+            .island:hover~.mapLabel, .island:focus~.mapLabel{
+                opacity: 1;
+                top: 90px;
+            }
+
+            #gamemodeSelection { 
+                display: none;
+                flex-direction: column;
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            #selector{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 125px;
+                margin-bottom: 25px;
+            }
+
+            #gamemodeDiv{
+                text-align: left;
+                display: flex;
+                flex-direction: column;
+                align-items: start;
+            }
+
+            #name, #locate{
+                font-size: 24px;
+                color: white;
+                font-family: 'pirate', Arial, Helvetica, sans-serif;
+                cursor: pointer;
+                background-color: transparent;
+                border: none;
+                margin: 10px 0px;
+            }
+
+            #skull {
+                margin-top: -10px;
+                transition: margin-top 500ms;
+            }
+
+            #ship{
+                animation: rock 3s ease-in-out infinite;
+                transform-origin: bottom center;
+            }
+
+            @keyframes rock {
+                0%{transform: rotate(5deg)}
+                50%{transform: rotate(-5deg)}
+                100%{transform: rotate(5deg)}
+            }
+
+            #map{
+                display: none;
+                width: 800px;
+                height: 475px;
+            }
+
+            #tryAgainBtn{
+                position: absolute;
+                left: 10px;
+                bottom: 45px;
+            }
+
+            #exit {
+                position: absolute;
+                bottom: 5px;
+                left: 0;
+                z-index: 10;
+                cursor: pointer;
+            }
+
+            #exitText, #redoText{
+                position: absolute;
+                visibility: hidden;
+                bottom: -3px;
+                left: 0;
+                color: black;
+                font-family: 'pirate', Arial, Helvetica, sans-serif;
+                opacity: 0;
+                transition: opacity 400ms, visibility 500ms, left 500ms;
+            }
+
+            #exit:hover~#exitText,  #redo:hover~#redoText{
+                opacity: 1;
+                visibility: visible;
+                left: 40px;
+            }
+
+            #redo{
+                display: none;
+                cursor: pointer;
+                position: absolute;
+                bottom: 45px;
+                left: 8px;
+                z-index: 10;
+            }
+
+            #redoText{
+                bottom: 29px;
+            }
+
+            #mapBorder{
+                position: absolute;
+                top: 18px;
+                z-index: -1;
+                height: 500px;
+                width: 825px;
+                background-color: #9A7E49;
+            }
+
+            #mapControls{
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                bottom: 45px;
+                left: 60px;
+            }
+            #scroll{
+                position: absolute;
+                z-index: 10;
+                top: 13px;
+                right: 850px;
+                /* 850px;  */
+                width: 110px;
+                height: 510px;
+                /* transition: right 4700ms ease-in-out, width 5s ease-in-out; */
+                /* opacity: 0.75; */
+            }
+
+            @keyframes scrollShrink {
+                0%{width: 110px;}
+                0%{right: 850px;}
+                50%{width: 90px;}
+                86%{width: 0px;}
+                97%{right: 25px; opacity: 1;}
+                100%{right: 100%; width: 0; opacity: 0;}
+            }
+
+            @keyframes scrollGrow {
+                0%{width: 0; right: 35px; opacity: 0;}
+                7%{right: 35px;}
+                15%{opacity: 1;}
+                95%{right: 850px;}
+                100%{width: 110px;}
+            }
+            /* https://www.color-hex.com/palettes/49504.png */
+
+            #countryInput{
+                z-index: 1;
+            }
+            .indicator{
+                z-index: 1;
+                transform: translateX(0);
+                position: absolute;
+                width: 151px;
+                color: green;
+                font: 400 13.3333px Arial;
+                padding-top: 1px;
+                padding-left: 5px;
+                transition: top 400ms, opacity 400ms, transform 400ms;
+            }
+
+            .alreadyGuessed{
+                visibility: visible;
+                color: white;
+                background-color: #c5453a;
+                border-top-left-radius: 2px;
+                border-top-right-radius: 2px;
+                text-align: center;
+                transform: translateY(-90%);
+                padding: 0;
+                padding-bottom: 5px;
+                padding-top: 3px;
+                z-index: 0;
+            }
+
+            .indicatorShow{
+                visibility: visible;
+                top: -20px;     
+                opacity: 0;
+            }
+            .indicatorHide{
+                visibility: hidden;
+                top: 1px;     
+                opacity: 1;
+            }
+
+            #timer, #progress{
+                width: 35px;
+                text-align: center;
+            }
+
+            #stats{
+                display: none;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                position: absolute;
+                background-color: #9A7E49;
+                z-index: -1;
+                width: 500px;
+                color: black;
+            }
+            .scoreDisp{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-direction: row;
+                width: 400px;
+                height: 50px;
+            }
+
+            .scoreBtns{
+                margin-bottom: 20px;
+                align-items: flex-end;
+            }
+
+            button:hover{
+                cursor: pointer;
+            }
+
+            #soundControl{
+                width:75px;
+                height:60px;
+                background: url('media/mute.svg') 0% 0% / 75px no-repeat;
+                position: fixed;
+                z-index: 100;
+                cursor: pointer;
+                bottom: 5px;
+                right: 5px;
+                border: none;
+            }
+
+            @keyframes blinkFill {
+                0%{fill: #c5453a;}
+                50%{fill: #dee2e8;}
+                100%{fill: #c5453a;}
+            }
+            @keyframes shakeRegion {
+                0%{transform: translateX(0);}
+                25%{transform: translateX(10px);}
+                50%{transform: translateX(0px);}
+                75%{transform: translateX(-10px);}
+                100%{transform: translateX(0);}
+            }
+            @keyframes textBlink {
+                from{color: black;}
+                to{color: green;}
+            }
+            #lowTime{
+                display: none;
+                position: absolute;
+                backface-visibility: hidden;
+                background-color: #A53C33;
+                padding-top: 5px;
+                text-align: center;
+                width: 150px;
+                border-radius: 2px;
+                top: 10px;
+                right: 0;
+                font-family: 'pirate', Arial, Helvetica, sans-serif;
+            }
+            @keyframes lowTimeIndicator {
+                from{right: -150px}
+                to{right: 0;}
+            }
+            @keyframes textSize{
+                50%{transform: scale(1.05)}
+                100%{transform: scale(1);}
+            }
+            .pirateBtn{
+                background-color: transparent;
+                border: none;
+                border-bottom: 2px dashed black;
+                /* border-top: 2px dashed black; */
+                font-family: 'pirate', Arial, Helvetica, sans-serif;
+                cursor: pointer;
+                padding: 4px 6px 2px 6px;
+                transition: padding 200ms;
+            }
+            .pirateBtn:hover{
+                /* padding-bottom: 8px;
+                padding-top: 10px; */
+                padding-bottom: 10px;
+            }
+
+            #noAudio{
+                display: none;
+                background-color: rgba(0,0,0,0.75);
+                color: white;
+                width: 250px;
+                height: 50px;
+                align-items: center;
+                text-align: center;
+                border-radius: 5px;
+                position: fixed;
+                bottom: 10px;
+                right: 90px;
+                z-index: 100;
+            }
+
+            @keyframes noAudioPopup {
+                0%{opacity: 0;}
+                20%{opacity: 1;}
+                80%{opacity: 1;}
+                100%{opacity: 0;}
+            }
+
+            #noScript{
+                display: flex;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                width: 75%;
+                align-items: center;
+                justify-content: center;
+                background-color: #A53C33;
+                border-radius: 10px;
+                z-index: 1000;
+                padding: 10px 40px 10px 0;
+                flex-direction: row;
+                max-width: 760px;
+                box-shadow: 0px 0px 26px 10px #000000;
+            }
+
+            #errSkull {
+                display: block;
+            }
+            @media (max-width: 725px) {
+                #errSkull {
+                    display: none;
+                }
+                #noScript{
+                    padding: 10px 40px 10px 40px;
+                }
+            }
+
+        </style>
+    </head>
+    <body onload="loaded()">
+        <!-- check if mime type is working -->
+        <noscript>
+            <div id="noScript">
+                <img src="media/skull.svg" width="250" id="errSkull">
+                <div>
+                    <h3>Looks like your browser doesn't support Javascript, which is needed to power this site!</h3>
+                    <h3>Enable or install Javascript to continue.</h3>
+                </div>
+            </div>
+        </noscript>
+        <div id="noAudio">Your brower does not support audio</div>
+        <audio id="audio" type="audio/mpeg" autoplay></audio>
+
+        <div class="gamebar">
+            <div id="typePrompt">
+                <p id="timer">10:00</p>
+                <input type="text" id="countryInput">
+                <p id="progress"></p>
+                <p class="indicator indicatorHide"></p>
+            </div>
+           
+            <div id="clickPrompt">
+                <h2 id="regionPrompt"></h2>
+                <p id="locateProgress"></p>
+            </div>
+        </div>
+        
+        
+        <div style="position: relative">
+            <div id="mapContainer">
+                <div id="mapMenu">
+                    <h1 id="menuTitle">~ Select a Map ~</h1>
+                    
+                    <div id="mapSelection">
+                        <div class="world">
+                            <button class="island" onclick="selectMap('world')"></button>
+                            <div class="flag">
+                                <img src="media/earthFlag.png" width="50" class="flagIcon">                     
+                                <div class="pole"></div>
+                            </div>
+                            <p class="mapLabel">Map of the World</p>
+                        </div>
+                        <div class="canada">
+                            <button class="island" onclick="selectMap('canada')"></button>
+                            <div class="flag">
+                                <img src="media/canadianFlag.png" width="50" class="flagIcon">                        
+                                <div class="pole"></div>
+                            </div>
+                            <p class="mapLabel">Map of Canada</p>
+                        </div>
+                        <div class="usa">
+                            <button class="island" onclick="selectMap('us_aea_en')"></button>
+                            <div class="flag">
+                                <img src="media/americanFlag.png" width="50" class="flagIcon">                        
+                                <div class="pole"></div>
+                            </div>
+                            <p class="mapLabel">Map of the USA</p>
+                        </div>
+                    </div>
+
+                    <div id="gamemodeSelection">
+                        <div id="selector">
+                            <img src="media/skull.png" width="125" id="skull">
+                            <div id="gamemodeDiv">
+                                <button id="name" onclick="startGame('name')">Name as many countries as possible</button>
+                                <button id="locate" onclick="startGame('locate')">Locate as many countries as possible</button>
+                            </div>
+                        </div>
+                        <img src="media/ship.png" id="ship">                       
+                    </div>
+                </div>
+
+                <div id="map">
+                    <h1 id="lowTime"></h1>
+
+                    <img src="media/redo.svg" width="22" id="redo" onclick="tryAgain()" class="noHighlight">
+                    <p id="redoText" class="noHighlight">Try again</p>
+
+                    <img src="media/exit.svg" width="40" id="exit"onclick="end()" class="noHighlight">
+                    <p id="exitText" class="noHighlight">End test</p>
+                </div>
+
+                <div id="mapBorder"></div>
+            </div>
+
+            <img src="media/scroll2.png" id="scroll" class="noHighlight" draggable="false">
+        </div>
+
+        <div id="stats">
+            <h1 id="statsHeading">Game Over</h1>
+
+            <div class="scoreDisp">
+                <h2>Score</h2>
+                <h1 id="score"></h1>
+            </div>
+            <div class="scoreDisp pbScore">
+                <h2>Personal Best</h2>
+                <h1 id="bestScore"></h1>
+            </div>
+
+            <div id="timeDisp">
+                <div class="scoreDisp">
+                    <h2>Time</h2>
+                    <h1 id="time">1:00</h1>
+                </div>
+                <div class="scoreDisp pbTime">
+                    <h2>Your Best Time</h2>
+                    <h1 id="bestTime">4:00</h1>
+                </div>
+            </div>
+            
+            <div class="scoreDisp scoreBtns">
+                <button onclick="unfurlMap()" id="viewAnswers" class="pirateBtn">View Answers</button>
+                <button onclick="tryAgain()" class="pirateBtn">Try Again</button>
+                <button onclick="resetAll()" class="pirateBtn">Restart</button>
+            </div>
+           
+            <!-- add average score -->
+        </div>
+
+
+        <button id="soundControl" class="imgBtn" state="paused"></button>
+
+        <script src="node_modules/jsvectormap/dist/maps/world.js"></script>
+        <script src="node_modules/jsvectormap/dist/maps/canada.js"></script>
+        <script src="node_modules/jsvectormap/dist/maps/us-aea-en.js"></script>
+
+
+        <script src="main.js"></script>
+    </body>
+</html>
