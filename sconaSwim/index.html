@@ -7,9 +7,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             html{
-                /* height: fi; */
+
                 overflow-x: hidden;
-                margin: 0;
+
+                overflow-x: hidden;
 
             }
             body{
@@ -48,6 +49,7 @@
             }
 
             .scoreContainer:after {
+                display: block;
                 content: ' ';
                 border-top: 100vh solid #F8CF4B;
                 border-right: 27vw solid transparent;
@@ -107,11 +109,13 @@
                 }
                 .scoreContainer:after {
                     border: none;
+                    display: none;
                 }
 
                 .divider{
                     display: block;
                     height: 100px;
+                    max-width: 100%;
                 }
 
                 .divider:after{
@@ -120,6 +124,7 @@
                     border-right: 100vw solid #D23943;
                     width: 0;
                     position: absolute;
+                    max-width: 100%;
                 }
 
                 .top{
@@ -147,10 +152,6 @@
             li{
                 margin: 10px;
             }
-            
-            p{
-                margin-bottom: 100px;
-            }
         </style>
     </head>
     <body>
@@ -175,7 +176,7 @@
 
         <div class="mainContent">
             <h1 class="title">Scona Swim Battle</h1>
-            <h2>Highscores</h2>
+            <h2>Overall Highscores</h2>
             <div class="highscores">
                 <ol>
                     <li>Finlay Soehn</li>
