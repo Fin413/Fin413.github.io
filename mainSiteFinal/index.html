@@ -43,7 +43,6 @@
 
             }            
 
-
             #name{
                 cursor: pointer;
                 font-family: 'Courier New', Courier, monospace;
@@ -115,9 +114,7 @@
 
             .blueWhite path{
                 fill: white;
-            }
-
-            
+            }            
 
             @keyframes blink {
                 to{ visibility: hidden; }
@@ -217,8 +214,8 @@
                 width: 100%;
                 text-align: center;
                 /* position: absolute; */
-                /* visibility: hidden;
-                opacity: 0; */
+                visibility: hidden;
+                opacity: 0;
                 margin-right: 15px;
                 margin-left: 15px;
                 font-size: 15px;
@@ -296,6 +293,7 @@
                 margin-bottom: 40px;
                 resize: none;
                 height: 150px;
+                max-height: 150px;
                 outline: none;
                 padding: 10px;
                 /* font-weight: lighter; */
@@ -381,13 +379,13 @@
                 .contactContainer{
                     flex-direction: column;
                     align-items: center;
-                    justify-content: space-between;
-                    height: 105%;
                 }
 
                 .contactInfo{
+                    margin-top: 0;
                     width: fit-content;
                     margin-right: 0px;
+                    margin-bottom: 35px;
                     align-items: center;
                 }
 
@@ -481,7 +479,6 @@
                 <textarea placeholder="Enter Message" name="message" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
                 <button id="form-button">Send<img id="plane" src="plane.png" width="25px"></button>
                 <p id="form-status" style="opacity: 0; transition: all 1s; color:#499E98;text-align: center;">&nbsp</p>
-                <br/>
             </form>
         </div>
        
