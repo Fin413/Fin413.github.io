@@ -154,16 +154,9 @@
                 margin-bottom: 10px;
                 color: #4B6269;
                 margin-top: 0;
+                font-family: 'Courier New', Courier, monospace;
             }
 
-            hr{
-                border: 0;
-                height: 2px;
-                width: 90%;
-                background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
-                margin-bottom: 75px;
-
-            }
 
 
             /* figure out how to use grid instead */
@@ -174,7 +167,8 @@
                 width: 100%;
                 flex-wrap: wrap;
                 /* repeat(auto-fit, minmax(350px, 30%)) */
-                padding-top: 25px;
+                padding-top: 50px;
+                padding-bottom: 50px;
             }
 
             .siteContainer{
@@ -214,12 +208,30 @@
                 width: 100%;
                 text-align: center;
                 /* position: absolute; */
-                /* visibility: hidden; */
-                /* opacity: 0; */
+                /* visibility: hidden;
+                opacity: 0; */
                 margin-right: 15px;
                 margin-left: 15px;
                 font-size: 15px;
                 font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            }
+
+            .moreInfo{
+                background-color: white;
+                transition: all 300ms;
+                border: 1px solid black;
+                border-radius: 0;
+                cursor: pointer;
+                margin: 15px;
+
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            }
+
+            .moreInfo:hover{
+                /* background-color: black;
+                color: white; */
+                /* remove text and add arrow pointing -> */
+                border: 6px double #000000;
             }
 
             .siteThumbnail:hover ~ .siteDescription{
@@ -394,6 +406,24 @@
                 }
 
             }
+
+
+            hr{
+                border: 0;
+                height: 2px;
+                width: 90%;
+                background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #091b22, rgba(0, 0, 0, 0));
+                margin-bottom: 25px;
+                color:#091b22
+            }
+
+            .footer{
+                color: #091b22;
+                width: 100%;
+                text-align: center;
+                height: 50px;
+                margin: 0;
+            }
         </style>
 
        
@@ -433,26 +463,41 @@
                 <!-- <h1 class="siteTitle">Pirate Geography</h1> -->
                 <img src="pirate.png" class="siteThumbnail notSelectable" onclick="window.location='./PirateGeography'">
                 <!-- <a href="./5'Oclock">Pirate Geography</a> -->
-                <p class="siteDescription">Test your geography skills in this pirate themed guessing game. I made this site after taking a "countries of the world" quiz and wondering if I could make the same thing. Turns out, I can, this is the result.</p>
+                <p class="siteDescription">
+                    Test your Geography skills with this pirate-themed game. This site contains maps of Canada, the United States, and the World. Guess the locations or names of their regions and beat your highscores.
+                </p>
+                <button class="moreInfo">More Details</button>
             </div>
             <div class="siteContainer">
                 <!-- <h1 class="siteTitle">Galactic Gainz</h1> -->
                 <img src="gainz.png" class="siteThumbnail notSelectable" onclick="window.location='./GlacticGainz'">
                 
-                <p class="siteDescription">In the summer of 2021 covid-19 was rampant and I had nothing better to do than stay inside. So I entered a 4 week code-jam with the theme "health". I came second with this submission. </p>
+                <p class="siteDescription">
+                    Galactic Gainz is a site that aims to introduce newcomers to the world of fitness. With an alien companion and minigames, exercise has never been more out of this world.
+                    
+                </p>
+                <button class="moreInfo">More Details</button>
                 <!-- <a href="./5'Oclock">Galactic Gainz</a> -->
             </div>
             <div class="siteContainer">
                 <!-- <h1 class="siteTitle">Sudoku</h1> -->
                 <img src="sudoku.png" class="siteThumbnail notSelectable" onclick="window.location='./Sudoku'">
                 <!-- <a href="./5'Oclock">Sudoku Solver</a> -->
-                <p class="siteDescription">This site can create and solve Sudoku puzzles. Orignially made with Java I convered all the code to JavaScript and made a cool UI.</p>
+                <p class="siteDescription">
+                    Input numbers into the Sudoku grid and this site can solve it. It includes tools to create Sudoku puzzles and a visual demonstration of the backtracking algorithm used to solve the puzzles.
+                    
+                </p>
+                <button class="moreInfo">More Details</button>
             </div>
             <div class="siteContainer">
                 <!-- <h1 class="siteTitle">5 O'Clock</h1> -->
                 <img src="five.png" class="siteThumbnail notSelectable" onclick="window.location='./5OClock'">
                 <!-- <a href="./5'Oclock">5'Oclock</a> -->
-                <p class="siteDescription">Fed up with always worrying about making things look good, I made this site. This project can tell you where in the world it is currently 5 o'clock. (am or pm)</p>
+                <p class="siteDescription">
+                    Ever heard the phrase "It's 5'Oclock somewhere"? Well, this site brings that idea to life by telling you where in the world it's currently 5'Oclock.
+                    
+                </p>
+                <button class="moreInfo">More Details</button>
             </div>
         </div>
 
@@ -481,6 +526,9 @@
                 <p id="form-status" style="opacity: 0; transition: all 1s; color:#499E98;text-align: center;">&nbsp</p>
             </form>
         </div>
+
+        <hr>
+        <p class="footer">Created 2021 by Finlay Soehn, established 2004</p>
        
 
         <script>
