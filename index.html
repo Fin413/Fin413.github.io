@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Home</title>
+        <meta charset="UTF-8">
+        <link rel="icon" href="favicon.svg">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            :root{
+                --cursorAnimation: blink 1s steps(2, start) infinite;
+            }
+
+            body, html{
+                margin: 0;
+                height: 100%;
+                font-family: 'Courier New', Courier, monospace;
+                background-color: #0E2A35;
+            }
+
+            .notSelectable{
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-drag: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+            }
+
+            #nameContainer{
+                display: flex;
+                width: 100%;
+                height: 100%;
+                color: #4B6269;
+                background: #0E2A35;
+                /* background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgb(27, 27, 27) 100%); */
+                font-size: 65px;
+                text-align: center;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                z-index: 1;
+                /* margin-left: 15px; conflicted about this (with or without) */        
+
+            }            
+
+            #name{
+                cursor: pointer;
+                font-family: 'Courier New', Courier, monospace;
+            }
+
+            @media only screen and (max-width: 600px) {
+                #name{
+                    font-size: 20vw;
+                }
+            }
+
+            #description{
+                color: #6B9528;
+                text-align: left;
+                margin: -50px 50px 150px 50px;
+                word-break: break-all;
+            }
+
+            #description::after{
+                content: "_";
+                animation: var(--cursorAnimation);
+            }
+
+            #scroll{
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: -100px;
+                opacity: 0;
+                z-index: 100;
+                margin: auto auto 0 0;
+                text-align: center;
+                /* filter: invert(100%); */
+                color: #4B6269;
+                transition: bottom 1s, visibility 1s, opacity 1s;
+            }
+
+
+            #scroll, p {
+                margin-bottom: -5px;
+                font-size: 20px;
+            }
+
+            .downArrow{
+                border: solid #4B6269;
+                border-width: 0 3px 3px 0;
+                border-radius: 2px;
+                display: inline-block;
+                padding: 5px;
+                transform: rotate(45deg);
+                -webkit-transform: rotate(45deg);
+            }
+
+            .wave{
+                background-color: white;
+                margin-bottom: -10px;
+                margin-top: -5px;
+                z-index: 0;
+            }
+
+            .wave path{
+                fill: #0E2A35;
+            }
+
+            .blueWhite{
+                background-color: transparent;
+                margin-bottom: -10px;
+            }
+
+            .blueWhite path{
+                fill: white;
+            }            
+
+            @keyframes blink {
+                to{ visibility: hidden; }
+            }
+
+            @keyframes upDown {
+                0%{bottom: 20px}
+                50%{bottom: 10px;}
+                100%{bottom: 20px}
+            }
+
+            /* Scrollbar styling */
+
+            /* Scrollbar */
+            ::-webkit-scrollbar {
+                width: 12px;
+            }
+
+            /* Track */
+            ::-webkit-scrollbar-track {
+                background: #4B6269; 
+            }
+            
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                background: #091b22; 
+            }
+
+            /* Handle on hover */
+            /* ::-webkit-scrollbar-thumb:hover {
+                background: #555; 
+            } */
+
+            .title{
+                font-size: 90px;
+                width: 100%;
+                margin-bottom: 10px;
+                color: #4B6269;
+                margin-top: 0;
+                font-family: 'Courier New', Courier, monospace;
+            }
+
+
+
+            /* figure out how to use grid instead */
+            .gridContainer{
+                background-color: white;
+                display: flex;
+                justify-content: space-evenly;
+                width: 100%;
+                flex-wrap: wrap;
+                /* repeat(auto-fit, minmax(350px, 30%)) */
+                padding-top: 50px;
+                padding-bottom: 50px;
+            }
+
+            .siteContainer{
+                /* padding-right: 100px;
+                padding-left: 100px; */
+                width: 300px;
+                position: relative;
+                /* background-color: aquamarine; */
+                /* flex: 1; */
+                /* flex-shrink: 10; */
+                margin: 20px;
+                /* margin-bottom: 100px; */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                /* border: 1px solid black; */
+                margin-bottom: 20px;
+            }
+
+            
+
+            .siteTitle{
+                text-align: center;
+            }
+
+            .siteThumbnail{
+                transition: margin 1s;
+                width: 100%;
+                cursor: pointer;
+                z-index: 1;
+            }
+
+            .siteDescription{
+                transition: visibility 1s, opacity 600ms, top 1s;
+                /* top: 60%; */
+                width: 100%;
+                text-align: center;
+                /* position: absolute; */
+                /* visibility: hidden;
+                opacity: 0; */
+                margin-right: 15px;
+                margin-left: 15px;
+                font-size: 15px;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            }
+
+            .moreInfo{
+                background-color: white;
+                transition: all 300ms;
+                border: 1px solid black;
+                border-radius: 0;
+                cursor: pointer;
+                margin: 15px;
+
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            }
+
+            .moreInfo:hover{
+                /* background-color: black;
+                color: white; */
+                /* remove text and add arrow pointing -> */
+                border: 6px double #000000;
+            }
+
+            .siteThumbnail:hover ~ .siteDescription{
+                visibility: visible;
+                opacity: 1;
+                /* top: 60%; */
+            }
+
+            .siteThumbnail:hover {
+                /* margin-bottom: 100px; */
+            }
+
+            .contactContainer{
+                display: flex;
+                width: 100%;
+                height: 100%;
+                /* margin-left: auto;
+                margin-right: auto; */
+                justify-content: center;
+                overflow-x: hidden;
+                overflow-y: hidden;
+                /* width: fit-content; */
+                /* flex-direction: r; */
+            }
+
+            .contactInfo{
+                margin-top: 10%;
+                width: 375px;
+                text-align: right;
+                color: #6B9528;
+                display: flex;
+                align-items: flex-end;
+                flex-direction: column;
+                margin-right: 100px;
+                
+            }
+
+            form{
+                margin-top: 13%;
+                width: 375px;
+                /* height: 100%; */
+                display: flex;
+                justify-content: flex-start;
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            input[type="email"]{
+                border-radius: 0;
+                /* width: 200px; */
+                border: 1px solid #4B6269;
+                color: white;
+                font-size: 15px;
+                font-family: 'Courier New', Courier, monospace;
+                outline: none;
+                background-color: #0E2A35;
+                margin-bottom: 25px;
+                padding: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-top: 8px;
+            }
+
+            textarea{
+                border-radius: 0;
+                font-family: 'Courier New', Courier, monospace;
+                background-color: #0E2A35;
+                border: 1px solid #4B6269;
+                color: white;
+                font-size: 15px;
+                margin-bottom: 40px;
+                resize: none;
+                height: 150px;
+                max-height: 150px;
+                outline: none;
+                padding: 10px;
+                /* font-weight: lighter; */
+            }
+
+            form button{
+                cursor: pointer;
+                background-color: #4B6269;
+                border: none;
+                color: black;
+                padding: 5px;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 20px;
+                transition: all 500ms;
+                position: relative;
+                padding-right: 30px;
+            }
+
+            form button:hover{
+                background-color: #6B9528;                
+            }
+
+            #plane{
+                position: absolute;
+                right: 145px;
+                top: 3px;
+                transition: all 1s;
+            }
+
+            @keyframes fly {
+                0%{
+                    right: 145px;
+                    top: 3px;
+                }
+                75%{
+                    right: -1000px;
+                    top: -1000px;
+                }
+                80%{
+                    opacity: 0;
+                }
+                85%{
+                    right: 145px;
+                    top: 3px;
+                    opacity: 0;
+                }
+                100%{
+                    opacity: 1;
+                }
+            }
+
+
+
+            .textHighlight{
+                background-color: #091b22;
+                color: #6B9528;
+                padding: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
+                margin-bottom: 30px;
+                user-select: all;
+                cursor: text;
+                /* font-weight: bold; */
+                letter-spacing: 1px;
+                transition: all 500ms;
+
+
+
+            }
+
+            .textHighlight:hover{
+                background-color: white;
+                color: black;
+                transform: scale(1.1) translateZ(0);
+            }
+
+            .greenText{
+                color: #6B9528;
+            }
+
+            @media only screen and (max-width: 900px) {
+
+                .contactContainer{
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                .contactInfo{
+                    margin-top: 0;
+                    width: fit-content;
+                    margin-right: 0px;
+                    margin-bottom: 35px;
+                    align-items: center;
+                }
+
+                form{
+                    margin-top: 0;
+                }
+
+            }
+
+
+            hr{
+                border: 0;
+                height: 2px;
+                width: 90%;
+                background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #091b22, rgba(0, 0, 0, 0));
+                margin-bottom: 25px;
+                color:#091b22
+            }
+
+            .footer{
+                color: #091b22;
+                width: 100%;
+                text-align: center;
+                height: 50px;
+                margin: 0;
+            }
+        </style>
+
+       
+    </head>
+    <body onload="init()">
+        <div id="nameContainer">
+            <h1 id="name" class="notSelectable"></h1>
+            <p id="description">C:\WINDOWS\system32\>&nbsp;<noscript>Error: JavaScript is not enabled</noscript></p>
+
+            <script>
+                const os = navigator.userAgent;
+                const descriptionText = document.getElementById("description");
+    
+                if (os.indexOf("Mac") != -1){
+                    descriptionText.innerHTML = "Finlays-MacBook:~ Fin$&nbsp;"
+                }else if (os.indexOf("Linux") != -1){
+                    descriptionText.innerHTML = "fin@ubuntu:~$";
+                }
+            </script>
+
+            <div id="scroll" class="notSelectable">
+                <p>Scroll</p>
+                <i class="downArrow"></i>
+            </div>
+        </div>
+
+        <svg class="wave" style="transform:rotate(180deg); transition: 0.3s; opacity: 1" viewBox="0 0 1440 250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <path style="transform:translate(0, 0px); opacity:1" d="M0,0L288,150L576,150L864,125L1152,100L1440,125L1728,125L2016,50L2304,0L2592,100L2880,125L3168,150L3456,0L3744,150L4032,175L4320,225L4608,175L4896,150L5184,225L5472,225L5760,75L6048,125L6336,125L6624,25L6912,150L6912,250L6624,250L6336,250L6048,250L5760,250L5472,250L5184,250L4896,250L4608,250L4320,250L4032,250L3744,250L3456,250L3168,250L2880,250L2592,250L2304,250L2016,250L1728,250L1440,250L1152,250L864,250L576,250L288,250L0,250Z"></path>
+            <path style="transform:translate(0, 50px); opacity:0.9" d="M0,175L288,175L576,50L864,150L1152,125L1440,0L1728,175L2016,150L2304,75L2592,100L2880,225L3168,175L3456,0L3744,0L4032,25L4320,75L4608,200L4896,25L5184,175L5472,175L5760,75L6048,125L6336,175L6624,125L6912,25L6912,250L6624,250L6336,250L6048,250L5760,250L5472,250L5184,250L4896,250L4608,250L4320,250L4032,250L3744,250L3456,250L3168,250L2880,250L2592,250L2304,250L2016,250L1728,250L1440,250L1152,250L864,250L576,250L288,250L0,250Z"></path>
+            <path style="transform:translate(0, 100px); opacity:0.8" d="M0,200L288,175L576,125L864,175L1152,125L1440,0L1728,200L2016,175L2304,100L2592,225L2880,150L3168,150L3456,225L3744,0L4032,175L4320,50L4608,125L4896,125L5184,50L5472,150L5760,125L6048,100L6336,225L6624,200L6912,100L6912,250L6624,250L6336,250L6048,250L5760,250L5472,250L5184,250L4896,250L4608,250L4320,250L4032,250L3744,250L3456,250L3168,250L2880,250L2592,250L2304,250L2016,250L1728,250L1440,250L1152,250L864,250L576,250L288,250L0,250Z"></path>
+            <path style="transform:translate(0, 150px); opacity:0.7" d="M0,225L288,225L576,100L864,125L1152,50L1440,175L1728,125L2016,150L2304,125L2592,225L2880,125L3168,200L3456,125L3744,225L4032,175L4320,175L4608,100L4896,225L5184,125L5472,125L5760,50L6048,0L6336,0L6624,175L6912,25L6912,250L6624,250L6336,250L6048,250L5760,250L5472,250L5184,250L4896,250L4608,250L4320,250L4032,250L3744,250L3456,250L3168,250L2880,250L2592,250L2304,250L2016,250L1728,250L1440,250L1152,250L864,250L576,250L288,250L0,250Z"></path>
+        </svg>
+       
+
+        <div class="gridContainer">
+            <div class="siteContainer">
+                <!-- <h1 class="siteTitle">Pirate Geography</h1> -->
+                <img src="pirate.png" class="siteThumbnail notSelectable" onclick="window.location='./PirateGeography'">
+                <!-- <a href="./5'Oclock">Pirate Geography</a> -->
+                <p class="siteDescription">
+                    Test your Geography skills with this pirate-themed game. This site contains maps of Canada, the United States, and the World. Guess the locations or names of their regions and beat your highscores.
+                </p>
+                <!-- <button class="moreInfo">More Details</button> -->
+            </div>
+            <div class="siteContainer">
+                <!-- <h1 class="siteTitle">Galactic Gainz</h1> -->
+                <img src="gainz.png" class="siteThumbnail notSelectable" onclick="window.location='./GlacticGainz'">
+                
+                <p class="siteDescription">
+                    Galactic Gainz is a site that aims to introduce newcomers to the world of fitness. With an alien companion and minigames, exercise has never been more out of this world.
+                    
+                </p>
+                <!-- <button class="moreInfo">More Details</button> -->
+                <!-- <a href="./5'Oclock">Galactic Gainz</a> -->
+            </div>
+            <div class="siteContainer">
+                <!-- <h1 class="siteTitle">Sudoku</h1> -->
+                <img src="sudoku.png" class="siteThumbnail notSelectable" onclick="window.location='./Sudoku'">
+                <!-- <a href="./5'Oclock">Sudoku Solver</a> -->
+                <p class="siteDescription">
+                    Input numbers into the Sudoku grid and this site can solve it. It includes tools to create Sudoku puzzles and a visual demonstration of the backtracking algorithm used to solve the puzzles.
+                    
+                </p>
+                <!-- <button class="moreInfo">More Details</button> -->
+            </div>
+            <div class="siteContainer">
+                <!-- <h1 class="siteTitle">5 O'Clock</h1> -->
+                <img src="five.png" class="siteThumbnail notSelectable" onclick="window.location='./5OClock'">
+                <!-- <a href="./5'Oclock">5'Oclock</a> -->
+                <p class="siteDescription">
+                    Ever heard the phrase "It's 5'Oclock somewhere"? Well, this site brings that idea to life by telling you where in the world it's currently 5'Oclock.
+                    
+                </p>
+                <!-- <button class="moreInfo">More Details</button> -->
+            </div>
+        </div>
+
+        <svg class="blueWhite" style="transform:rotate(180deg); transition: 0.3s; opacity: 1" viewBox="0 0 1440 250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <path style="transform:translate(0, 0px); opacity:1" d="M0,0L288,150L576,150L864,125L1152,100L1440,125L1728,125L2016,50L2304,0L2592,100L2880,125L3168,150L3456,0L3744,150L4032,175L4320,225L4608,175L4896,150L5184,225L5472,225L5760,75L6048,125L6336,125L6624,25L6912,150L6912,250L6624,250L6336,250L6048,250L5760,250L5472,250L5184,250L4896,250L4608,250L4320,250L4032,250L3744,250L3456,250L3168,250L2880,250L2592,250L2304,250L2016,250L1728,250L1440,250L1152,250L864,250L576,250L288,250L0,250Z"></path>
+            <path style="transform:translate(0, 50px); opacity:0.9" d="M0,175L288,175L576,50L864,150L1152,125L1440,0L1728,175L2016,150L2304,75L2592,100L2880,225L3168,175L3456,0L3744,0L4032,25L4320,75L4608,200L4896,25L5184,175L5472,175L5760,75L6048,125L6336,175L6624,125L6912,25L6912,250L6624,250L6336,250L6048,250L5760,250L5472,250L5184,250L4896,250L4608,250L4320,250L4032,250L3744,250L3456,250L3168,250L2880,250L2592,250L2304,250L2016,250L1728,250L1440,250L1152,250L864,250L576,250L288,250L0,250Z"></path>
+            <path style="transform:translate(0, 100px); opacity:0.8" d="M0,200L288,175L576,125L864,175L1152,125L1440,0L1728,200L2016,175L2304,100L2592,225L2880,150L3168,150L3456,225L3744,0L4032,175L4320,50L4608,125L4896,125L5184,50L5472,150L5760,125L6048,100L6336,225L6624,200L6912,100L6912,250L6624,250L6336,250L6048,250L5760,250L5472,250L5184,250L4896,250L4608,250L4320,250L4032,250L3744,250L3456,250L3168,250L2880,250L2592,250L2304,250L2016,250L1728,250L1440,250L1152,250L864,250L576,250L288,250L0,250Z"></path>
+            <path style="transform:translate(0, 150px); opacity:0.7" d="M0,225L288,225L576,100L864,125L1152,50L1440,175L1728,125L2016,150L2304,125L2592,225L2880,125L3168,200L3456,125L3744,225L4032,175L4320,175L4608,100L4896,225L5184,125L5472,125L5760,50L6048,0L6336,0L6624,175L6912,25L6912,250L6624,250L6336,250L6048,250L5760,250L5472,250L5184,250L4896,250L4608,250L4320,250L4032,250L3744,250L3456,250L3168,250L2880,250L2592,250L2304,250L2016,250L1728,250L1440,250L1152,250L864,250L576,250L288,250L0,250Z"></path>
+        </svg>
+        
+        <div class="contactContainer">
+            <div class="contactInfo">
+                <h1 class="title">Contact</h1>
+                <div>
+                    <img class="notSelectable" style="display: inline-block; margin-bottom: -3px;" src="mail.png" width="30px" id="emailImage">
+                    <p style="display: inline-block;">Email</p>
+                </div>
+                <p class="textHighlight">FinSoehn@gmail.com</p>
+                <!-- <p class="greenText">Reach me directly at <span class="textHighlight">FinSoehn@gmail.com</span></p> -->
+            </div>
+
+            <form id="emailForm" action="https://formspree.io/f/xrgrzdpk" method="POST">
+                <input placeholder="Your Email" type="email" name="email" />
+                <textarea placeholder="Enter Message" name="message" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+                <button id="form-button">Send<img id="plane" src="plane.png" width="25px"></button>
+                <p id="form-status" style="opacity: 0; transition: all 1s; color:#499E98;text-align: center;">&nbsp</p>
+            </form>
+        </div>
+       
+
+        <script>
+            /*************************************************************************************\
+
+                TODO
+                    - Contact list is not vertically centered, especially on mobile
+                    - also on the emailtext threres no margin bottom om mobiles so its too close
+
+                ISSUES
+                    - the wave element has a small line in between why?
+                    - innerText doesn't read spaces (if encouter issues this might be cause)
+
+                SHIT LIST
+                    - particle.js for background???
+                    - add fish going acress the screen or smth idk
+                    - dripping inc into letters
+                    - add a go crazy button that ducks up all the text witht teh scramble thing
+
+            \**************************************************************************************/
+
+
+
+            function init(){
+                setTimeout(()=>{
+                    typeLoop = setInterval(typeLetter, 100);
+                    scramble = setInterval(scrambleString, 50);
+                }, 500);
+            }
+
+        
+            // var allSvgs = [];
+            
+            // document.querySelectorAll("svg").forEach((svg, i) =>{
+            //     let svgObject = {};
+            //     let pArray = [];
+
+            //     svg.querySelectorAll("path").forEach((path)=> {
+            //         pArray.push(path.getAttribute("d"));
+            //     })
+
+            //     svgObject = {
+            //         target: pArray,
+            //         currentPath: pArray.slice(),
+            //     }
+
+            //     allSvgs.push(svgObject);
+            // });
+
+
+            // var animationIndex = 0;
+            // function animate(){
+            //     requestAnimationFrame(animate);
+            //     animationIndex++;
+            //     if(animationIndex < 5) return;
+            //     animationIndex = 0;
+
+
+
+            //     allSvgs.forEach((svg, index)=>{
+            //         for(let i = 0; i < svg.target.length; i++){
+            //             let targetCoords = svg.target[i].split(/([A-z])/);
+            //             let currentPathCoords = svg.currentPath[i].split(/([A-z])/);
+
+            //             let min, max;
+
+            //             switch(i){
+            //                 case 0:
+            //                     min = 100;
+            //                     max = 250;
+            //                     break;
+            //                 case 1:
+            //                     min = 0;
+            //                     max = 150;
+            //                     break;
+            //                 case 2:
+            //                     min = -50;
+            //                     max = 50;
+            //                     break;
+            //                 case 3:
+            //                     min = -100;
+            //                     max = 0;
+            //                     break;
+            //             }
+                       
+            //             for(let j = 0; j < currentPathCoords.length; j++){
+            //                 if(!isNaN(currentPathCoords[j][0])){
+            //                     let splitCoord = currentPathCoords[j].split(",");
+            //                     let targetCoord = targetCoords[j].split(",");
+                              
+            //                     if(splitCoord[1] == targetCoord[1]){
+                                    
+            //                         if(splitCoord[1] == "250") continue;
+
+            //                         let targetInt = parseInt(targetCoord[1]);
+
+
+            //                         let randNum = Math.floor(Math.random() * 10);
+            //                         let fifty = Math.floor(Math.random() * 2);
+                                    
+            //                         if((fifty == 0 && targetInt > min) || targetInt > max) randNum = -randNum;
+                                    
+            //                         targetCoord[1] = targetInt + randNum;
+            //                         targetCoords[j] = targetCoord[0] + "," + targetCoord[1];
+                                    
+            //                     }else{ 
+            //                         // console.log(splitCoord, targetCoord);
+            //                         if(parseInt(splitCoord[1]) > parseInt(targetCoord[1])){
+            //                             // console.log("down")
+            //                             splitCoord[1] = parseInt(splitCoord[1]) - 1;
+            //                         }else{
+            //                             // console.log("up")
+            //                             splitCoord[1] = parseInt(splitCoord[1]) + 1;
+            //                         }
+
+            //                         currentPathCoords[j] = splitCoord[0] + "," + splitCoord[1];
+            //                     }
+
+            //                 }
+            //             }
+
+            //             svg.target[i] = targetCoords.join("");
+            //             svg.currentPath[i] = currentPathCoords.join("");
+            //             document.querySelectorAll("svg")[index].querySelectorAll("path")[i].setAttribute("d", currentPathCoords.join(""));
+                        
+            //         }
+
+            //         // console.log(svg)
+            //     })
+                   
+                
+            // }
+
+            // animate();
+            // var testLoop;
+
+            // document.onmousedown = () =>{
+            //     // animate();
+            //     testLoop = setInterval(animate, 100);
+            // }
+            // document.onmouseup = () =>{
+            //     clearInterval(testLoop);
+            // }
+
+            
+
+
+            const element = document.getElementById("name");
+            const root = document.querySelector(":root");
+            const scrollIndicator = document.getElementById("scroll");
+
+            var typeElement = element;
+
+            var name = "Finlay Soehn.";
+            var stringLength = 0;
+            var scramble;
+            var solve;
+            var solvedLetters = [];
+
+            var typeLoop;
+            var typeString = name;
+            var typeIndex = 0;
+
+            if (window.addEventListener){
+                window.addEventListener("mousewheel", scrollHandler, {passive: false}); // IE9+, Chrome, Safari, Opera
+                window.addEventListener("DOMMouseScroll", scrollHandler); // Firefox
+            }else{
+                window.attachEvent("onmousewheel", scrollHandler); // IE 6/7/8
+            }
+
+            function scrollHandler() {
+                let scrollPos = window.scrollY;
+
+                // if(scrollPos > 150){
+                //     scrollIndicator.style.animation = "none";
+                //     setTimeout(()=>{
+                //         scrollIndicator.style.bottom = "-100px";
+                //         scrollIndicator.style.visibility = "hidden";
+                //     }, 500);
+                // }
+                
+                // for(let i = 1; i < infoBlocks.length; i++){
+                //     let topOffset = infoBlocks[i].offsetTop;
+                //     let halfHeight = infoBlocks[i].offsetHeight/2;
+
+                //     if(scrollPos > (topOffset - window.innerHeight + halfHeight)) infoBlocks[i].style.opacity = 1;
+                // }
+            }
+
+            var test = "No change";
+
+            function changeTest(changeMe){
+                changeMe = "Changed!";
+            }
+
+            changeTest(test);
+            console.log(test);
+
+            function typeLetter(){
+                // console.log(typeString[typeElement.textContent.length - 1])
+                typeElement.innerHTML += typeString[typeIndex];
+                typeIndex ++;
+
+                if(typeElement == element) stringLength ++;
+                
+                if(typeIndex == typeString.length){ /// <- no neg 1???
+                    typeIndex = 0;
+
+                    if(typeString == "Full Stack Developer."){
+                        clearInterval(typeLoop);
+                        root.style.setProperty('--cursorAnimation', "blink 1s steps(2, start) infinite");
+                        return;
+                    }
+
+                    setTimeout(()=>{
+                        scrollIndicator.style.bottom = "20px";
+                        scrollIndicator.style.opacity = 1;
+
+                        typeString = "Full Stack Developer.";
+                        root.style.setProperty('--cursorAnimation', "none");
+                        typeLoop = setInterval(typeLetter, 100);
+                        typeElement = descriptionText;
+
+                        setTimeout(()=>{
+                            scrollIndicator.style.animation = "upDown 2s ease-in-out infinite";
+                        }, 1000)
+                    }, 1500);
+                    
+                    clearInterval(typeLoop);
+                    unscramble();
+
+                    element.onmouseover = () => {
+                        stopScramble();
+                        scramble = setInterval(scrambleString, 50);
+                    }  
+                    element.onmouseleave = unscramble;
+                }
+            }
+
+            function stopScramble(){
+                clearInterval(solve);
+                clearInterval(scramble);
+                solvedLetters = [];
+            }
+
+            function scrambleString(){
+                const clearCharacters = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890~!@#$%^&*()`-_=+[]{}\\|:\;\"'?/>.<,";
+
+                for(var i = 0; i < stringLength; i++){
+                    
+                    let temp = element.textContent;
+                    
+                    if(solvedLetters.includes(i) || temp[i] == " ") continue;
+
+                    let random = Math.floor(Math.random() * (clearCharacters.length)); 
+                    element.innerText = temp.substring(0, i) + clearCharacters[random] + temp.substring(i + 1);
+                }
+            }
+
+            function unscramble(){        
+                const solveFunc = () => {
+                    if(solvedLetters.length == name.length){
+                        stopScramble();
+                        return;
+                    }
+
+                    let numLettersSolved = Math.floor(Math.random() * 3);
+                    if((name.length - solvedLetters.length) == 1) numLettersSolved = 1;
+                    
+                    for(var i = 0; i < numLettersSolved; i++){
+                        let charIndex = Math.floor(Math.random() * name.length);
+
+                        while(solvedLetters.includes(charIndex)){ 
+                            if(charIndex == name.length - 1) charIndex = 0;
+                            else charIndex++;
+                        }
+                        
+                        solvedLetters.push(charIndex);
+                        
+                        element.innerText = element.innerText.substring(0, charIndex) + name[charIndex] + element.innerText.substring(charIndex + 1);
+                    }
+                }
+                solve = setInterval(solveFunc, 75);
+            }
+
+            document.getElementById("emailForm").onsubmit = (e) => {
+                e.preventDefault();
+
+                var form = document.getElementById("emailForm");
+                var email = document.getElementsByName("email")[0].value;
+                var message = document.getElementsByName("message")[0].value;
+                var status = document.getElementById("form-status");
+
+                if(message == "" || email == ""){
+                    status.innerText = "Please fill out all fields.";
+                    status.style.opacity = 1;
+                    return;
+                }
+
+                document.getElementById("plane").style.animation = "fly 2.5s";
+
+                var data = new FormData(event.target);
+
+                fetch(event.target.action, {
+                    method: form.method,
+                    body: data,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }).then(response => {
+                    status.innerHTML = "Message sent";
+                    status.style.opacity = 1;
+                    form.reset();
+                }).catch(error => {
+                    status.innerHTML = "Oops! There was a problem sending your message";
+                    status.style.opacity = 1;
+                    console.log(error);
+                });
+            }
+
+
+        </script>
+    </body>
+</html>
+
+
+<!-- // var paths = document.querySelectorAll("path");
+// let min = 25; // 0 is bottom
+// let max = 200; // 250 is top
+// let add = true;
+
+// var animationIndex = 0;
+
+
+// function animate(){
+//     requestAnimationFrame(animate);
+   
+//     for(let i = 0; i < paths.length; i++){
+//         let currentPathCoords = paths[i].getAttribute("d").split(/([A-z])/);
+
+//         switch(i){
+//             case 0:
+//                 min = 100;
+//                 max = 250;
+//                 break;
+//             case 1:
+//                 min = 0;
+//                 max = 150;
+//                 break;
+//             case 2:
+//                 min = -50;
+//                 max = 50;
+//                 break;
+//             case 3:
+//                 min = -100;
+//                 max = 0;
+//                 break;
+//         }
+
+//         for(let j = 0; j < currentPathCoords.length; j++){
+//             if(!isNaN(currentPathCoords[j][0])){
+//                 let coords = currentPathCoords[j].split(",");
+
+//                 // y range 0 (bottom) - 250 (top)
+
+//                 if(coords[1] == "250") continue;
+
+//                 let randNum = Math.floor(Math.random() * 10);
+//                 let coordInt = parseInt(coords[1]);
+
+//                 if((add && coordInt >= max || !add) && (coordInt >= min)) randNum *= -1;
+
+//                 coords[1] = coordInt + randNum;
+
+//                 currentPathCoords[j] = coords[0] + "," + coords[1];
+//             }
+//         }
+
+//         paths[i].setAttribute("d", currentPathCoords.join(""));
+
+//     }
+
+
+//     add = !add;
+// }
+
+// animate(); -->
