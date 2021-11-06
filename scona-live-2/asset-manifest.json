@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/scona-live-2/static/css/main.91a9f07a.chunk.css",
+    "main.js": "/scona-live-2/static/js/main.02939779.chunk.js",
+    "main.js.map": "/scona-live-2/static/js/main.02939779.chunk.js.map",
+    "runtime-main.js": "/scona-live-2/static/js/runtime-main.8e160a62.js",
+    "runtime-main.js.map": "/scona-live-2/static/js/runtime-main.8e160a62.js.map",
+    "static/js/2.5df88e36.chunk.js": "/scona-live-2/static/js/2.5df88e36.chunk.js",
+    "static/js/2.5df88e36.chunk.js.map": "/scona-live-2/static/js/2.5df88e36.chunk.js.map",
+    "static/js/3.b61f6b40.chunk.js": "/scona-live-2/static/js/3.b61f6b40.chunk.js",
+    "static/js/3.b61f6b40.chunk.js.map": "/scona-live-2/static/js/3.b61f6b40.chunk.js.map",
+    "index.html": "/scona-live-2/index.html",
+    "static/css/main.91a9f07a.chunk.css.map": "/scona-live-2/static/css/main.91a9f07a.chunk.css.map",
+    "static/js/2.5df88e36.chunk.js.LICENSE.txt": "/scona-live-2/static/js/2.5df88e36.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.8e160a62.js",
+    "static/js/2.5df88e36.chunk.js",
+    "static/css/main.91a9f07a.chunk.css",
+    "static/js/main.02939779.chunk.js"
+  ]
+}
