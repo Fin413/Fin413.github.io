@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Scona BSA</title>
+        <link rel="icon" href="favicon.png" />
+        <link rel="stylesheet" href="stylesheet.css" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    </head>
+    <body>
+        
+      
+        <div class="header">
+            <div id="scale">
+                <div class="logoContainer">
+                    <div class="fadein logo"></div>
+                </div>
+            </div>
+            <div class="fadein column">
+                <div class="buttons">
+                    <button class="textBtn">About</button>
+                    <button class="textBtn" onclick="window.location='https:\/\/anchor.fm/sconabsa'">Podcast</button>
+                    <button class="imgBtn" onclick="window.location='https\:\/\/www.instagram.com/sconabsa/?hl=en'"><img width="100%" src="instaIcon.svg"></button>
+                    <button class="imgBtn" onclick="showOverlay(0)"><img width="100%" src="classroomIcon.svg"></button>
+                </div>
+                <div class="dropdown">
+                    <div style="display: flex; justify-content: space-evenly;" class="buttons">
+                        <h1 class="smallTitle">SCONA BSA</h1>
+                        <button class="imgBtn"><img src="burger.png" width="25px" onclick="showDropdown()"></button>
+                    </div>
+
+                    <div class="dropdown-content">
+                        <h2>Menu</h2>
+                        <button class="dropdownBtn textBtn">About</button>
+                        <button class="dropdownBtn textBtn" onclick="window.location='https:\/\/anchor.fm/sconabsa'">Podcast</button>
+                        <div style="display: flex; justify-content: space-evenly;" class="buttons">
+                            <button class="dropdownBtn imgBtn" onclick="window.location='https:\/\/www.instagram.com/sconabsa/?hl=en'"><img width="100%" src="instaIcon.svg"></button>
+                            <button class="dropdownBtn imgBtn" onclick="showOverlay(0)"><img width="100%" src="classroomIcon.svg"></button>
+                        </div> 
+                    </div>
+                </div>
+
+                
+                <h1 id="title">STRATHCONA BLACK STUDENTS' ALLIENCE</h1>
+            </div>
+           
+
+           
+        </div>
+
+        <div id="overlay">
+            <div class="overlayContent">
+                <button class="xBtn" onclick="hideOverlay(0)">+</button>
+                <h1>Google Classroom Code</h1>
+                <h1 class="largeText">1g463t</h1>
+            </div>
+        </div>
+
+
+        <div class="section">
+            <div class="fadeScroll">
+                <h1>Blah blah blah</h1>
+                <p>WOrds words words</p>
+            </div>
+        </div>
+        <div class="section">
+            <div class="fadeScroll">
+                <h1>Blah blah blah</h1>
+                <p>WOrds words words</p>
+            </div>
+        </div>
+        <div class="section">
+            <div class="fadeScroll">
+                <h1>Blah blah blah</h1>
+                <p>WOrds words words</p>
+            </div>
+        </div>
+        <div class="section">
+            <div class="fadeScroll">
+                <h1>Blah blah blah</h1>
+                <p>WOrds words words</p>
+            </div>
+        </div>
+        <div class="section">
+            <div class="fadeScroll">
+                <h1>Blah blah blah</h1>
+                <p>WOrds words words</p>
+            </div>
+        </div>
+
+        <div class="footer column">
+            <div>
+                <button class="imgBtn" onclick="window.location='https\:\/\/www.instagram.com/sconabsa/?hl=en'"><img width="100%" src="instaIcon.svg"></button>
+                <button class="imgBtn" onclick="window.location='https:\/\/anchor.fm/sconabsa'"><img width="100%" src="podcast.png"></button>
+                <button class="imgBtn" onclick="showOverlay(0)"><img width="100%" src="classroomIcon.svg"></button>
+            </div>
+            <p>&#169; Strathcona Highschool 2021 - Finlay Soehn</p>
+        </div>
+
+        <script>
+            const title = document.getElementById("title");
+            var logo = document.getElementsByClassName("logo")[0];
+
+            var fadein = document.getElementsByClassName("fadein");
+
+            window.onload = () => {
+                fadeInScroll();
+                for(let el of fadein){
+                    el.style.opacity = 1;
+                };
+            }
+
+            var dropdownContent = document.getElementsByClassName("dropdown-content")[0];
+            var dropdownInit = true;
+
+            function showDropdown(){
+                dropdownInit = false;
+                dropdownContent.classList.add("showDropdown");
+
+                setTimeout(()=>{
+                    dropdownInit = true;
+                }, 100);
+            }
+
+            var overlay = document.getElementById("overlay");
+            
+            overlay.onclick = (e) => {
+                if(e.target.id === "overlay") hideOverlay();
+            }
+
+            function showOverlay(index){
+                document.getElementsByClassName("overlayContent")[index].style.display = "flex";
+                overlay.style.display = "flex";
+                setTimeout(()=>{overlay.style.opacity = 1;}, 200);
+            }
+
+            function hideOverlay(){
+                overlay.style.opacity = 0;
+                setTimeout(()=>{
+                    for(let el of document.getElementsByClassName("overlayContent")){
+                        if(el.style.display === "flex") el.style.display = "none";
+                    }
+                    overlay.style.display = "none";
+                }, 500);
+            }
+
+            document.onclick = () => {
+                if(dropdownInit){
+                    dropdownContent.classList.remove("showDropdown");
+                }
+            }
+
+
+            var fadeScroll = document.getElementsByClassName("fadeScroll");
+
+            window.addEventListener("scroll", fadeInScroll);
+
+            function fadeInScroll(){
+                var scroll = window.scrollY;
+                
+                for(let el of fadeScroll){
+                    let topOffset = el.offsetTop;
+                    let halfHeight = el.offsetHeight/2;
+
+                    if(scroll > (topOffset - window.innerHeight + halfHeight)){
+                        el.style.opacity = 1;
+                        el.style.transform = "translateY(0)";
+                    }
+                }
+            }
+
+        </script>
+    </body>
+</html>
