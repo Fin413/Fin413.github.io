@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <style>
+            :root{
+                --cursorAnimation: blink 1s steps(2, start) infinite;
+            }
+
+            body, html{
+                margin: 0;
+                font-family: 'Courier New', Courier, monospace;
+                background: #0E2A35;
+            }
+
+            .fadeScroll, .intervalFade{
+                opacity: 0;
+                transform: translateY(100px);
+                transition: opacity 1s, transform 1s;
+            }
+
+             /* Scrollbar */
+             ::-webkit-scrollbar {
+                width: 12px;
+            }
+
+            /* Track */
+            ::-webkit-scrollbar-track {
+                background: #4B6269; 
+            }
+            
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                background: #091b22; 
+            }
+
+
+            .notSelectable{
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-drag: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+            }
+
+            .fullHeight{
+                height: 100vh;
+                background-color: #0E2A35;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                text-align: center;
+                padding: 0 50px 0 50px;
+            }
+
+            #name{
+                cursor: pointer;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 8rem;
+                margin: 0;
+                color: #4B6269;
+            }
+
+            #description{
+                color: #6B9528;
+                text-align: left;
+                word-break: break-all;
+                font-weight: normal;
+                font-size: 20px;
+                margin-bottom: 75px;
+            }
+
+            #description::after{
+                content: "_";
+                animation: var(--cursorAnimation);
+            }
+
+            @media only screen and (max-width: 600px) {
+                #name{
+                    font-size: 20vw;
+                }
+
+                .fullHeight{
+                    padding: 0 25px 0 25px;
+                }
+            }
+
+            #scroll{
+                position: absolute;
+                visibility: hidden;
+                bottom: -100px;
+                opacity: 0;
+                left: 0;
+                right: 0;
+                z-index: 2;
+                margin: auto auto 0 0;
+                text-align: center;
+                color: #4B6269;
+                transition: bottom 1s, visibility 1s, opacity 1s;
+            }
+
+            #scroll p {
+                margin-bottom: -5px;
+                font-size: 20px;
+            }
+
+            .downArrow{
+                border: solid #4B6269;
+                border-width: 0 3px 3px 0;
+                border-radius: 2px;
+                display: inline-block;
+                padding: 5px;
+                transform: rotate(45deg);
+                -webkit-transform: rotate(45deg);
+            }
+
+            .portfolioGrid{
+                background-color: white;
+                display: flex;
+                justify-content: space-evenly;
+                width: 100%;
+                flex-wrap: wrap;
+                /* transform: skewY(-11deg); */
+
+                padding-top: 200px;
+                padding-bottom: 200px;
+                clip-path: polygon(0 15%, 100% 0%, 100% 85%, 0% 100%);
+            }
+
+            @media only screen and (max-width: 800px) {
+                .portfolioGrid{
+                    clip-path: polygon(0 5%, 100% 0%, 100% 95%, 0% 100%);
+                }
+            }
+
+
+            .siteContainer{
+                width: 300px;
+                position: relative;
+                margin: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            .siteTitle{
+                text-align: center;
+            }
+
+            .siteThumbnail{
+                transition: margin 1s;
+                width: 100%;
+                cursor: pointer;
+                z-index: 1;
+                transition: opacity 200ms;
+            }
+
+            .siteThumbnail:hover{
+                opacity: 0.5;
+            }
+
+            .siteDescription{
+                transition: visibility 1s, opacity 600ms, top 1s;
+                width: 100%;
+                text-align: center;
+                margin-right: 15px;
+                margin-left: 15px;
+                font-size: 15px;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            }
+
+            .contactBackground{
+                display: flex;
+                /* width: 100%; */
+           
+                height: 100vh;
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                overflow-x: hidden;
+                overflow-y: hidden;
+            }
+
+            .contactContainer{
+                height: fit-content;
+                margin-top:auto;
+                margin-bottom: auto;
+                display: flex;
+                flex-direction: row;
+            }
+
+            .contactInfo{
+                text-align: right;
+                color: #6B9528;
+                display: flex;
+                align-items: flex-end;
+                flex-direction: column;
+                margin-right: 100px;
+            }
+
+            .title{
+                font-size: 4em;
+                margin: 0;
+            }   
+
+            form{
+                margin-top: 20px;
+                width: 375px;
+                display: flex;
+                justify-content: flex-start;
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            input[type="email"]{
+                border-radius: 0;
+                /* width: 200px; */
+                border: 1px solid #4B6269;
+                color: white;
+                font-size: 15px;
+                font-family: 'Courier New', Courier, monospace;
+                outline: none;
+                background-color: #0E2A35;
+                margin-bottom: 25px;
+                padding: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-top: 8px;
+            }
+
+            textarea{
+                border-radius: 0;
+                font-family: 'Courier New', Courier, monospace;
+                background-color: #0E2A35;
+                border: 1px solid #4B6269;
+                color: white;
+                font-size: 15px;
+                margin-bottom: 40px;
+                resize: none;
+                height: 150px;
+                max-height: 150px;
+                outline: none;
+                padding: 10px;
+            }
+
+            form button{
+                cursor: pointer;
+                background-color: #4B6269;
+                border: none;
+                color: black;
+                padding: 5px;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 20px;
+                transition: all 500ms;
+                position: relative;
+                padding-right: 30px;
+            }
+
+            form button:hover{
+                background-color: #6B9528;                
+            }
+
+            #plane{
+                position: absolute;
+                right: 145px;
+                top: 3px;
+                transition: all 1s;
+            }
+
+            @keyframes fly {
+                0%{
+                    right: 145px;
+                    top: 3px;
+                }
+                75%{
+                    right: -1000px;
+                    top: -1000px;
+                }
+                80%{
+                    opacity: 0;
+                }
+                85%{
+                    right: 145px;
+                    top: 3px;
+                    opacity: 0;
+                }
+                100%{
+                    opacity: 1;
+                }
+            }
+
+
+
+            .textHighlight{
+                background-color: #091b22;
+                color: #6B9528;
+                padding: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
+                margin-bottom: 30px;
+                user-select: all;
+                cursor: text;
+                /* font-weight: bold; */
+                letter-spacing: 1px;
+                transition: color 500ms, background-color 500ms, transform 1s, opacity 1s;
+
+            }
+
+            .textHighlight:hover{
+                background-color: white;
+                color: black;
+                /* transform: scale(1.1) translateZ(0); */
+            }
+
+            .greenText{
+                color: #6B9528;
+            }
+
+            @media only screen and (max-width: 900px) {
+                .contactBackground{
+                    padding-top: 50px;
+                    padding-bottom: 50px;
+                }
+
+                .contactContainer{
+                    flex-direction: column;
+                    align-items: center;
+                   
+                }
+
+                .contactInfo{
+                    margin-top: 0;
+                    width: fit-content;
+                    margin-right: 0px;
+                    margin-bottom: 35px;
+                    align-items: center;
+                }
+
+                form{
+                    margin-top: 0;
+                }
+
+            }
+
+            .divider {
+                position: relative;
+                width: 100%;
+                height: 100px;
+            }
+
+            .upright::before {
+                position: absolute;
+                content: "";
+                width: 100%;
+                height: 100%;
+                background-color: #0E2A35;
+                clip-path: polygon(100% 0, 0 0, 0 100%);
+            }
+
+            .reverse::before {
+                position: absolute;
+                content: "";
+                width: 100%;
+                height: 100%;
+                background-color: #0E2A35;
+                clip-path: polygon(0 101%, 100% 0, 100% 101%);
+            }
+
+            @keyframes blink {
+                to{ visibility: hidden; }
+            }
+
+            @keyframes upDown {
+                0%{bottom: 25px}
+                50%{bottom: 10px;}
+                100%{bottom: 25px}
+            }
+
+            footer{
+                background-color: white;
+                height: 100px;
+                clip-path: polygon(0 0, 100% 50%, 100% 100%, 0% 100%);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding-top: 50px;
+                font-weight: bold;
+            }
+
+            footer p{
+                margin: 0;
+            }
+        </style>
+    </head>
+
+    <body onload="init()">
+        <div class="fullHeight">
+            <h1 id="name" class="notSelectable" aria-lable="Finlay Soehn"></h1>
+            <h2 id="description">
+                <span aria-hidden="true">
+                    C:\WINDOWS\system32\>&nbsp;
+                </span>
+                <noscript>Error: JavaScript is not enabled</noscript>
+            </h2>
+           
+            <script>
+                const os = navigator.userAgent;
+                const descriptionText = document.getElementById("description");
+    
+                if (os.indexOf("Mac") != -1){
+                    descriptionText.innerHTML = "Finlays-MacBook:~ Fin$&nbsp;"
+                }else if (os.indexOf("Linux") != -1){
+                    descriptionText.innerHTML = "fin@ubuntu:~$";
+                }
+            </script>
+ 
+            <div id="scroll" class="notSelectable">
+                <p>Scroll</p>
+                <i class="downArrow"></i>
+            </div> 
+        </div>
+        <div class="portfolioGrid">
+            <!-- <div class="divider upright"></div> -->
+
+            <div class="intervalFade siteContainer">
+                <img src="pirate.png" class="siteThumbnail notSelectable" onclick="window.location='./PirateGeography'">
+                <p class="siteDescription">
+                    Test your Geography skills with this pirate-themed game. This site contains maps of Canada, the United States, and the World. Guess the locations or names of their regions and beat your highscores.
+                </p>
+            </div>
+            <div class="intervalFade siteContainer">
+                <!-- <h1 class="siteTitle">Galactic Gainz</h1> -->
+                <img src="gainz.png" class="siteThumbnail notSelectable" onclick="window.location='./GlacticGainz'">
+                
+                <p class="siteDescription">
+                    Galactic Gainz is a site that aims to introduce newcomers to the world of fitness. With an alien companion and minigames, exercise has never been more out of this world. Made for the 2021 <a href="https://twtcodejam.net/timathon/">Timithon</a>.
+                    
+                </p>
+                <!-- <button class="moreInfo">More Details</button> -->
+                <!-- <a href="./5'Oclock">Galactic Gainz</a> -->
+            </div>
+            <div class="intervalFade siteContainer">
+                <!-- <h1 class="siteTitle">Sudoku</h1> -->
+                <img src="sudoku.png" class="siteThumbnail notSelectable" onclick="window.location='./Sudoku'">
+                <!-- <a href="./5'Oclock">Sudoku Solver</a> -->
+                <p class="siteDescription">
+                    Input numbers into the Sudoku grid and this site can solve it. It includes tools to create Sudoku puzzles and a visual demonstration of the backtracking algorithm used to solve the puzzles.
+                    
+                </p>
+                <!-- <button class="moreInfo">More Details</button> -->
+            </div>
+            <div class="intervalFade siteContainer">
+                <!-- <h1 class="siteTitle">5 O'Clock</h1> -->
+                <button onclick="window.location='./5OClock'"><img src="five.png" class="siteThumbnail notSelectable"></button>
+                <!-- <a href="./5'Oclock">5'Oclock</a> -->
+                <p class="siteDescription">
+                    Ever heard the phrase "It's 5'Oclock somewhere"? Well, this site brings that idea to life by telling you where in the world it's currently 5'Oclock.
+                    
+                </p>
+                <!-- <button class="moreInfo">More Details</button> -->
+            </div>
+            <!-- <div class="divider reverse"></div> -->
+
+        </div>
+
+        <div class="contactBackground">
+            <div class="contactContainer">
+                <div class="contactInfo">
+                    <h2 class="fadeScroll title">Contact</h2>
+                    <div class="fadeScroll">
+                        <img class="notSelectable" style="display: inline-block; margin-bottom: -3px;" src="mail.png" width="30px" id="emailImage">
+                        <p style="display: inline-block;">Email</p>
+                    </div>
+                    <p class="fadeScroll textHighlight">FinSoehn@gmail.com</p>
+                    <!-- <p class="greenText">Reach me directly at <span class="textHighlight">FinSoehn@gmail.com</span></p> -->
+                </div>
+
+                <form class="fadeScroll" id="emailForm" action="https://formspree.io/f/xrgrzdpk" method="POST">
+                    <input placeholder="Your Email" type="email" name="email" />
+                    <textarea placeholder="Enter Message" name="message" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+                    <button id="form-button">Send<img id="plane" src="plane.png" width="25px"></button>
+                    <p id="form-status" style="opacity: 0; transition: all 1s; color:#499E98;text-align: center;">&nbsp</p>
+                </form>
+            </div>
+        </div>
+
+        <footer>
+            <p>--- 2021 ---</p>
+            <p>Finlay Soehn</p>
+        </footer>
+
+        <script>
+            const scrollIndicator = document.getElementById("scroll");
+            const name = document.getElementById("name");
+            const root = document.querySelector(":root");
+            
+            var fadeScroll = document.getElementsByClassName("fadeScroll");
+            var intervalScroll = document.getElementsByClassName("intervalFade");
+            
+            if(window.innerWidth < 600){
+                fadeScroll = [...fadeScroll, ...intervalScroll];
+                console.log(fadeScroll);
+                intervalScroll = [];
+            }
+
+            var typeLoop;
+            var typeElement = name;
+            var typeString = "Finlay Soehn.";
+            var typeIndex = 0;
+
+            var nameText = "Finlay Soehn.";
+            var scrambleLoop;
+            var unscrambleLoop;
+            var stringLength = 0;
+            var solvedLetters = [];
+
+            function init(){
+                fadeInScroll();
+                setTimeout(()=>{
+                    typeLoop = setInterval(typeLetter, 100);
+                    scrambleLoop = setInterval(scramble, 50);
+                }, 500);
+            }
+
+            window.addEventListener("scroll", fadeInScroll);
+
+            function fadeInScroll(){
+                var scroll = window.scrollY;
+
+                // if(scroll < 100) document.body.style = 'background: #0E2A35;';
+                // else if(document.body.style.backgroundColor != "white") document.body.style = 'background: white;';
+                
+                for(let el of fadeScroll){
+                    if(el.opacity == 1) continue;
+
+                    let topOffset = el.offsetTop;
+                    let halfHeight = el.offsetHeight/2;
+
+                    if(scroll > (topOffset - window.innerHeight + halfHeight)){
+                        el.style.opacity = 1;
+                        el.style.transform = "translateY(0)";
+                    }
+                }
+
+                if(intervalScroll.length > 0 && intervalScroll[0].style.opacity != 1 && scroll > (intervalScroll[0].offsetTop - window.innerHeight + (intervalScroll[0].offsetHeight/2))){
+                    const showMore = i => {
+                        intervalScroll[i].style.opacity = 1;
+                        intervalScroll[i].style.transform = "translateY(0)";
+                        if(i < intervalScroll.length - 1){
+                            setTimeout(() => {
+                                showMore(i + 1);
+                            }, 400);
+                        }
+                    }
+
+                    showMore(0);
+                }
+
+                
+            }
+
+            function typeLetter(){
+                if(typeIndex == typeString.length){
+                    typeIndex = 0;
+                    clearInterval(typeLoop);
+
+                    if(typeString === "Finlay Soehn."){ 
+                        clearInterval(typeLoop);
+                        unscrambleLoop = setInterval(unscramble, 75);
+
+                        name.onmouseover = () => {
+                            stopScramble();
+                            scrambleLoop = setInterval(scramble, 50);
+                        }  
+
+                        name.onmouseleave = () => {
+                            unscrambleLoop = setInterval(unscramble, 75);
+                        };
+
+                        setTimeout(()=>{
+                            scrollIndicator.style.bottom = "25px";
+                            scrollIndicator.style.opacity = 1;
+                            scrollIndicator.style.visibility = "visible";
+
+                            typeString = "Full Stack Developer.";
+                            root.style.setProperty('--cursorAnimation', "none");
+                            typeLoop = setInterval(typeLetter, 100);
+                            typeElement = document.getElementById("description");
+
+                            setTimeout(()=>{
+                                scrollIndicator.style.animation = "upDown 2s ease-in-out infinite";
+                            }, 1000)
+                        }, 1500);
+                    }else{
+                        clearInterval(typeLoop);
+                        root.style.setProperty('--cursorAnimation', "blink 1s steps(2, start) infinite");
+                    }
+
+                    
+                }else{
+                    typeElement.innerHTML += typeString[typeIndex];
+                    typeIndex++;
+
+                    if(typeElement == name) stringLength ++;
+                }
+            }
+
+
+            function scramble(){
+                const clearCharacters = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890~!@#$%^&*()`-_=+[]{}\\|:\;\"'?/>.<,";
+
+                for(var i = 0; i < stringLength; i++){
+                    let temp = name.textContent;
+                    
+                    if(solvedLetters.includes(i) || temp[i] == " ") continue;
+
+                    let random = Math.floor(Math.random() * (clearCharacters.length)); 
+                    name.innerText = temp.substring(0, i) + clearCharacters[random] + temp.substring(i + 1);
+                }
+            }
+
+            function unscramble(){        
+                if(solvedLetters.length == nameText.length){
+                    stopScramble();
+                    console.log("THHTHTHTH")
+
+                    return;
+                }
+
+                let numLettersSolved = Math.floor(Math.random() * 3);
+                if((nameText.length - solvedLetters.length) == 1) numLettersSolved = 1;
+                
+                for(var i = 0; i < numLettersSolved; i++){
+                    let charIndex = Math.floor(Math.random() * nameText.length);
+
+                    while(solvedLetters.includes(charIndex)){ 
+                        if(charIndex == nameText.length - 1) charIndex = 0;
+                        else charIndex++;
+                    }
+                    
+                    solvedLetters.push(charIndex);
+                    
+                    name.innerText = name.innerText.substring(0, charIndex) + nameText[charIndex] + name.innerText.substring(charIndex + 1);
+                }
+            }
+
+            function stopScramble(){
+                clearInterval(unscrambleLoop);
+                clearInterval(scrambleLoop);
+                solvedLetters = [];
+            }
+
+            document.getElementById("emailForm").onsubmit = (e) => {
+                e.preventDefault();
+
+                var form = document.getElementById("emailForm");
+                var email = document.getElementsByName("email")[0].value;
+                var message = document.getElementsByName("message")[0].value;
+                var status = document.getElementById("form-status");
+
+                if(message == "" || email == ""){
+                    status.innerText = "Please fill out all fields.";
+                    status.style.opacity = 1;
+                    return;
+                }
+
+                document.getElementById("plane").style.animation = "fly 2.5s";
+
+                var data = new FormData(event.target);
+
+                fetch(event.target.action, {
+                    method: form.method,
+                    body: data,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }).then(response => {
+                    status.innerHTML = "Message sent";
+                    status.style.opacity = 1;
+                    form.reset();
+                }).catch(error => {
+                    status.innerHTML = "Oops! There was a problem sending your message";
+                    status.style.opacity = 1;
+                    console.log(error);
+                });
+            }
+
+
+        </script>
+    </body>
+</html>
