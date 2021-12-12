@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/dubyk/static/css/main.b4a5fbc5.chunk.css",
+    "main.js": "/dubyk/static/js/main.b009c43a.chunk.js",
+    "main.js.map": "/dubyk/static/js/main.b009c43a.chunk.js.map",
+    "runtime-main.js": "/dubyk/static/js/runtime-main.5f812248.js",
+    "runtime-main.js.map": "/dubyk/static/js/runtime-main.5f812248.js.map",
+    "static/js/2.c08d4ef5.chunk.js": "/dubyk/static/js/2.c08d4ef5.chunk.js",
+    "static/js/2.c08d4ef5.chunk.js.map": "/dubyk/static/js/2.c08d4ef5.chunk.js.map",
+    "static/js/3.81312810.chunk.js": "/dubyk/static/js/3.81312810.chunk.js",
+    "static/js/3.81312810.chunk.js.map": "/dubyk/static/js/3.81312810.chunk.js.map",
+    "index.html": "/dubyk/index.html",
+    "static/css/main.b4a5fbc5.chunk.css.map": "/dubyk/static/css/main.b4a5fbc5.chunk.css.map",
+    "static/js/2.c08d4ef5.chunk.js.LICENSE.txt": "/dubyk/static/js/2.c08d4ef5.chunk.js.LICENSE.txt",
+    "static/media/angryDubyk.e9c60ca6.png": "/dubyk/static/media/angryDubyk.e9c60ca6.png",
+    "static/media/dubie.0c0fa6d8.jpeg": "/dubyk/static/media/dubie.0c0fa6d8.jpeg",
+    "static/media/sax.90a47eef.png": "/dubyk/static/media/sax.90a47eef.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5f812248.js",
+    "static/js/2.c08d4ef5.chunk.js",
+    "static/css/main.b4a5fbc5.chunk.css",
+    "static/js/main.b009c43a.chunk.js"
+  ]
+}
