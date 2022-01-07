@@ -10,26 +10,30 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Jawad Calculations</title>
     <style>
-        html, body{
-            margin: 0;
+        html{
             height: 100%;
         }
 
+        body{
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            box-sizing: border-box;
+        }
+
         form{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 90%;
+           box-sizing: border-box;
+           padding-bottom: 50px;
         }
 
         .inputContainer{
             margin: 5px;
             display: flex;
             flex-direction: column;
-            /* width: min-content; */
         }
 
         input{
@@ -38,18 +42,66 @@
         }
 
         button{
-            margin: 20px;
             cursor: pointer;
+            background-color: white;
+            border: 1px solid black;
+            padding: 10px 25px 10px 25px;
+            border-radius: 5px;
+            margin-bottom: 50px;
+            margin-right: auto;
+            margin-left: auto;
+            display: block;
+        }
+
+        button:hover{
+            opacity: 0.5;
         }
 
         #title{
-            max-width: 300px;
+            width: 300px;
             text-align: center;
-            /* margin-bottom: -5px; */
+            margin-right: auto;
+            margin-left: auto;
+            margin-top: auto;
         }
 
-        p{
-            /* margin-bottom: 30px; */
+        .mainContainer{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .first{
+            margin-right: 50px;
+        }
+
+        @media only screen and (max-width: 500px) {
+            .mainContainer{
+                flex-direction: column;
+            }
+
+            .first{
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+
+        .second{
+            position: relative;
+        }
+
+        .calc{
+            margin-top: -15px;
+            margin-bottom: 20px;
+            width: 100%;
+            border-bottom: 1px solid black;
+        }
+
+        #error{
+            width: 100%;
+            text-align: center;
+            color: red;
         }
     </style>
 
@@ -57,58 +109,69 @@
 <body>
     <form onsubmit="event.preventDefault(); calculate()">
         <h1 id="title">Jawad's Fancy Calculus Calculator</h1>
-        <!-- <p>All Values in Meters and Seconds</p> -->
-        <div class="inputContainer">
-            <label>Fan Height (m)</label>
-            <input inputmode="decimal" step="any" id="fanHeight" type="number">
-        </div>
-        <div class="inputContainer">
-            <label>Max Height of Egg (m)</label>
-            <input inputmode="decimal" step="any" id="eggHeight" type="number">
-        </div>
-        <div class="inputContainer">
-            <label>Length of String (m)</label>
-            <input inputmode="decimal" step="any" id="length" type="number">
-        </div>
-        <div class="inputContainer">
-            <label>Radius of Fan (m)</label>
-            <input inputmode="decimal" step="any" id="radius" type="number">
+
+        <div class="mainContainer">
+            <div class="first">
+                <div class="inputContainer">
+                    <label>Fan Height (m)</label>
+                    <input inputmode="decimal" step="any" id="fanHeight" type="number">
+                </div>
+                <div class="inputContainer">
+                    <label>Max Height of Egg (m)</label>
+                    <input inputmode="decimal" step="any" id="eggHeight" type="number">
+                </div>
+                <div class="inputContainer">
+                    <label>Length of String (m)</label>
+                    <input inputmode="decimal" step="any" id="length" type="number">
+                </div>
+                <div class="inputContainer">
+                    <label>Radius of Fan (m)</label>
+                    <input inputmode="decimal" step="any" id="radius" type="number">
+                </div>
+
+                <div class="inputContainer">
+                    <label>Time 1 (s)</label>
+                    <input inputmode="decimal" step="any" id="1" type="number">
+                </div>
+                <div class="inputContainer">
+                    <label>Time 2 (s)</label>
+                    <input inputmode="decimal" step="any" id="2" type="number">
+                </div>
+                <div class="inputContainer">
+                    <label>Time 3 (s)</label>
+                    <input inputmode="decimal" step="any" id="3" type="number">
+                </div>
+            </div>
+
+            <div class="second">
+                <h3>Average Speed before UCM</h3>
+                <p class="calc" id="before">&nbsp;</p>
+                <h3>Average Speed during UCM</h3>
+                <p class="calc" id="during">&nbsp;</p>
+                <h3>Average Speed after UCM</h3>
+                <p class="calc" id="after">&nbsp;</p>
+                <h3>Total Average Speed</h3>
+                <p class="calc" id="answer">&nbsp;</p>
+            </div>
         </div>
 
-        <div class="inputContainer">
-            <label>Time 1 (s)</label>
-            <input inputmode="decimal" step="any" id="1" type="number">
-        </div>
-        <div class="inputContainer">
-            <label>Time 2 (s)</label>
-            <input inputmode="decimal" step="any" id="2" type="number">
-        </div>
-        <div class="inputContainer">
-            <label>Time 3 (s)</label>
-            <input inputmode="decimal" step="any" id="3" type="number">
-        </div>
-
+        <p id="error">&nbsp;</p>
         <button type="submit">Calculate</button>
-        <h3 id="answer">&nbsp;</h3>
     </form>
   
 
     <script>
-        document.getElementById("radius").value = 0.15;
-
-        var result =  document.getElementById("answer");
-
         function calculate(){
             var Hf = parseFloat(document.getElementById("fanHeight").value); // fan height
             var He = parseFloat(document.getElementById("eggHeight").value); // max height of egg
             var L = parseFloat(document.getElementById("length").value); // length of string
             var Rfan = parseFloat(document.getElementById("radius").value); // radius of the fan
-            var t1 = parseFloat(document.getElementById("1").value);;
-            var t2 = parseFloat(document.getElementById("2").value);;
-            var t3 = parseFloat(document.getElementById("3").value);;
+            var t1 = parseFloat(document.getElementById("1").value);
+            var t2 = parseFloat(document.getElementById("2").value);
+            var t3 = parseFloat(document.getElementById("3").value);
 
-            if(isNaN(Hf + He + L + Rfan)){
-                result.innerText = "Fill out all Feilds";
+            if(isNaN(Hf + He + L + Rfan + t1 + t2 + t3)){
+                document.getElementById("error").innerText = "Fill out all Feilds";
                 return;
             }
 
@@ -126,9 +189,10 @@
 
             var total = ((V1 * t1) + (V2 * t2) + (V3 * t3)) / (t1 + t2 + t3);
 
-            console.log(V1, V2, V3);
-
-            result.innerText = total + " m/s";
+            document.getElementById("before").innerText = V1.toFixed(5) + " m/s";
+            document.getElementById("during").innerText = V2.toFixed(5) + " m/s";
+            document.getElementById("after").innerText = V3.toFixed(5) + " m/s";
+            document.getElementById("answer").innerText = total.toFixed(5) + " m/s";
         }
     </script>
     
