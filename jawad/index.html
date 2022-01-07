@@ -180,6 +180,8 @@
                 return;
             }
 
+            document.getElementById("error").innerHTML = "&nbsp;";
+
             var Acf = 9.81 / Math.tan(Math.asin((Hf - He) / L)); // final centripetal acceleration
             var Rf = Math.sqrt(Math.pow(L, 2) - Math.pow(Hf - He, 2)) + Rfan; // final radius
             var Ri = Rfan; // initial radius
