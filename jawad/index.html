@@ -34,8 +34,9 @@
 
         input{
             border: 1px solid black;
+            width: 175px;
         }
-        
+
         button{
             margin: 20px;
             cursor: pointer;
@@ -53,19 +54,19 @@
         <h1 id="title">Jawad's Fancy Calculous Calculator</h1>
         <div class="inputContainer">
             <label>Fan Height (m)</label>
-            <input pattern="\d*" step="any" id="fanHeight" type="number">
+            <input inputmode="decimal" step="any" id="fanHeight" type="number">
         </div>
         <div class="inputContainer">
             <label>Max Height of Egg (m)</label>
-            <input pattern="\d*" step="any" id="eggHeight" type="number">
+            <input inputmode="decimal" step="any" id="eggHeight" type="number">
         </div>
         <div class="inputContainer">
             <label>Length of String (m)</label>
-            <input pattern="\d*" step="any" id="length" type="number">
+            <input inputmode="decimal" step="any" id="length" type="number">
         </div>
         <div class="inputContainer">
             <label>Radius of Fan (m)</label>
-            <input pattern="\d*" step="any" id="radius" type="number">
+            <input inputmode="decimal" step="any" id="radius" type="number">
         </div>
         <button type="submit">Calculate</button>
         <h1 id="answer">&nbsp;</h1>
