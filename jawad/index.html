@@ -1,0 +1,102 @@
+<!-- 
+    made for the science olympics
+    we created an amusement park ride called swings of death
+    jawad did speed calcualtions and i made this site to make it easier
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html, body{
+            margin: 0;
+            height: 100%;
+        }
+
+        form{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 90%;
+        }
+
+        .inputContainer{
+            margin: 5px;
+            display: flex;
+            flex-direction: column;
+            width: min-content;
+        }
+
+        button{
+            margin: 20px;
+            cursor: pointer;
+        }
+
+        #title{
+            max-width: 300px;
+            text-align: center;
+        }
+    </style>
+
+</head>
+<body>
+    <form onsubmit="event.preventDefault(); calculate()">
+        <h1 id="title">Jawad's Fancy Calculous Calculator</h1>
+        <div class="inputContainer">
+            <label>Fan Height (m)</label>
+            <input step="any" id="fanHeight" type="number">
+        </div>
+        <div class="inputContainer">
+            <label>Max Height of Egg (m)</label>
+            <input step="any" id="eggHeight" type="number">
+        </div>
+        <div class="inputContainer">
+            <label>Length of String (m)</label>
+            <input step="any" id="length" type="number">
+        </div>
+        <div class="inputContainer">
+            <label>Radius of Fan (m)</label>
+            <input step="any" id="radius" type="number">
+        </div>
+        <button type="submit">Calculate</button>
+        <h1 id="answer">&nbsp;</h1>
+    </form>
+  
+
+    <script>
+        document.getElementById("radius").value = 0.15;
+
+        var result =  document.getElementById("answer");
+
+        function calculate(){
+            var Hf = parseFloat(document.getElementById("fanHeight").value); // fan height
+            var He = parseFloat(document.getElementById("eggHeight").value); // max height of egg
+            var L = parseFloat(document.getElementById("length").value); // length of string
+            var Rfan = parseFloat(document.getElementById("radius").value); // radius of the fan
+
+            if(isNaN(Hf + He + L + Rfan)){
+                result.innerText = "Fill out all Feilds";
+                return;
+            }
+
+            var Acf = 9.81 / Math.tan(Math.asin((Hf - He) / L)); // final centripetal acceleration
+            var Rf = Math.sqrt(Math.pow(L, 2) - Math.pow(Hf - He, 2) + Rfan); // final radius
+            var Ri = Rfan; // initial radius
+
+            // console.log(Acf, Rf, Ri);
+
+            var answer = 4 * Math.sqrt(Acf) * (Math.pow(Rf, 3/4) - Math.pow(Ri, 3/4));
+            // console.log(Math.sqrt(Acf), Math.pow(Rf, 3/4) - Math.pow(Ri, 3/4))
+            answer = answer / (9 * (Rf - Ri));
+
+           result.innerText = answer;
+        }
+    </script>
+    
+</body>
+</html>
