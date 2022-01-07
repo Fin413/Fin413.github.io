@@ -45,13 +45,19 @@
         #title{
             max-width: 300px;
             text-align: center;
+            /* margin-bottom: -5px; */
+        }
+
+        p{
+            /* margin-bottom: 30px; */
         }
     </style>
 
 </head>
 <body>
     <form onsubmit="event.preventDefault(); calculate()">
-        <h1 id="title">Jawad's Fancy Calculous Calculator</h1>
+        <h1 id="title">Jawad's Fancy Calculus Calculator</h1>
+        <!-- <p>All Values in Meters and Seconds</p> -->
         <div class="inputContainer">
             <label>Fan Height (m)</label>
             <input inputmode="decimal" step="any" id="fanHeight" type="number">
@@ -68,8 +74,22 @@
             <label>Radius of Fan (m)</label>
             <input inputmode="decimal" step="any" id="radius" type="number">
         </div>
+
+        <div class="inputContainer">
+            <label>Time 1 (s)</label>
+            <input inputmode="decimal" step="any" id="1" type="number">
+        </div>
+        <div class="inputContainer">
+            <label>Time 2 (s)</label>
+            <input inputmode="decimal" step="any" id="2" type="number">
+        </div>
+        <div class="inputContainer">
+            <label>Time 3 (s)</label>
+            <input inputmode="decimal" step="any" id="3" type="number">
+        </div>
+
         <button type="submit">Calculate</button>
-        <h1 id="answer">&nbsp;</h1>
+        <h3 id="answer">&nbsp;</h3>
     </form>
   
 
@@ -83,6 +103,9 @@
             var He = parseFloat(document.getElementById("eggHeight").value); // max height of egg
             var L = parseFloat(document.getElementById("length").value); // length of string
             var Rfan = parseFloat(document.getElementById("radius").value); // radius of the fan
+            var t1 = parseFloat(document.getElementById("1").value);;
+            var t2 = parseFloat(document.getElementById("2").value);;
+            var t3 = parseFloat(document.getElementById("3").value);;
 
             if(isNaN(Hf + He + L + Rfan)){
                 result.innerText = "Fill out all Feilds";
@@ -90,16 +113,22 @@
             }
 
             var Acf = 9.81 / Math.tan(Math.asin((Hf - He) / L)); // final centripetal acceleration
-            var Rf = Math.sqrt(Math.pow(L, 2) - Math.pow(Hf - He, 2) + Rfan); // final radius
+            var Rf = Math.sqrt(Math.pow(L, 2) - Math.pow(Hf - He, 2)) + Rfan; // final radius
             var Ri = Rfan; // initial radius
 
-            // console.log(Acf, Rf, Ri);
+            var V1 = 4 * Math.sqrt(Acf) * (Math.pow(Rf, 3/2) - Math.pow(Ri, 3/2));
+            V1 = V1 / (9 * (Rf - Ri));
 
-            var answer = 4 * Math.sqrt(Acf) * (Math.pow(Rf, 3/4) - Math.pow(Ri, 3/4));
-            // console.log(Math.sqrt(Acf), Math.pow(Rf, 3/4) - Math.pow(Ri, 3/4))
-            answer = answer / (9 * (Rf - Ri));
+            var V2 = 9.81 * (Math.sqrt(Math.pow(L, 2) - Math.pow(Hf - He, 2)) + Rfan);
+            V2 = Math.sqrt(V2 / Math.tan(Math.asin((Hf - He) / L)));
 
-           result.innerText = answer;
+            var V3 = V2 / 2; // Vf = 0
+
+            var total = ((V1 * t1) + (V2 * t2) + (V3 * t3)) / (t1 + t2 + t3);
+
+            console.log(V1, V2, V3);
+
+            result.innerText = total + " m/s";
         }
     </script>
     
