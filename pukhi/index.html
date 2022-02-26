@@ -13,6 +13,7 @@
             justify-content: center;
             background-color: black;
         }
+        
         h1{
             color: red;
             font-size: 13vw;
@@ -24,6 +25,8 @@
     <h1 id="disp">10:10:10:10:10</h1>
     <script>
         var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
+        var x = setInterval(updateTime, 1000);
+        updateTime();
 
         function updateTime(){
             var now = new Date().getTime();
@@ -38,18 +41,13 @@
             if(minutes < 10) seconds = "0" + minutes;
             if(seconds < 10) seconds = "0" + seconds;
 
-
             document.getElementById("disp").innerHTML = days + ":" + hours + ":" + minutes + ":" + seconds + "";
 
             if (distance < 0) {
                 clearInterval(x);
-                document.getElementById("demo").innerHTML = "EXPIRED";
+                document.getElementById("disp").innerHTML = "Pukhraj is Amoung us";
             }
         }
-
-        var x = setInterval(updateTime, 1000);
-
-        updateTime();
     </script>
 </body>
 </html>
