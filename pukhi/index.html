@@ -4,21 +4,52 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Pukhi</title>
     <style>
-        html, body{
-            height: 100%;
-        }
-        body{
+        body, html{
+            height: 90%;
             display: flex;
             align-items: center;
-            flex-direction: column;
             justify-content: center;
+            background-color: black;
+        }
+        h1{
+            color: red;
+            font-size: 13vw;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <h1>PUKHRAJ LIKES PORN</h1>
-    <button onclick="window.location='http\:\/\/www.pornhub.com'">CLICK HERE FOR SUPER SPECIAL GIFT</button>
+    <h1 id="disp">10:10:10:10:10</h1>
+    <script>
+        var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
+
+        function updateTime(){
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if(days < 10) seconds = "0" + days;
+            if(hours < 10) seconds = "0" + hours;
+            if(minutes < 10) seconds = "0" + minutes;
+            if(seconds < 10) seconds = "0" + seconds;
+
+
+            document.getElementById("disp").innerHTML = days + ":" + hours + ":" + minutes + ":" + seconds + "";
+
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("demo").innerHTML = "EXPIRED";
+            }
+        }
+
+        var x = setInterval(updateTime, 1000);
+
+        updateTime();
+    </script>
 </body>
 </html>
