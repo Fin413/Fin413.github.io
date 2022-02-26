@@ -389,22 +389,27 @@
             else if(!words.includes(word)) wordError(word);
             else{
                 if(!alreadyPlayed && wordOfTheDay == word) correctWord();
+                
+                let tempDayWord = wordOfTheDay;
 
-                for(let i = (level * 5); i < 5 + (5 * level); i ++){
-                    let letter = disps[i].innerText.toLowerCase();
-                    if(wordOfTheDay.includes(letter)){
-                        if(wordOfTheDay.charAt(i - (level * 5)) == letter){
-                            disps[i].style.backgroundColor = "green";
-                            disps[i].style.borderColor = "green";
-                            changeBtnColor(letter, "green");
-                        }else{
-                            disps[i].style.backgroundColor = "yellow";
-                            disps[i].style.borderColor = "yellow";
-                            changeBtnColor(letter, "yellow");
-                        }
+                for(let i = 0; i < 5; i++){
+                    if(word.charAt(i) == wordOfTheDay.charAt(i)){
+                        tempDayWord = tempDayWord.substring(0, i) + "*" + tempDayWord.substring(i + 1);
+                    }
+                }
+
+                for(let i = 0; i < 5; i++){
+                    if(tempDayWord.charAt(i) == "*"){
+                        disps[i + (level * 5)].style.backgroundColor = "green";
+                        disps[i + (level * 5)].style.borderColor = "green";
+                        changeBtnColor(word.charAt(i), "green");
+                    }else if(tempDayWord.includes(word.charAt(i))){
+                        disps[i + (level * 5)].style.backgroundColor = "yellow";
+                        disps[i + (level * 5)].style.borderColor = "yellow";
+                        changeBtnColor(word.charAt(i), "yellow");
                     }else{
-                        disps[i].style.backgroundColor = "grey";
-                        changeBtnColor(letter, "grey");
+                        disps[i + (level * 5)].style.backgroundColor = "grey";
+                        changeBtnColor(word.charAt(i), "grey");
                     }
                 }
                 
@@ -446,7 +451,7 @@
             errorEl.style.top = "20px";
             setTimeout(() => {
                 errorEl.style.top = "-100px";
-            }, 1500)
+            }, 1750)
         }
 
         function correctWord(){
@@ -498,6 +503,7 @@
         }
 
         function saveResults(){
+            // save on keydown or whatever
             let data = {word: wordOfTheDay, guesses: ""};
             for(let i = 0; i < disps.length; i++){
                 data.guesses += disps[i].innerText;
