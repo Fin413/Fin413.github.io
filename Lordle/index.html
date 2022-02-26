@@ -74,7 +74,6 @@
         .letterBtn{
             /* GET THESE MOTHERFUCKERS TO SCALE AT THE SAME TIME SO THEYRE ALWASY TEH SAME SIZE */
             font-weight: bold;
-            /* padding: 15px 0 15px 0; */
             height: 40px;
             max-width: 40px;
             flex: 1;
@@ -83,6 +82,10 @@
             cursor: pointer;
             border: none;
             background-color: #D3D6DA;
+        }
+
+        button{
+            color: black;
         }
 
         .bigger{
@@ -213,6 +216,12 @@
             }
         }
 
+        .titleRow{
+            display: flex;
+            /* width: 100%; */
+            justify-content: center;
+        }
+
        
     </style>
 </head>
@@ -233,7 +242,7 @@
     </div>
     <div class="center">
 
-        <div class="row">
+        <div class="titleRow">
             <img src="lion.svg" width="60">
             <h1 class="title">Lordle</h1>
             <img src="lion.svg" width="60" class="hideMobile">
