@@ -330,7 +330,7 @@
         var disps = document.getElementsByClassName("letterDisp");
         var overlayContent = document.getElementsByClassName("overlayContent")[0]
         var letterBtns = document.getElementsByClassName("letterBtn");
-        var wordOfTheDay = "penis"; //OBFUSCATE THIS also type in lowercase
+        var wordOfTheDay = "pukhi"; //OBFUSCATE THIS also type in lowercase
         var savedData = JSON.parse(window.localStorage.getItem("LordleData"));
         var alreadyPlayed = false;
 
@@ -398,12 +398,18 @@
                     }
                 }
 
+                // penis niece
+                //
+
                 for(let i = 0; i < 5; i++){
+                    console.log(tempDayWord);
                     if(tempDayWord.charAt(i) == "*"){
                         disps[i + (level * 5)].style.backgroundColor = "green";
                         disps[i + (level * 5)].style.borderColor = "green";
                         changeBtnColor(word.charAt(i), "green");
                     }else if(tempDayWord.includes(word.charAt(i))){
+                        let indexOfLetter = tempDayWord.indexOf(word.charAt(i));
+                        tempDayWord = tempDayWord.substring(0, indexOfLetter) + "-" + tempDayWord.substring(indexOfLetter + 1);
                         disps[i + (level * 5)].style.backgroundColor = "yellow";
                         disps[i + (level * 5)].style.borderColor = "yellow";
                         changeBtnColor(word.charAt(i), "yellow");
@@ -422,7 +428,10 @@
         function changeBtnColor(letter, color){
             for (let i = 0; i < letterBtns.length; i++) {
                 if(letterBtns[i].innerText.toLowerCase() == letter){
-                    letterBtns[i].style.backgroundColor = color;
+                    let currentColor = letterBtns[i].style.backgroundColor;
+                    if(color == "green" || (color == "yellow" && currentColor != "green") || currentColor == ""){
+                        letterBtns[i].style.backgroundColor = color;
+                    }
                 }
             }
         }
