@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/x-icon" href="lion.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lordle</title>
+    <style>
+        @font-face {
+            font-family: 'sport';
+            src: url('fonts/OldSport.eot'); /* IE9 Compat Modes */
+            src: url('fonts/OldSport.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+                url('fonts/OldSport.woff2') format('woff2'), /* Super Modern Browsers */
+                url('fonts/OldSport.woff') format('woff'), /* Pretty Modern Browsers */
+                url('fonts/OldSport.ttf')  format('truetype'); /* Safari, Android, iOS */
+        }
+
+        html{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body{
+            margin: 0;
+            background-color: #F1C548;
+        }
+
+        .grid{
+            display: grid;
+            grid-template-columns: repeat(5, 50px);
+            grid-template-rows: repeat(5, 50px);
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .letterDisp{
+            width: 50px;
+            height: 50px;
+            font-size: 25px;
+            text-align: center;
+            /* background-color: grey; */
+            border: 2px solid grey;
+            line-height: 50px;
+            margin: 0;
+            border-radius: 2px;
+        }
+
+        .center{
+            /* display: flex;
+            align-items: center;
+            flex-direction: column; */
+            width: 100%;
+
+        }
+
+        .row{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            width: 100%;
+
+            position: relative;
+            touch-action: manipulation;
+        }
+
+        .letterBtnContainer{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 5px;
+        }
+
+        .letterBtn{
+            /* GET THESE MOTHERFUCKERS TO SCALE AT THE SAME TIME SO THEYRE ALWASY TEH SAME SIZE */
+            font-weight: bold;
+            /* padding: 15px 0 15px 0; */
+            height: 40px;
+            max-width: 40px;
+            flex: 1;
+            border-radius: 5px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            background-color: #D3D6DA;
+        }
+
+        .bigger{
+            max-width: 80px;
+            min-width: 60px;
+        }
+
+        .overlay{
+            z-index: 11;
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 500ms, visibility 500ms;
+        }
+
+        .overlayContent{
+            position: relative;
+            width: 50%;
+            padding: 50px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: transform 500ms;
+            margin-bottom: 75px;
+            transform: translateY(-200%);
+            border-radius: 10px;
+            font-family: sport;
+        }
+
+        .overlayContent h1{
+            margin: 0;
+            font-family: sport;
+            color: green;
+        }
+
+        .shareBtn{
+            margin-top: 25px;
+            padding: 13px 50px 10px 50px;
+            font-size: 20px;
+            cursor: pointer;
+            border: 1px solid black;
+            border-radius: 5px;
+            position: relative;
+            background-color: white;
+            font-family: sport;
+        }
+
+        #copied{
+            font-size: 15px;
+            top: 0;
+            left: 0;
+            position: absolute;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 500ms, visibility, 500ms, transition 1s;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+            padding: 10px;
+        }
+
+        .xBtn{
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .xBtn::before{
+            content: '+';
+            font-size: 50px;
+            display: inline-block;
+            line-height: 30px;
+            transform: rotate(45deg);
+        }
+
+        .backspaceImg{
+            margin-top: 2px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .title{
+            color: #C1333F;
+            font-family: sport;
+            font-size: 55px;
+            margin-bottom: 25px;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        #error{
+            padding: 10px;
+            background-color: black;
+            color: white;
+            position: absolute;
+            border-radius: 5px;
+            z-index: 10;
+            transition: top 500ms;
+            top: -100px;
+            left: 50%;
+            text-align: center;
+            transform: translateX(-50%);
+        }
+
+        @media only screen and (max-width: 400px) {
+            .hideMobile{
+                display: none;
+            }
+
+            .title{
+                margin-right: 0;
+            }
+        }
+
+       
+    </style>
+</head>
+<body>
+    <h2 id="error">Not in Wordlist</h2>
+
+    <div class="overlay">
+        <div class="overlayContent">
+            <h1>You Win!</h1>
+            <p id="wordReveal">The word was Scona</p>
+            <img src="lion.svg" width="100">
+            <button onclick="share()" class="shareBtn">
+                Share
+                <p id="copied">Results Copied to Clipboard</p>
+            </button>
+            <button onclick="hideOverlay()" class="xBtn"></button>
+        </div>
+    </div>
+    <div class="center">
+
+        <div class="row">
+            <img src="lion.svg" width="60">
+            <h1 class="title">Lordle</h1>
+            <img src="lion.svg" width="60" class="hideMobile">
+        </div>
+        
+
+        <div class="grid">
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+        </div>
+
+        <div class="letterBtnContainer">
+            <div class="row">
+                <button class="letterBtn" onclick="typeLetter(this)">Q</button>
+                <button class="letterBtn" onclick="typeLetter(this)">W</button>
+                <button class="letterBtn" onclick="typeLetter(this)">E</button>
+                <button class="letterBtn" onclick="typeLetter(this)">R</button>
+                <button class="letterBtn" onclick="typeLetter(this)">T</button>
+                <button class="letterBtn" onclick="typeLetter(this)">Y</button>
+                <button class="letterBtn" onclick="typeLetter(this)">U</button>
+                <button class="letterBtn" onclick="typeLetter(this)">I</button>
+                <button class="letterBtn" onclick="typeLetter(this)">O</button>
+                <button class="letterBtn" onclick="typeLetter(this)">P</button>
+            </div>
+            <div class="row">
+                <button class="letterBtn" onclick="typeLetter(this)">A</button>
+                <button class="letterBtn" onclick="typeLetter(this)">S</button>
+                <button class="letterBtn" onclick="typeLetter(this)">D</button>
+                <button class="letterBtn" onclick="typeLetter(this)">F</button>
+                <button class="letterBtn" onclick="typeLetter(this)">G</button>
+                <button class="letterBtn" onclick="typeLetter(this)">H</button>
+                <button class="letterBtn" onclick="typeLetter(this)">J</button>
+                <button class="letterBtn" onclick="typeLetter(this)">K</button>
+                <button class="letterBtn" onclick="typeLetter(this)">L</button>
+            </div>
+            <div class="row">
+                <button class="bigger letterBtn" onclick="guessWord()">ENTER</button>
+                <button class="letterBtn" onclick="typeLetter(this)">Z</button>
+                <button class="letterBtn" onclick="typeLetter(this)">X</button>
+                <button class="letterBtn" onclick="typeLetter(this)">C</button>
+                <button class="letterBtn" onclick="typeLetter(this)">V</button>
+                <button class="letterBtn" onclick="typeLetter(this)">B</button>
+                <button class="letterBtn" onclick="typeLetter(this)">N</button>
+                <button class="letterBtn" onclick="typeLetter(this)">M</button>
+                <button class="bigger letterBtn" onclick="deleteLetter()"><img class="backspaceImg" src="backspace.svg" width="25"></button>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="words.js"></script>
+    <script>
+
+        var level = 0;
+        // lords, scona, pride, crest, emily, merch, serve, brice, gerun, grant, lyons, brice, buffi, Irwin, Andoh, Perry, Dubyk, Rolph, lions
+        var disps = document.getElementsByClassName("letterDisp");
+        var overlayContent = document.getElementsByClassName("overlayContent")[0]
+        var letterBtns = document.getElementsByClassName("letterBtn");
+        var wordOfTheDay = "penis"; //OBFUSCATE THIS also type in lowercase
+        var savedData = JSON.parse(window.localStorage.getItem("LordleData"));
+        var alreadyPlayed = false;
+
+        if(savedData != undefined && savedData.word == wordOfTheDay){
+            alreadyPlayed = true;
+            for(let i = 0; i < savedData.guesses.length; i++){
+                disps[i].innerText = savedData.guesses.charAt(i);
+                if((i + 1) % 5 == 0){
+                    guessWord();
+                }
+            }
+        }
+
+        document.onkeydown = (e) => {
+            if(alreadyPlayed) return;
+
+            if(e.key == "Backspace"){
+                deleteLetter();
+            }else if(e.key == "Enter"){
+                guessWord();
+            }else if((/[a-zA-Z]/).test(e.key) && e.key.length == 1){
+                typeLetter({innerText: e.key.toLocaleUpperCase()});
+            }
+        }
+
+        function typeLetter(btn){
+            if(alreadyPlayed) return;
+
+            let letter = btn.innerText;
+            for(let i = (level * 5); i < ((level * 5) + 5); i++){
+                if(disps[i].innerText == ""){
+                    disps[i].innerText = letter;
+                    break;
+                }
+            }
+        }
+
+        function deleteLetter(){
+            if(alreadyPlayed) return;
+
+            for(let i = (4 + (5 * level)); i >= (level * 5); i--){
+                if(disps[i].innerText != ""){
+                    disps[i].innerText = "";
+                    break;
+                }
+            }
+        }
+
+        function guessWord(){            
+            let word = "";
+            for(let i = (level * 5); i < (5 + (5 * level)); i++){
+                word += disps[i].innerText.toLowerCase();
+            }
+
+            if(word.length != 5) wordError();
+            else if(!words.includes(word)) wordError(word);
+            else{
+                if(!alreadyPlayed && wordOfTheDay == word) correctWord();
+
+                for(let i = (level * 5); i < 5 + (5 * level); i ++){
+                    let letter = disps[i].innerText.toLowerCase();
+                    if(wordOfTheDay.includes(letter)){
+                        if(wordOfTheDay.charAt(i - (level * 5)) == letter){
+                            disps[i].style.backgroundColor = "green";
+                            disps[i].style.borderColor = "green";
+                            changeBtnColor(letter, "green");
+                        }else{
+                            disps[i].style.backgroundColor = "yellow";
+                            disps[i].style.borderColor = "yellow";
+                            changeBtnColor(letter, "yellow");
+                        }
+                    }else{
+                        disps[i].style.backgroundColor = "grey";
+                        changeBtnColor(letter, "grey");
+                    }
+                }
+                
+                if(wordOfTheDay != word && level <= 3) level++;
+                else if(!alreadyPlayed) lose();
+            }
+
+        }
+
+        function changeBtnColor(letter, color){
+            for (let i = 0; i < letterBtns.length; i++) {
+                if(letterBtns[i].innerText.toLowerCase() == letter){
+                    letterBtns[i].style.backgroundColor = color;
+                }
+            }
+        }
+
+        function showOverlay(){
+            document.getElementsByClassName("overlay")[0].style.opacity = 1;
+            document.getElementsByClassName("overlay")[0].style.visibility = "visible";
+            setTimeout(() => {
+                document.getElementsByClassName("overlayContent")[0].style.transform = "translateY(0)";
+            }, 500)
+        }
+
+        function hideOverlay(){
+            document.getElementsByClassName("overlay")[0].style.opacity = 0;
+            document.getElementsByClassName("overlay")[0].style.visibility = "hidden";
+            setTimeout(() => {
+                document.getElementsByClassName("overlayContent")[0].style.transform = "translateY(-200%)";
+            }, 500);
+        }
+
+        function wordError(word){
+            let errorEl = document.getElementById("error");
+            if(word == undefined) errorEl.innerText = "Invalid Word";
+            else errorEl.innerText = "\"" + word.toUpperCase() + "\" Not in Wordlist";
+
+            errorEl.style.top = "20px";
+            setTimeout(() => {
+                errorEl.style.top = "-100px";
+            }, 1500)
+        }
+
+        function correctWord(){
+            overlayContent.firstElementChild.innerText = "You Win!"
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay;
+            alreadyPlayed = true;
+            showOverlay();
+            saveResults();
+        }
+
+        function lose(){
+            overlayContent.firstElementChild.innerText = "You Lose!";
+            overlayContent.firstElementChild.style.color = "red";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay;
+            alreadyPlayed = true;
+            showOverlay();
+            saveResults();
+        }
+
+        function share(){
+            let copyText = document.getElementById("copied");
+            let emojis = "Scona Lordle 🦁 " + (level + 1) + "/5";
+            for(let i = 0; i < ((level * 5) + 5); i++){
+                if(i % 5 == 0) emojis += "\n";
+                console.log(disps[i].color)
+                if(disps[i].style.backgroundColor == "green"){
+                    emojis += "🟩";
+                }else if(disps[i].style.backgroundColor == "yellow"){
+                    emojis += "🟨";
+                }else{
+                    emojis += "⬛";
+                }
+                
+            }
+            console.log(emojis);
+            navigator.clipboard.writeText(emojis);
+
+            copyText.style.visibility = "visible";
+            copyText.style.opacity = 1;
+            copyText.style.transform = "translateY(-90px)";
+
+            setTimeout(() => {
+                copyText.style.opacity = 0;
+                copyText.style.visibility = "hidden";
+                setTimeout(() => {
+                    copyText.style.transform = "translateY(0)";
+                }, 500);
+            }, 1500);
+        }
+
+        function saveResults(){
+            let data = {word: wordOfTheDay, guesses: ""};
+            for(let i = 0; i < disps.length; i++){
+                data.guesses += disps[i].innerText;
+            }
+            window.localStorage.setItem("LordleData", JSON.stringify(data));
+        }
+
+
+    </script>
+</body>
+</html>
