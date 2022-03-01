@@ -46,14 +46,6 @@
             border-radius: 2px;
         }
 
-        .center{
-            /* display: flex;
-            align-items: center;
-            flex-direction: column; */
-            /* width: 100%; */
-
-        }
-
         .row{
             display: flex;
             flex-direction: row;
@@ -293,6 +285,12 @@
             <h1 class="letterDisp"></h1>
             <h1 class="letterDisp"></h1>
             <h1 class="letterDisp"></h1>
+
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
+            <h1 class="letterDisp"></h1>
         </div>
 
         <div class="letterBtnContainer">
@@ -428,7 +426,7 @@
                     }
                 }
                 
-                if(wordOfTheDay != word && level <= 3) level++;
+                if(wordOfTheDay != word && level <= 4) level++;
                 else if(!alreadyPlayed) lose();
 
                 saveResults();
@@ -510,7 +508,7 @@
         var animatingCopy = false;
         function share(){
             let copyText = document.getElementById("copied");
-            let emojis = "Scona Lordle 🦁 " + (level + 1) + "/5";
+            let emojis = "Scona Lordle 🦁 " + (level + 1) + "/6";
             for(let i = 0; i < ((level * 5) + 5); i++){
                 if(i % 5 == 0) emojis += "\n";
                 console.log(disps[i].color)
@@ -536,7 +534,7 @@
                 copyText.style.visibility = "hidden";
                 setTimeout(() => {
                     copyText.style.transform = "translateY(0)";
-                    animatingCopy = false;
+                    animating = false;
                 }, 500);
             }, 1500);
         }
