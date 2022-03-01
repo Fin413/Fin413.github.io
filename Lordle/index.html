@@ -130,6 +130,15 @@
             color: green;
         }
 
+        .overlayContent h3{
+            margin-top: 50px;
+            margin-bottom: 0;
+        }
+        
+        #countDown{
+            margin: 0;
+        }
+
         .shareBtn{
             margin-top: 25px;
             padding: 13px 50px 10px 50px;
@@ -221,6 +230,9 @@
             width: 100%;
             text-align: center;
         }
+
+
+
        
     </style>
 </head>
@@ -238,6 +250,9 @@
                 Share
                 <p id="copied">Results Copied to Clipboard</p>
             </button>
+
+            <h3>Next word in</h3>
+            <p id="countDown">00:00:00</p>
             <button onclick="hideOverlay()" class="xBtn"></button>
         </div>
     </div>
@@ -329,6 +344,8 @@
         var wordOfTheDay = "roars"; // lowercase only
         var savedData = JSON.parse(window.localStorage.getItem("LordleData"));
         var alreadyPlayed = false;
+        var nextWord = new Date().setHours(24,0,0,0);
+        var countDownInterval;
 
         if(savedData != undefined && savedData.word == wordOfTheDay){
             for(let i = 0; i < savedData.guesses.length; i++){
@@ -431,6 +448,8 @@
         }
 
         function showOverlay(){
+            countDown();
+            countDownInterval = setInterval(countDown, 1000);
             document.getElementsByClassName("overlay")[0].style.opacity = 1;
             document.getElementsByClassName("overlay")[0].style.visibility = "visible";
             setTimeout(() => {
@@ -438,7 +457,20 @@
             }, 500)
         }
 
+        function countDown(){
+            let timer = document.getElementById("countDown");
+            var diff = nextWord - (new Date().getTime());
+            var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            if(hours < 10) hours = "0" + hours;
+            if(minutes < 10) minutes = "0" + minutes;
+            if(seconds < 10) seconds = "0" + seconds;
+            timer.innerText = hours + ":" + minutes + ":" + seconds;
+        }
+
         function hideOverlay(){
+            clearInterval(countDownInterval);
             document.getElementsByClassName("overlay")[0].style.opacity = 0;
             document.getElementsByClassName("overlay")[0].style.visibility = "hidden";
             setTimeout(() => {
