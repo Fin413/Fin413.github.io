@@ -507,6 +507,7 @@
             saveResults();
         }
 
+        var animatingCopy = false;
         function share(){
             let copyText = document.getElementById("copied");
             let emojis = "Scona Lordle 🦁 " + (level + 1) + "/5";
@@ -522,9 +523,10 @@
                 }
                 
             }
-            console.log(emojis);
             navigator.clipboard.writeText(emojis);
 
+            if(animatingCopy) return;
+            animatingCopy = true;
             copyText.style.visibility = "visible";
             copyText.style.opacity = 1;
             copyText.style.transform = "translateY(-90px)";
@@ -534,6 +536,7 @@
                 copyText.style.visibility = "hidden";
                 setTimeout(() => {
                     copyText.style.transform = "translateY(0)";
+                    animatingCopy = false;
                 }, 500);
             }, 1500);
         }
