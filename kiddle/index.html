@@ -47,10 +47,10 @@
             font-size: 25px;
             text-align: center;
             /* background-color: grey; */
-            border: 2px solid rgb(163,182,189);
+            border: 2px solid black;
             line-height: 50px;
             margin: 0;
-            border-radius: 2px;
+            border-radius: 4px;
         }
 
         .row{
@@ -81,7 +81,8 @@
             margin: 2px;
             cursor: pointer;
             border: none;
-            background-color: #E8E8E6;
+            background-color: #dbd7a5;
+            
         }
 
         button{
@@ -195,13 +196,16 @@
         }
 
         .title{
-            color: black;
+            /* color: black;
             font-family: kid;
             letter-spacing: 8px;
             font-size: 55px;
             margin: auto;
             width: 100%;
-            text-align: center;
+            text-align: center; */
+            display: block;
+            margin: 0 auto 20px auto;
+            width: 250px;
         }
 
         #error{
@@ -348,7 +352,8 @@
     </div>
 
     <div style="padding-top: 25px;">
-        <h1 class="title">kiddle</h1>
+        <!-- <h1 class="title">kiddle</h1> -->
+        <img src="logo.png" class="title">
         <div class="row" style="flex-wrap: wrap;">
             <div class="lengthBtnContainer" onclick="setLength(2)">
                 <button class="wordLengthBtn" onclick="setLength(2)">Two Letters</button>
@@ -628,6 +633,7 @@
                     }else{
                         disps[i + (level * wordLength)].style.backgroundColor = "rgb(163,182,189)";
                         changeBtnColor(word.charAt(i), "rgb(163,182,189)");
+                        disps[i + (level * wordLength)].style.borderColor = "rgb(163,182,189)";
                     }
                 }
                 
