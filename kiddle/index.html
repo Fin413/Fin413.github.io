@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/x-icon" href="star.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiddle</title>
+    <style>
+        :root{
+            --wordLength: 5;
+        }
+
+        @font-face {
+            font-family: 'kid';
+            
+            src: url('./fonts/kid.otf');
+
+        }
+
+        html{
+            font-family: Arial, Helvetica, sans-serif;
+            font-family: kid;
+        }
+
+        body{
+            margin: 0;
+            background-color: #FAF39D;
+        }
+
+        .grid{
+            display: grid;
+            grid-template-columns: repeat(var(--wordLength), 50px);
+            grid-template-rows: repeat(var(--wordLength), 50px);
+            gap: 10px;
+            margin-bottom: 30px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .letterDisp{
+            width: 50px;
+            height: 50px;
+            font-size: 25px;
+            text-align: center;
+            /* background-color: grey; */
+            border: 2px solid rgb(163,182,189);
+            line-height: 50px;
+            margin: 0;
+            border-radius: 2px;
+        }
+
+        .row{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            touch-action: manipulation;
+        }
+
+        .letterBtnContainer{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 5px;
+        }
+
+        .letterBtn{
+            font-weight: bold;
+            height: 50px;
+            max-width: 40px;
+            flex: 1;
+            border-radius: 5px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            background-color: #E8E8E6;
+        }
+
+        button{
+            color: black;
+        }
+
+        .bigger{
+            max-width: 80px;
+            min-width: 60px;
+        }
+
+        .overlay{
+            z-index: 11;
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 500ms, visibility 500ms;
+        }
+
+        .overlayContent{
+            position: relative;
+            width: 50%;
+            padding: 50px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: transform 500ms;
+            margin-bottom: 100px;
+            transform: translateY(-200%);
+            border-radius: 10px;
+            font-family: kid;
+            text-align: center;
+        }
+
+        .overlayContent h1{
+            margin: 0;
+            font-family: kid;
+            color: green;
+        }
+
+        .overlayContent h3{
+            margin-top: 50px;
+            margin-bottom: 0;
+        }
+        
+        #countDown{
+            margin: 0;
+        }
+
+        .shareBtn{
+            margin-top: 25px;
+            padding: 10px 50px 10px 50px;
+            font-size: 20px;
+            cursor: pointer;
+            border: 1px solid black;
+            border-radius: 5px;
+            position: relative;
+            background-color: white;
+            font-family: kid;
+            
+        }
+
+        #copied{
+            font-size: 15px;
+            top: 0;
+            left: 0;
+            position: absolute;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 500ms, visibility, 500ms, transition 1s;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+            padding: 10px;
+        }
+
+        .xBtn{
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .xBtn::before{
+            content: '+';
+            font-size: 50px;
+            display: inline-block;
+            line-height: 30px;
+            transform: rotate(45deg);
+        }
+
+        .backspaceImg{
+            margin-top: 2px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .title{
+            color: black;
+            font-family: kid;
+            letter-spacing: 8px;
+            font-size: 55px;
+            margin: auto;
+            width: 100%;
+            text-align: center;
+        }
+
+        #error{
+            padding: 10px;
+            background-color: black;
+            color: white;
+            position: fixed;
+            border-radius: 5px;
+            z-index: 10;
+            transition: top 500ms;
+            top: -100px;
+            left: 50%;
+            text-align: center;
+            transform: translateX(-50%);
+        }
+
+        @media only screen and (max-width: 400px) {
+            .hideMobile{
+                display: none;
+            }
+
+            .title{
+                margin-right: 0;
+            }
+        }
+
+        noscript p{
+            width: 100%;
+            text-align: center;
+        }
+
+        .lengthBtnContainer{
+            cursor: pointer;
+            /* margin-bottom: 10px; */
+        }
+
+        .wordLengthBtn{
+            width: 105px;
+            margin: 5px 10px;
+            flex-wrap: wrap;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 2px solid black;
+            cursor: pointer;
+            font-family: kid;
+        }
+
+        @media (hover) {
+            .lengthBtnContainer:hover > .wordLengthBtn{
+                animation: jump 500ms 1;
+            }
+        }
+
+
+        .lengthBtnContainer:nth-child(1) button{
+            background-color: rgba(249,163,140,0.5);
+            border-color: rgb(249,163,140);
+        }
+
+        .lengthBtnContainer:nth-child(2) button{
+            background-color: rgba(252,221,129,0.5);
+            border-color: rgb(252,221,129);
+
+        }
+
+        .lengthBtnContainer:nth-child(3) button{
+            background-color: rgba(152,209,166, 0.5);
+            border-color: rgb(152,209,166);
+
+        }
+
+        .lengthBtnContainer:nth-child(4) button{
+            background-color: rgba(131,195,234, 0.5);
+            border-color: rgb(131,195,234);
+
+        }
+
+        @keyframes jump {
+            50% {transform: translateY(-10px);}
+            100% {transform: translateY(0);}
+        }
+
+
+        .newGameBtn{
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-family: kid;
+            font-size: 16px;
+        }
+
+        .smallRow{
+            width: fit-content;
+            margin: 10px;
+            margin-top: 0;
+        }
+
+        #unlimitedGuesses{
+            margin-right: 5px;
+        }
+
+        #canvas{
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: block;
+        }
+
+        .wordList{
+            padding: 25px;
+            margin: auto;
+            box-sizing: border-box;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, 75px);
+            max-width: 1000px;
+        }
+
+        .wordList p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <noscript><p>This website needs Javascript to function. Please enable or install Javascript continue.</p></noscript>
+
+    <h2 id="error">Not in Wordlist</h2>
+
+    <div class="overlay">
+        <canvas id="canvas"></canvas>
+        <div class="overlayContent row">
+            <h1 id="result">You Win!</h1>
+            <p id="wordReveal">The word was Scona</p>
+            <img src="star.jpg" width="100">
+
+
+            <button onclick="newGame()" class="shareBtn">
+                Play Again
+            </button>
+            
+            <button onclick="hideOverlay()" class="xBtn"></button>
+        </div>
+        
+    </div>
+
+    <div style="padding-top: 25px;">
+        <h1 class="title">kiddle</h1>
+        <div class="row" style="flex-wrap: wrap;">
+            <div class="lengthBtnContainer" onclick="setLength(2)">
+                <button class="wordLengthBtn" onclick="setLength(2)">Two Letters</button>
+            </div>
+            <div class="lengthBtnContainer" onclick="setLength(3)">
+                <button class="wordLengthBtn" onclick="setLength(3)">Three Letters</button>
+            </div>
+            <div class="lengthBtnContainer" onclick="setLength(4)">
+                <button class="wordLengthBtn" onclick="setLength(4)">Four Letters</button>
+            </div>
+            <div class="lengthBtnContainer" onclick="setLength(5)">
+                <button class="wordLengthBtn" onclick="setLength(5)">Five Letters</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid"></div>
+
+    <div class="letterBtnContainer">
+        <div class="row">
+            <button class="letterBtn" onclick="typeLetter(this)">Q</button>
+            <button class="letterBtn" onclick="typeLetter(this)">W</button>
+            <button class="letterBtn" onclick="typeLetter(this)">E</button>
+            <button class="letterBtn" onclick="typeLetter(this)">R</button>
+            <button class="letterBtn" onclick="typeLetter(this)">T</button>
+            <button class="letterBtn" onclick="typeLetter(this)">Y</button>
+            <button class="letterBtn" onclick="typeLetter(this)">U</button>
+            <button class="letterBtn" onclick="typeLetter(this)">I</button>
+            <button class="letterBtn" onclick="typeLetter(this)">O</button>
+            <button class="letterBtn" onclick="typeLetter(this)">P</button>
+        </div>
+        <div class="row">
+            <button class="letterBtn" onclick="typeLetter(this)">A</button>
+            <button class="letterBtn" onclick="typeLetter(this)">S</button>
+            <button class="letterBtn" onclick="typeLetter(this)">D</button>
+            <button class="letterBtn" onclick="typeLetter(this)">F</button>
+            <button class="letterBtn" onclick="typeLetter(this)">G</button>
+            <button class="letterBtn" onclick="typeLetter(this)">H</button>
+            <button class="letterBtn" onclick="typeLetter(this)">J</button>
+            <button class="letterBtn" onclick="typeLetter(this)">K</button>
+            <button class="letterBtn" onclick="typeLetter(this)">L</button>
+        </div>
+        <div class="row">
+            <button class="bigger letterBtn" onclick="guessWord()">GUESS</button>
+            <button class="letterBtn" onclick="typeLetter(this)">Z</button>
+            <button class="letterBtn" onclick="typeLetter(this)">X</button>
+            <button class="letterBtn" onclick="typeLetter(this)">C</button>
+            <button class="letterBtn" onclick="typeLetter(this)">V</button>
+            <button class="letterBtn" onclick="typeLetter(this)">B</button>
+            <button class="letterBtn" onclick="typeLetter(this)">N</button>
+            <button class="letterBtn" onclick="typeLetter(this)">M</button>
+            <button class="bigger letterBtn" onclick="deleteLetter()"><img class="backspaceImg" src="backspace.svg" width="25"></button>
+        </div>
+        
+    </div>
+
+    <div class="row">
+        <button class="row smallRow newGameBtn" onclick="toggleCheckbox()">
+            <img src="checked.png" width="20" id="unlimitedGuesses">
+            <p style="text-align: left;">Unlimited guesses</p>
+        </button>
+        <div class="row smallRow">
+            <button onclick="endGame();" class="newGameBtn">End Game</button>
+        </div>
+        <div class="row smallRow">
+            <button onclick="showWordlist();" class="newGameBtn" id="viewWordlist">View Wordlist</button>
+        </div>
+    </div>
+
+    <div class="wordList row" style="flex-wrap: wrap;"></div>
+
+    <script src="confetti.js"></script>
+    <script src="kidlist.js"></script>
+    <script src="2Letter.js"></script>
+    <script src="3Letter.js"></script>
+    <script src="4Letter.js"></script>
+    <script src="5Letter.js"></script>
+    <script>
+        // add unlimited guess feature
+        // cull word list so that kids
+        // also fonts are fuckd for some reason???
+        // update copy paste
+
+        var level = 0;
+        var disps = document.getElementsByClassName("letterDisp");
+        var overlayContent = document.getElementsByClassName("overlayContent")[0]
+        var letterBtns = document.getElementsByClassName("letterBtn");
+        var wordOfTheDay; // lowercase only
+        var alreadyPlayed = false;
+        var grid = document.getElementsByClassName("grid")[0];
+        var wordLength = 5;
+        var oldWord;
+        var numGuesses = 6;
+        var checkbox = document.getElementById("unlimitedGuesses");
+        var unlimitedGuesses;
+        var wordList;
+        var savedData = JSON.parse(window.localStorage.getItem("KiddleData"));
+
+        if(savedData == null){
+            savedData = {
+                lastLength: wordLength,
+                savedGames: [
+                    {
+                        word: "",
+                        guesses: "",
+                        unlimited: true
+                    },
+                    {
+                        word: "",
+                        guesses: "",
+                        unlimited: true
+                    },
+                    {
+                        word: "",
+                        guesses: "",
+                        unlimited: true
+                    },
+                    {
+                        word: "",
+                        guesses: "",
+                        unlimited: true
+                    },
+                ]
+            }
+        }
+
+        setLength(savedData.lastLength);
+        animateButtons();
+
+        function animateButtons(){
+            let bouncyBtns = document.getElementsByClassName("wordLengthBtn");
+            let tempIndex = 0;
+            var bounceInt = setInterval(() => {
+                bouncyBtns[tempIndex].style.animation = "jump 500ms 1";
+                if(tempIndex == bouncyBtns.length - 1){
+                    setTimeout(() => {
+                        for (const el of bouncyBtns) {
+                            el.style.animation = 'none';
+                            el.offsetHeight; /* trigger reflow */
+                            el.style.animation = null;
+                        }
+                    }, 500);
+                    clearInterval(bounceInt);
+                }else{
+                    tempIndex++;
+                }
+            }, 200)
+        }
+
+        function toggleCheckbox(){
+            unlimitedGuesses = !unlimitedGuesses;
+            
+            if(unlimitedGuesses){
+                checkbox.src = "checked.png";
+            }else{
+                checkbox.src = "unchecked.png";
+            }
+
+            savedData.savedGames[wordLength - 2].unlimited = unlimitedGuesses;
+            saveResults();
+        }
+
+        function showWordlist(){
+            document.getElementById("viewWordlist").innerText = "Hide Wordlist";
+            document.getElementById("viewWordlist").onclick = () => {hideWordlist();};
+            let container = document.getElementsByClassName("wordList")[0];
+            kidList.forEach(word => {
+                let p = document.createElement("p");
+                p.innerText = word;
+                container.appendChild(p);
+                console.log(word);
+            })
+        }
+
+        function hideWordlist(){
+            document.getElementsByClassName("wordList")[0].innerHTML = "";
+            document.getElementById("viewWordlist").innerText = "View Wordlist";
+            document.getElementById("viewWordlist").onclick = () => {showWordlist();};
+        }
+
+        function restoreSession(){
+            if(savedData.savedGames[wordLength - 2].word == ""){
+                let newWord;
+                while(true){
+                    newWord = kidList[Math.floor(Math.random() * kidList.length)];
+                    if(newWord.length == wordLength && newWord != oldWord){
+                        break;
+                    }
+                }
+                savedData.savedGames[wordLength - 2].word = newWord;
+                saveResults();
+            }
+
+            wordOfTheDay = savedData.savedGames[wordLength - 2].word;
+            let oldGuesses = savedData.savedGames[wordLength - 2].guesses;
+
+            let isUnlimited = savedData.savedGames[wordLength - 2].unlimited;
+
+            if(isUnlimited) checkbox.src = "checked.png";
+            else checkbox.src = "unchecked.png";
+            unlimitedGuesses = isUnlimited;
+            
+
+            for(let i = 0; i < oldGuesses.length; i++){
+                disps[i].innerText = oldGuesses.charAt(i);
+                if((i + 1) % wordLength == 0){
+                    guessWord();
+                }
+            }
+        }
+
+        document.onkeydown = (e) => {
+            if(alreadyPlayed) return;
+
+            if(e.key == "Backspace"){
+                deleteLetter();
+            }else if(e.key == "Enter"){
+                guessWord();
+            }else if((/[a-zA-Z]/).test(e.key) && e.key.length == 1){
+                typeLetter({innerText: e.key.toLocaleUpperCase()});
+            }
+        }
+
+        function typeLetter(btn){
+            if(alreadyPlayed) return;
+
+            let letter = btn.innerText;
+            for(let i = (level * wordLength); i < ((level * wordLength) + wordLength); i++){
+                if(disps[i].innerText == ""){
+                    disps[i].innerText = letter;
+                    break;
+                }
+            }
+        }
+
+        function deleteLetter(){
+            if(alreadyPlayed) return;
+
+            for(let i = ((wordLength - 1) + (wordLength * level)); i >= (level * wordLength); i--){
+                if(disps[i].innerText != ""){
+                    disps[i].innerText = "";
+                    break;
+                }
+            }
+        }
+
+        function guessWord(){      
+            let word = "";
+            for(let i = (level * wordLength); i < (wordLength + (wordLength * level)); i++){
+                word += disps[i].innerText.toLowerCase();
+            }
+
+            if(word.length != wordLength) wordError();
+            else if(!wordList.includes(word)) wordError(word);
+            else{
+                if(!alreadyPlayed && wordOfTheDay == word) correctWord();
+                
+                let tempDayWord = wordOfTheDay;
+
+                for(let i = 0; i < wordLength; i++){
+                    if(word.charAt(i) == wordOfTheDay.charAt(i)){
+                        tempDayWord = tempDayWord.substring(0, i) + "*" + tempDayWord.substring(i + 1);
+                    }
+                }
+
+                for(let i = 0; i < wordLength; i++){
+                    if(tempDayWord.charAt(i) == "*"){
+                        disps[i + (level * wordLength)].style.backgroundColor = "rgb(152, 209, 166)";
+                        disps[i + (level * wordLength)].style.borderColor = "rgb(152, 209, 166)";
+                        changeBtnColor(word.charAt(i), "rgb(152, 209, 166)");
+                    }else if(tempDayWord.includes(word.charAt(i))){
+                        let indexOfLetter = tempDayWord.indexOf(word.charAt(i));
+                        tempDayWord = tempDayWord.substring(0, indexOfLetter) + "-" + tempDayWord.substring(indexOfLetter + 1);
+                        disps[i + (level * wordLength)].style.backgroundColor = "yellow";
+                        disps[i + (level * wordLength)].style.borderColor = "yellow";
+                        changeBtnColor(word.charAt(i), "yellow");
+                    }else{
+                        disps[i + (level * wordLength)].style.backgroundColor = "rgb(163,182,189)";
+                        changeBtnColor(word.charAt(i), "rgb(163,182,189)");
+                    }
+                }
+                
+                if(wordOfTheDay != word && level < (numGuesses - 1)) level++;
+                else if(!alreadyPlayed && !unlimitedGuesses) lose();
+                else if(!alreadyPlayed && wordOfTheDay != word){
+                    numGuesses++;
+                    setLength(wordLength);
+                }
+                saveResults();
+            }
+
+        }
+
+        function changeBtnColor(letter, color){
+            for (let i = 0; i < letterBtns.length; i++) {
+                if(letterBtns[i].innerText.toLowerCase() == letter){
+                    let currentColor = letterBtns[i].style.backgroundColor;
+                    if(color == "rgb(152, 209, 166)" || (color == "yellow" && currentColor != "rgb(152, 209, 166)") || currentColor == ""){
+                        letterBtns[i].style.backgroundColor = color;
+                    }
+                }
+            }
+        }
+
+        function showOverlay(){
+            document.getElementsByClassName("overlay")[0].style.opacity = 1;
+            document.getElementsByClassName("overlay")[0].style.visibility = "visible";
+            setTimeout(() => {
+                document.getElementsByClassName("overlayContent")[0].style.transform = "translateY(0)";
+            }, 500)
+        }
+
+        function hideOverlay(){
+            document.getElementsByClassName("overlay")[0].style.opacity = 0;
+            document.getElementsByClassName("overlay")[0].style.visibility = "hidden";
+            setTimeout(() => {
+                document.getElementsByClassName("overlayContent")[0].style.transform = "translateY(-200%)";
+            }, 500);
+        }
+
+        function wordError(word){
+            let errorEl = document.getElementById("error");
+            if(word == undefined) errorEl.innerText = "Invalid Word";
+            else errorEl.innerText = "\"" + word.toUpperCase() + "\" Not in Wordlist";
+
+            errorEl.style.top = "20px";
+            setTimeout(() => {
+                errorEl.style.top = "-100px";
+            }, 1750)
+        }
+
+        function correctWord(){
+            document.getElementById("result").innerText = "You Win!";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay;
+            alreadyPlayed = true;
+            showOverlay();
+            saveResults();
+            
+            initConfetti();
+            render();
+        }
+
+        function lose(){
+            document.getElementById("result").innerText = "You ran out of guesses!";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay;
+            alreadyPlayed = true;
+            showOverlay();
+            saveResults();
+        }
+
+        function endGame(){
+            document.getElementById("result").innerText = "Game Over!";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay;
+            document.getElementsByClassName("xBtn")[0].style.display = "none";
+            document.getElementsByClassName("shareBtn")[0].onclick = () => {
+                hideOverlay();
+                setTimeout(() => {
+                    document.getElementsByClassName("xBtn")[0].style.display = "flex";
+                    document.getElementsByClassName("shareBtn")[0].onclick = () => {newGame()};
+                }, 500)
+            }
+            showOverlay();
+            numGuesses = 6;
+            oldWord = savedData.savedGames[wordLength - 2].word;
+            savedData.savedGames[wordLength - 2].word = "";
+            savedData.savedGames[wordLength - 2].guesses = "";
+            setLength(wordLength);
+        }
+
+        function saveResults(){
+            if(wordOfTheDay != undefined){  
+                savedData.savedGames[wordLength - 2].guesses = "";
+                for(let i = 0; i < disps.length; i++){
+                    savedData.savedGames[wordLength - 2].guesses += disps[i].innerText;
+                }
+            }
+            window.localStorage.setItem("KiddleData", JSON.stringify(savedData));
+        }
+
+        function setLength(length){
+            savedData.lastLength = length;
+            saveResults();
+
+            reset();
+
+            grid.innerHTML = "";
+            wordLength = length;
+            document.documentElement.style.setProperty('--wordLength', length);
+            switch(length){
+                case 2:
+                    wordList = twoLetter;
+                    break;
+                case 3:
+                    wordList = threeLetter;
+                    break;
+                case 4:
+                    wordList = fourLetter;
+                    break;
+                case 5:
+                    wordList = fiveLetter;
+                    break;
+            }
+
+            for(let i = 0; i < (wordLength * numGuesses); i++){
+                let letterDisp = document.createElement("h1");
+                letterDisp.classList = "letterDisp";
+                grid.appendChild(letterDisp);
+            }
+
+            restoreSession();
+        }
+
+        function reset(){
+            level = 0;
+            alreadyPlayed = false;
+            for (let i = 0; i < letterBtns.length; i++) {
+                letterBtns[i].style.cssText = "";
+            }
+            for (let i = 0; i < disps.length; i++) {
+                disps[i].style.cssText = "";
+                disps[i].innerText = "";
+            }
+        }
+   
+        function newGame(){
+            numGuesses = 6;
+            oldWord = savedData.savedGames[wordLength - 2].word;
+            savedData.savedGames[wordLength - 2].word = "";
+            savedData.savedGames[wordLength - 2].guesses = "";
+            setLength(wordLength);
+            hideOverlay();
+        }
+   </script>
+</body>
+</html>
