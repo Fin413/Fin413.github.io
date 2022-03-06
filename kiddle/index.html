@@ -66,6 +66,7 @@
             justify-content: center;
             flex-direction: column;
             margin: 5px;
+            margin-bottom: 15px;
         }
 
         .letterBtn{
@@ -283,8 +284,9 @@
 
         .smallRow{
             width: fit-content;
-            margin: 10px;
+            /* margin: 10px; */
             margin-top: 0;
+            margin: 5px 10px;
         }
 
         #unlimitedGuesses{
@@ -315,7 +317,7 @@
 
         #checkBoxText{
             text-align: left;
-
+            margin: 0;
         }
 
     </style>
@@ -400,7 +402,7 @@
         
     </div>
 
-    <div class="row">
+    <div class="row" style="flex-wrap: wrap;">
         <button class="row smallRow newGameBtn" onclick="toggleCheckbox()">
             <img src="checked.png" width="20" id="unlimitedGuesses">
             <p id="checkBoxText">Unlimited guesses</p>
