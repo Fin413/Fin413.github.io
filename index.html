@@ -1,786 +1,730 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="icon" type="image/x-icon" href="star.jpg">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="Kiddle, Word game, kids game">
-    <meta name="author" content="Finlay Soehn">
-    <meta name="description" content="Kiddle is a word game for kids based off of the popular game Wordle">
-    <title>Kiddle</title>
-    <style>
-        :root{
-            --wordLength: 5;
-        }
+<html>
+    <head>
+        <title>Home</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="icon" href="favicon.svg">
 
-        @font-face {
-            font-family: 'kid';
-            
-            src: url('./fonts/kid.otf');
-
-        }
-
-        html{
-            font-family: Arial, Helvetica, sans-serif;
-            font-family: kid;
-        }
-
-        body{
-            margin: 0;
-            background-color: #FAF39D;
-        }
-
-        .grid{
-            display: grid;
-            grid-template-columns: repeat(var(--wordLength), 50px);
-            grid-template-rows: repeat(var(--wordLength), 50px);
-            gap: 10px;
-            margin-bottom: 30px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-
-        .letterDisp{
-            width: 50px;
-            height: 50px;
-            font-size: 25px;
-            text-align: center;
-            /* background-color: grey; */
-            border: 2px solid rgb(163,182,189);
-            line-height: 50px;
-            margin: 0;
-            border-radius: 2px;
-        }
-
-        .row{
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            position: relative;
-            touch-action: manipulation;
-        }
-
-        .letterBtnContainer{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            margin: 5px;
-            margin-bottom: 15px;
-        }
-
-        .letterBtn{
-            font-weight: bold;
-            height: 50px;
-            max-width: 40px;
-            flex: 1;
-            border-radius: 5px;
-            margin: 2px;
-            cursor: pointer;
-            border: none;
-            background-color: #E8E8E6;
-        }
-
-        button{
-            color: black;
-        }
-
-        .bigger{
-            max-width: 80px;
-            min-width: 60px;
-        }
-
-        .overlay{
-            z-index: 11;
-            position: fixed;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 500ms, visibility 500ms;
-        }
-
-        .overlayContent{
-            position: relative;
-            width: 50%;
-            padding: 50px;
-            background-color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            transition: transform 500ms;
-            margin-bottom: 100px;
-            transform: translateY(-200%);
-            border-radius: 10px;
-            font-family: kid;
-            text-align: center;
-        }
-
-        .overlayContent h1{
-            margin: 0;
-            font-family: kid;
-            color: green;
-        }
-
-        .overlayContent h3{
-            margin-top: 50px;
-            margin-bottom: 0;
-        }
-        
-        #countDown{
-            margin: 0;
-        }
-
-        .shareBtn{
-            margin-top: 25px;
-            padding: 10px 50px 10px 50px;
-            font-size: 20px;
-            cursor: pointer;
-            border: 1px solid black;
-            border-radius: 5px;
-            position: relative;
-            background-color: white;
-            font-family: kid;
-            
-        }
-
-        #copied{
-            font-size: 15px;
-            top: 0;
-            left: 0;
-            position: absolute;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 500ms, visibility, 500ms, transition 1s;
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-            padding: 10px;
-        }
-
-        .xBtn{
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 40px;
-            height: 40px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .xBtn::before{
-            content: '+';
-            font-size: 50px;
-            display: inline-block;
-            line-height: 30px;
-            transform: rotate(45deg);
-        }
-
-        .backspaceImg{
-            margin-top: 2px;
-            margin-left: 10px;
-            margin-right: 10px;
-        }
-
-        .title{
-            color: black;
-            font-family: kid;
-            letter-spacing: 8px;
-            font-size: 55px;
-            margin: auto;
-            width: 100%;
-            text-align: center;
-        }
-
-        #error{
-            padding: 10px;
-            background-color: black;
-            color: white;
-            position: fixed;
-            border-radius: 5px;
-            z-index: 10;
-            transition: top 500ms;
-            top: -100px;
-            left: 50%;
-            text-align: center;
-            transform: translateX(-50%);
-        }
-
-
-
-        noscript p{
-            width: 100%;
-            text-align: center;
-        }
-
-        .lengthBtnContainer{
-            cursor: pointer;
-            /* margin-bottom: 10px; */
-        }
-
-        .wordLengthBtn{
-            width: 105px;
-            margin: 5px 10px;
-            flex-wrap: wrap;
-            padding: 5px 10px;
-            border-radius: 5px;
-            border: 2px solid black;
-            cursor: pointer;
-            font-family: kid;
-        }
-
-        @media (hover) {
-            .lengthBtnContainer:hover > .wordLengthBtn{
-                animation: jump 500ms 1;
+        <style>
+            :root{
+                --cursorAnimation: blink 1s steps(2, start) infinite;
             }
-        }
 
-
-        .lengthBtnContainer:nth-child(1) button{
-            background-color: rgba(249,163,140,0.5);
-            border-color: rgb(249,163,140);
-        }
-
-        .lengthBtnContainer:nth-child(2) button{
-            background-color: rgba(252,221,129,0.5);
-            border-color: rgb(252,221,129);
-
-        }
-
-        .lengthBtnContainer:nth-child(3) button{
-            background-color: rgba(152,209,166, 0.5);
-            border-color: rgb(152,209,166);
-
-        }
-
-        .lengthBtnContainer:nth-child(4) button{
-            background-color: rgba(131,195,234, 0.5);
-            border-color: rgb(131,195,234);
-
-        }
-
-        @keyframes jump {
-            50% {transform: translateY(-10px);}
-            100% {transform: translateY(0);}
-        }
-
-
-        .newGameBtn{
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            font-family: kid;
-            font-size: 16px;
-        }
-
-        .smallRow{
-            width: fit-content;
-            /* margin: 10px; */
-            margin-top: 0;
-            margin: 5px 10px;
-        }
-
-        #unlimitedGuesses{
-            margin-right: 5px;
-        }
-
-        #canvas{
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: block;
-        }
-
-        .wordList{
-            padding: 25px;
-            margin: auto;
-            box-sizing: border-box;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, 75px);
-            max-width: 1000px;
-        }
-
-        .wordList p {
-            margin: 0;
-        }
-
-        #checkBoxText{
-            text-align: left;
-            margin: 0;
-        }
-
-    </style>
-</head>
-<body>
-    <noscript><p>This website needs Javascript to function. Please enable or install Javascript continue.</p></noscript>
-
-    <h2 id="error">Not in Wordlist</h2>
-
-    <div class="overlay">
-        <canvas id="canvas"></canvas>
-        <div class="overlayContent row">
-            <h1 id="result">You Win!</h1>
-            <p id="wordReveal">The word was Scona</p>
-            <img src="star.jpg" width="100">
-
-
-            <button onclick="newGame()" class="shareBtn">
-                Play Again
-            </button>
-            
-            <button onclick="hideOverlay()" class="xBtn"></button>
-        </div>
-        
-    </div>
-
-    <div style="padding-top: 25px;">
-        <h1 class="title">kiddle</h1>
-        <div class="row" style="flex-wrap: wrap;">
-            <div class="lengthBtnContainer" onclick="setLength(2)">
-                <button class="wordLengthBtn" onclick="setLength(2)">Two Letters</button>
-            </div>
-            <div class="lengthBtnContainer" onclick="setLength(3)">
-                <button class="wordLengthBtn" onclick="setLength(3)">Three Letters</button>
-            </div>
-            <div class="lengthBtnContainer" onclick="setLength(4)">
-                <button class="wordLengthBtn" onclick="setLength(4)">Four Letters</button>
-            </div>
-            <div class="lengthBtnContainer" onclick="setLength(5)">
-                <button class="wordLengthBtn" onclick="setLength(5)">Five Letters</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid"></div>
-
-    <div class="letterBtnContainer">
-        <div class="row">
-            <button class="letterBtn" onclick="typeLetter(this)">Q</button>
-            <button class="letterBtn" onclick="typeLetter(this)">W</button>
-            <button class="letterBtn" onclick="typeLetter(this)">E</button>
-            <button class="letterBtn" onclick="typeLetter(this)">R</button>
-            <button class="letterBtn" onclick="typeLetter(this)">T</button>
-            <button class="letterBtn" onclick="typeLetter(this)">Y</button>
-            <button class="letterBtn" onclick="typeLetter(this)">U</button>
-            <button class="letterBtn" onclick="typeLetter(this)">I</button>
-            <button class="letterBtn" onclick="typeLetter(this)">O</button>
-            <button class="letterBtn" onclick="typeLetter(this)">P</button>
-        </div>
-        <div class="row">
-            <button class="letterBtn" onclick="typeLetter(this)">A</button>
-            <button class="letterBtn" onclick="typeLetter(this)">S</button>
-            <button class="letterBtn" onclick="typeLetter(this)">D</button>
-            <button class="letterBtn" onclick="typeLetter(this)">F</button>
-            <button class="letterBtn" onclick="typeLetter(this)">G</button>
-            <button class="letterBtn" onclick="typeLetter(this)">H</button>
-            <button class="letterBtn" onclick="typeLetter(this)">J</button>
-            <button class="letterBtn" onclick="typeLetter(this)">K</button>
-            <button class="letterBtn" onclick="typeLetter(this)">L</button>
-        </div>
-        <div class="row">
-            <button class="bigger letterBtn" onclick="guessWord()">GUESS</button>
-            <button class="letterBtn" onclick="typeLetter(this)">Z</button>
-            <button class="letterBtn" onclick="typeLetter(this)">X</button>
-            <button class="letterBtn" onclick="typeLetter(this)">C</button>
-            <button class="letterBtn" onclick="typeLetter(this)">V</button>
-            <button class="letterBtn" onclick="typeLetter(this)">B</button>
-            <button class="letterBtn" onclick="typeLetter(this)">N</button>
-            <button class="letterBtn" onclick="typeLetter(this)">M</button>
-            <button class="bigger letterBtn" onclick="deleteLetter()"><img class="backspaceImg" src="backspace.svg" width="25"></button>
-        </div>
-        
-    </div>
-
-    <div class="row" style="flex-wrap: wrap;">
-        <button class="row smallRow newGameBtn" onclick="toggleCheckbox()">
-            <img src="checked.png" width="20" id="unlimitedGuesses">
-            <p id="checkBoxText">Unlimited guesses</p>
-        </button>
-        <div class="row smallRow">
-            <button onclick="endGame();" class="newGameBtn">End Game</button>
-        </div>
-        <div class="row smallRow">
-            <button onclick="showWordlist();" class="newGameBtn" id="viewWordlist">View Wordlist</button>
-        </div>
-    </div>
-
-    <div class="wordList row" style="flex-wrap: wrap;"></div>
-
-    <script src="confetti.js"></script>
-    <script src="kidlist.js"></script>
-    <script src="2Letter.js"></script>
-    <script src="3Letter.js"></script>
-    <script src="4Letter.js"></script>
-    <script src="5Letter.js"></script>
-    <script>
-        // add unlimited guess feature
-        // cull word list so that kids
-        // also fonts are fuckd for some reason???
-        // update copy paste
-
-        var level = 0;
-        var disps = document.getElementsByClassName("letterDisp");
-        var overlayContent = document.getElementsByClassName("overlayContent")[0]
-        var letterBtns = document.getElementsByClassName("letterBtn");
-        var wordOfTheDay; // lowercase only
-        var alreadyPlayed = false;
-        var grid = document.getElementsByClassName("grid")[0];
-        var wordLength = 5;
-        var oldWord;
-        var numGuesses = 6;
-        var checkbox = document.getElementById("unlimitedGuesses");
-        var unlimitedGuesses;
-        var wordList;
-        var savedData = JSON.parse(window.localStorage.getItem("KiddleData"));
-
-        if(savedData == null){
-            savedData = {
-                lastLength: wordLength,
-                savedGames: [
-                    {
-                        word: "",
-                        guesses: "",
-                        unlimited: true
-                    },
-                    {
-                        word: "",
-                        guesses: "",
-                        unlimited: true
-                    },
-                    {
-                        word: "",
-                        guesses: "",
-                        unlimited: true
-                    },
-                    {
-                        word: "",
-                        guesses: "",
-                        unlimited: true
-                    },
-                ]
+            body, html{
+                margin: 0;
+                font-family: 'Courier New', Courier, monospace;
+                background: #0E2A35;
             }
-        }
 
-        setLength(savedData.lastLength);
-        animateButtons();
+            .fadeScroll, .intervalFade{
+                opacity: 0;
+                transform: translateY(100px);
+                transition: opacity 1s, transform 1s;
+            }
 
-        function animateButtons(){
-            let bouncyBtns = document.getElementsByClassName("wordLengthBtn");
-            let tempIndex = 0;
-            var bounceInt = setInterval(() => {
-                bouncyBtns[tempIndex].style.animation = "jump 500ms 1";
-                if(tempIndex == bouncyBtns.length - 1){
-                    setTimeout(() => {
-                        for (const el of bouncyBtns) {
-                            el.style.animation = 'none';
-                            el.offsetHeight; /* trigger reflow */
-                            el.style.animation = null;
+             /* Scrollbar */
+             ::-webkit-scrollbar {
+                width: 12px;
+            }
+
+            /* Track */
+            ::-webkit-scrollbar-track {
+                background: #4B6269; 
+            }
+            
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                background: #091b22; 
+            }
+
+
+            .notSelectable{
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-drag: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+            }
+
+            .fullHeight{
+                height: 100vh;
+                background-color: #0E2A35;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                text-align: center;
+                padding: 0 50px 0 50px;
+            }
+
+            #name{
+                cursor: pointer;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 8rem;
+                margin: 0;
+                color: #4B6269;
+            }
+
+            #description{
+                color: #6B9528;
+                text-align: left;
+                word-break: break-all;
+                font-weight: normal;
+                font-size: 20px;
+                margin-bottom: 75px;
+            }
+
+            #description::after{
+                content: "_";
+                animation: var(--cursorAnimation);
+            }
+
+            @media only screen and (max-width: 600px) {
+                #name{
+                    font-size: 20vw;
+                }
+
+                .fullHeight{
+                    padding: 0 25px 0 25px;
+                }
+            }
+
+            #scroll{
+                position: absolute;
+                visibility: hidden;
+                bottom: -100px;
+                opacity: 0;
+                left: 0;
+                right: 0;
+                z-index: 2;
+                margin: auto auto 0 0;
+                text-align: center;
+                color: #4B6269;
+                transition: bottom 1s, visibility 1s, opacity 1s;
+            }
+
+            #scroll p {
+                margin-bottom: -5px;
+                font-size: 20px;
+            }
+
+            .downArrow{
+                border: solid #4B6269;
+                border-width: 0 3px 3px 0;
+                border-radius: 2px;
+                display: inline-block;
+                padding: 5px;
+                transform: rotate(45deg);
+                -webkit-transform: rotate(45deg);
+            }
+
+            .portfolioGrid{
+                background-color: white;
+                display: flex;
+                justify-content: space-evenly;
+                width: 100%;
+                flex-wrap: wrap;
+                /* transform: skewY(-11deg); */
+
+                padding-top: 200px;
+                padding-bottom: 200px;
+                clip-path: polygon(0 15%, 100% 0%, 100% 85%, 0% 100%);
+            }
+
+            @media only screen and (max-width: 800px) {
+                .portfolioGrid{
+                    clip-path: polygon(0 5%, 100% 0%, 100% 95%, 0% 100%);
+                }
+            }
+
+
+            .siteContainer{
+                width: 300px;
+                position: relative;
+                margin: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            .siteTitle{
+                text-align: center;
+            }
+
+            .siteThumbnail{
+                transition: margin 1s;
+                width: 100%;
+                cursor: pointer;
+                z-index: 1;
+                transition: opacity 200ms;
+            }
+
+            .siteThumbnail:hover{
+                opacity: 0.5;
+            }
+
+            .siteDescription{
+                transition: visibility 1s, opacity 600ms, top 1s;
+                width: 100%;
+                text-align: center;
+                margin-right: 15px;
+                margin-left: 15px;
+                font-size: 15px;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            }
+
+            .contactBackground{
+                display: flex;
+                /* width: 100%; */
+           
+                height: 100vh;
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                overflow-x: hidden;
+                overflow-y: hidden;
+            }
+
+            .contactContainer{
+                height: fit-content;
+                margin-top:auto;
+                margin-bottom: auto;
+                display: flex;
+                flex-direction: row;
+            }
+
+            .contactInfo{
+                text-align: right;
+                color: #6B9528;
+                display: flex;
+                align-items: flex-end;
+                flex-direction: column;
+                margin-right: 100px;
+            }
+
+            .title{
+                font-size: 4em;
+                margin: 0;
+            }   
+
+            form{
+                margin-top: 20px;
+                width: 375px;
+                display: flex;
+                justify-content: flex-start;
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            input[type="email"]{
+                border-radius: 0;
+                /* width: 200px; */
+                border: 1px solid #4B6269;
+                color: white;
+                font-size: 15px;
+                font-family: 'Courier New', Courier, monospace;
+                outline: none;
+                background-color: #0E2A35;
+                margin-bottom: 25px;
+                padding: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-top: 8px;
+            }
+
+            textarea{
+                border-radius: 0;
+                font-family: 'Courier New', Courier, monospace;
+                background-color: #0E2A35;
+                border: 1px solid #4B6269;
+                color: white;
+                font-size: 15px;
+                margin-bottom: 40px;
+                resize: none;
+                height: 150px;
+                max-height: 150px;
+                outline: none;
+                padding: 10px;
+            }
+
+            ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                color: #4B6269;
+                opacity: 1; /* Firefox */
+                font-family: monospace, 'Courier New', Courier;
+            }
+
+            :-ms-input-placeholder { /* Internet Explorer 10-11 */
+                color: #4B6269;
+                font-family: monospace, 'Courier New', Courier;
+            }
+
+            ::-ms-input-placeholder { /* Microsoft Edge */
+                color: #4B6269;
+                font-family: monospace, 'Courier New', Courier;
+            }
+
+            form button{
+                cursor: pointer;
+                background-color: #4B6269;
+                border: none;
+                color: black;
+                padding: 5px;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 20px;
+                transition: all 500ms;
+                position: relative;
+            }
+
+            form button:hover{
+                background-color: #6B9528;                
+            }
+
+            #plane{
+                margin-bottom: -5px;
+                margin-left: 5px;
+                transition: all 1s;
+            }
+
+            @media only screen and (max-width: 450px) {
+                form{
+                    width: 85vw;
+                }
+            }
+
+            @keyframes fly {
+                0%{
+                    right: 145px;
+                    top: 3px;
+                }
+                75%{
+                    right: -1000px;
+                    top: -1000px;
+                }
+                80%{
+                    opacity: 0;
+                }
+                85%{
+                    right: 145px;
+                    top: 3px;
+                    opacity: 0;
+                }
+                100%{
+                    opacity: 1;
+                }
+            }
+
+
+
+            .textHighlight{
+                cursor: pointer;
+                background-color: #091b22;
+                color: #6B9528;
+                font-family: monospace,'Courier New', Courier;
+                font-size: 15px;
+                padding: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
+                margin-bottom: 30px;
+                letter-spacing: 2px;
+                transition: color 500ms, background-color 500ms, transform 1s, opacity 1s;
+
+            }
+
+            .textHighlight:hover{
+                background-color: white;
+                color: black;
+                /* transform: scale(1.1) translateZ(0); */
+            }
+
+            .greenText{
+                color: #6B9528;
+            }
+
+            @media only screen and (max-width: 900px) {
+                .contactBackground{
+                    padding-top: 50px;
+                    padding-bottom: 50px;
+                }
+
+                .contactContainer{
+                    flex-direction: column;
+                    align-items: center;
+                   
+                }
+
+                .contactInfo{
+                    margin-top: 0;
+                    width: fit-content;
+                    margin-right: 0px;
+                    margin-bottom: 35px;
+                    align-items: center;
+                }
+
+                form{
+                    margin-top: 0;
+                }
+
+            }
+
+            .divider {
+                position: relative;
+                width: 100%;
+                height: 100px;
+            }
+
+            .upright::before {
+                position: absolute;
+                content: "";
+                width: 100%;
+                height: 100%;
+                background-color: #0E2A35;
+                clip-path: polygon(100% 0, 0 0, 0 100%);
+            }
+
+            .reverse::before {
+                position: absolute;
+                content: "";
+                width: 100%;
+                height: 100%;
+                background-color: #0E2A35;
+                clip-path: polygon(0 101%, 100% 0, 100% 101%);
+            }
+
+            @keyframes blink {
+                to{ visibility: hidden; }
+            }
+
+            @keyframes upDown {
+                0%{bottom: 25px}
+                50%{bottom: 10px;}
+                100%{bottom: 25px}
+            }
+
+            footer{
+                background-color: white;
+                height: 100px;
+                clip-path: polygon(0 0, 100% 50%, 100% 100%, 0% 100%);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding-top: 50px;
+                font-weight: bold;
+            }
+
+            footer p{
+                margin: 0;
+                font-weight: bold;
+            }
+
+            button{
+                background-color: transparent;
+                border: none;
+            }
+
+            #copyText{
+                position: fixed;
+                background-color: #4B6269;
+                padding: 10px 20px;
+                color: black;
+                text-align: center;
+                font-size: 20px;
+                top: -150px;
+                left: 50%;
+                font-weight: bold;
+                transform: translateX(-50%);
+                border-radius: 5px;
+                transition: opacity 750ms, top 750ms;
+            }
+        </style>
+    </head>
+
+    <body onload="init()">
+        <div class="fullHeight">
+            <h1 id="name" class="notSelectable" aria-lable="Finlay Soehn"></h1>
+            <h2 id="description">
+                <span aria-hidden="true">
+                    C:\WINDOWS\system32\>&nbsp;
+                </span>
+                <noscript>Error: JavaScript is not enabled</noscript>
+            </h2>
+           
+            <script>
+                const os = navigator.userAgent;
+                const descriptionText = document.getElementById("description");
+    
+                if (os.indexOf("Mac") != -1){
+                    descriptionText.innerHTML = "Finlays-MacBook:~ Fin$&nbsp;"
+                }else if (os.indexOf("Linux") != -1){
+                    descriptionText.innerHTML = "fin@ubuntu:~$";
+                }
+            </script>
+ 
+            <div id="scroll" class="notSelectable">
+                <p>Scroll</p>
+                <i class="downArrow"></i>
+            </div> 
+        </div>
+        
+        <div class="portfolioGrid">
+            <div class="intervalFade siteContainer">
+                <button onclick="window.location='./Lordle'"><img src="lordle.png" class="siteThumbnail notSelectable"></button>
+            </div>
+            <div class="intervalFade siteContainer">
+                <button onclick="window.location='./pirateGeography'"><img src="pirate.png" class="siteThumbnail notSelectable"></button>
+            </div>
+
+            <div class="intervalFade siteContainer">
+                <button onclick="window.location='./sudoku'"><img src="sudoku.png" class="siteThumbnail notSelectable"></button>
+            </div>
+            <div class="intervalFade siteContainer">
+                <button onclick="window.location='./GalacticGainz'"><img src="gainz.png" class="siteThumbnail notSelectable"></button>
+            </div>
+            <div class="intervalFade siteContainer">
+                <button onclick="window.location='./5OClock'"><img src="five.png" class="siteThumbnail notSelectable"></button>
+            </div>
+
+        </div>
+
+        <p id="copyText">Email Copied to Clipboard</p>
+
+        <div class="contactBackground">
+            <div class="contactContainer">
+                <div class="contactInfo">
+                    <h2 class="fadeScroll title">Contact</h2>
+                    <div class="fadeScroll">
+                        <img class="notSelectable" style="display: inline-block; margin-bottom: -3px;" src="mail.png" width="30px" id="emailImage">
+                        <p style="display: inline-block; font-family: monospace, 'Courier New', Courier;">Email</p>
+                    </div>
+                    <button onClick="copyEmail()" class="fadeScroll textHighlight">FinSoehn@gmail.com</button>
+                </div>
+
+                <form class="fadeScroll" id="emailForm" action="https://formspree.io/f/xrgrzdpk" method="POST">
+                    <input placeholder="Your Email" type="email" name="email" />
+                    <textarea placeholder="Enter Message" name="message" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+                    <button id="form-button">Send<img id="plane" src="plane.png" width="25px"></button>
+                    <p id="form-status" style="opacity: 0; transition: all 1s; color:#499E98;text-align: center;">&nbsp</p>
+                </form>
+            </div>
+        </div>
+
+        <footer>
+            <p>--- 2021 ---</p>
+            <p>Finlay Soehn</p>
+        </footer>
+
+        <script>
+            const scrollIndicator = document.getElementById("scroll");
+            const name = document.getElementById("name");
+            const root = document.querySelector(":root");
+            
+            var fadeScroll = document.getElementsByClassName("fadeScroll");
+            var intervalScroll = document.getElementsByClassName("intervalFade");
+            
+            if(window.innerWidth < 600){
+                fadeScroll = [...fadeScroll, ...intervalScroll];
+                console.log(fadeScroll);
+                intervalScroll = [];
+            }
+
+            var typeLoop;
+            var typeElement = name;
+            var typeString = "Finlay Soehn.";
+            var typeIndex = 0;
+
+            var nameText = "Finlay Soehn.";
+            var scrambleLoop;
+            var unscrambleLoop;
+            var stringLength = 0;
+            var solvedLetters = [];
+
+            function init(){
+                fadeInScroll();
+                setTimeout(()=>{
+                    typeLoop = setInterval(typeLetter, 100);
+                    scrambleLoop = setInterval(scramble, 50);
+                }, 500);
+            }
+
+            window.addEventListener("scroll", fadeInScroll);
+
+            function fadeInScroll(){
+                var scroll = window.scrollY;
+
+                // if(scroll < 100) document.body.style = 'background: #0E2A35;';
+                // else if(document.body.style.backgroundColor != "white") document.body.style = 'background: white;';
+                
+                for(let el of fadeScroll){
+                    if(el.opacity == 1) continue;
+
+                    let topOffset = el.offsetTop;
+                    let halfHeight = el.offsetHeight/2;
+
+                    if(scroll > (topOffset - window.innerHeight + halfHeight)){
+                        el.style.opacity = 1;
+                        el.style.transform = "translateY(0)";
+                    }
+                }
+
+                if(intervalScroll.length > 0 && intervalScroll[0].style.opacity != 1 && scroll > (intervalScroll[0].offsetTop - window.innerHeight + (intervalScroll[0].offsetHeight/2))){
+                    const showMore = i => {
+                        intervalScroll[i].style.opacity = 1;
+                        intervalScroll[i].style.transform = "translateY(0)";
+                        if(i < intervalScroll.length - 1){
+                            setTimeout(() => {
+                                showMore(i + 1);
+                            }, 400);
                         }
-                    }, 500);
-                    clearInterval(bounceInt);
-                }else{
-                    tempIndex++;
-                }
-            }, 200)
-        }
-
-        function toggleCheckbox(){
-            unlimitedGuesses = !unlimitedGuesses;
-            
-            if(unlimitedGuesses){
-                checkbox.src = "checked.png";
-            }else{
-                checkbox.src = "unchecked.png";
-            }
-
-            savedData.savedGames[wordLength - 2].unlimited = unlimitedGuesses;
-            saveResults();
-        }
-
-        function showWordlist(){
-            document.getElementById("viewWordlist").innerText = "Hide Wordlist";
-            document.getElementById("viewWordlist").onclick = () => {hideWordlist();};
-            let container = document.getElementsByClassName("wordList")[0];
-            kidList.forEach(word => {
-                let p = document.createElement("p");
-                p.innerText = word;
-                container.appendChild(p);
-                console.log(word);
-            })
-        }
-
-        function hideWordlist(){
-            document.getElementsByClassName("wordList")[0].innerHTML = "";
-            document.getElementById("viewWordlist").innerText = "View Wordlist";
-            document.getElementById("viewWordlist").onclick = () => {showWordlist();};
-        }
-
-        function restoreSession(){
-            if(savedData.savedGames[wordLength - 2].word == ""){
-                let newWord;
-                while(true){
-                    newWord = kidList[Math.floor(Math.random() * kidList.length)];
-                    if(newWord.length == wordLength && newWord != oldWord){
-                        break;
                     }
+
+                    showMore(0);
                 }
-                savedData.savedGames[wordLength - 2].word = newWord;
-                saveResults();
-            }
 
-            wordOfTheDay = savedData.savedGames[wordLength - 2].word;
-            let oldGuesses = savedData.savedGames[wordLength - 2].guesses;
-
-            let isUnlimited = savedData.savedGames[wordLength - 2].unlimited;
-
-            if(isUnlimited) checkbox.src = "checked.png";
-            else checkbox.src = "unchecked.png";
-            unlimitedGuesses = isUnlimited;
-            
-
-            for(let i = 0; i < oldGuesses.length; i++){
-                disps[i].innerText = oldGuesses.charAt(i);
-                if((i + 1) % wordLength == 0){
-                    guessWord();
-                }
-            }
-        }
-
-        document.onkeydown = (e) => {
-            if(alreadyPlayed) return;
-
-            if(e.key == "Backspace"){
-                deleteLetter();
-            }else if(e.key == "Enter"){
-                guessWord();
-            }else if((/[a-zA-Z]/).test(e.key) && e.key.length == 1){
-                typeLetter({innerText: e.key.toLocaleUpperCase()});
-            }
-        }
-
-        function typeLetter(btn){
-            if(alreadyPlayed) return;
-
-            let letter = btn.innerText;
-            for(let i = (level * wordLength); i < ((level * wordLength) + wordLength); i++){
-                if(disps[i].innerText == ""){
-                    disps[i].innerText = letter;
-                    break;
-                }
-            }
-        }
-
-        function deleteLetter(){
-            if(alreadyPlayed) return;
-
-            for(let i = ((wordLength - 1) + (wordLength * level)); i >= (level * wordLength); i--){
-                if(disps[i].innerText != ""){
-                    disps[i].innerText = "";
-                    break;
-                }
-            }
-        }
-
-        function guessWord(){      
-            let word = "";
-            for(let i = (level * wordLength); i < (wordLength + (wordLength * level)); i++){
-                word += disps[i].innerText.toLowerCase();
-            }
-
-            if(word.length != wordLength) wordError();
-            else if(!wordList.includes(word)) wordError(word);
-            else{
-                if(!alreadyPlayed && wordOfTheDay == word) correctWord();
                 
-                let tempDayWord = wordOfTheDay;
+            }
 
-                for(let i = 0; i < wordLength; i++){
-                    if(word.charAt(i) == wordOfTheDay.charAt(i)){
-                        tempDayWord = tempDayWord.substring(0, i) + "*" + tempDayWord.substring(i + 1);
-                    }
-                }
+            function typeLetter(){
+                if(typeIndex == typeString.length){
+                    typeIndex = 0;
+                    clearInterval(typeLoop);
 
-                for(let i = 0; i < wordLength; i++){
-                    if(tempDayWord.charAt(i) == "*"){
-                        disps[i + (level * wordLength)].style.backgroundColor = "rgb(152, 209, 166)";
-                        disps[i + (level * wordLength)].style.borderColor = "rgb(152, 209, 166)";
-                        changeBtnColor(word.charAt(i), "rgb(152, 209, 166)");
-                    }else if(tempDayWord.includes(word.charAt(i))){
-                        let indexOfLetter = tempDayWord.indexOf(word.charAt(i));
-                        tempDayWord = tempDayWord.substring(0, indexOfLetter) + "-" + tempDayWord.substring(indexOfLetter + 1);
-                        disps[i + (level * wordLength)].style.backgroundColor = "yellow";
-                        disps[i + (level * wordLength)].style.borderColor = "yellow";
-                        changeBtnColor(word.charAt(i), "yellow");
+                    if(typeString === "Finlay Soehn."){ 
+                        clearInterval(typeLoop);
+                        unscrambleLoop = setInterval(unscramble, 75);
+
+                        name.onmouseover = () => {
+                            stopScramble();
+                            scrambleLoop = setInterval(scramble, 50);
+                        }  
+
+                        name.onmouseleave = () => {
+                            unscrambleLoop = setInterval(unscramble, 75);
+                        };
+
+                        setTimeout(()=>{
+                            scrollIndicator.style.bottom = "25px";
+                            scrollIndicator.style.opacity = 1;
+                            scrollIndicator.style.visibility = "visible";
+
+                            typeString = "Full Stack Developer.";
+                            root.style.setProperty('--cursorAnimation', "none");
+                            typeLoop = setInterval(typeLetter, 100);
+                            typeElement = document.getElementById("description");
+
+                            setTimeout(()=>{
+                                scrollIndicator.style.animation = "upDown 2s ease-in-out infinite";
+                            }, 1000)
+                        }, 1500);
                     }else{
-                        disps[i + (level * wordLength)].style.backgroundColor = "rgb(163,182,189)";
-                        changeBtnColor(word.charAt(i), "rgb(163,182,189)");
+                        clearInterval(typeLoop);
+                        root.style.setProperty('--cursorAnimation', "blink 1s steps(2, start) infinite");
                     }
+
+                    
+                }else{
+                    typeElement.innerHTML += typeString[typeIndex];
+                    typeIndex++;
+
+                    if(typeElement == name) stringLength ++;
                 }
+            }
+
+
+            function scramble(){
+                const clearCharacters = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890~!@#$%^&*()`-_=+[]{}\\|:\;\"'?/>.<,";
+
+                for(var i = 0; i < stringLength; i++){
+                    let temp = name.textContent;
+                    
+                    if(solvedLetters.includes(i) || temp[i] == " ") continue;
+
+                    let random = Math.floor(Math.random() * (clearCharacters.length)); 
+                    name.innerText = temp.substring(0, i) + clearCharacters[random] + temp.substring(i + 1);
+                }
+            }
+
+            function unscramble(){        
+                if(solvedLetters.length == nameText.length){
+                    stopScramble();
+                    console.log("THHTHTHTH")
+
+                    return;
+                }
+
+                let numLettersSolved = Math.floor(Math.random() * 3);
+                if((nameText.length - solvedLetters.length) == 1) numLettersSolved = 1;
                 
-                if(wordOfTheDay != word && level < (numGuesses - 1)) level++;
-                else if(!alreadyPlayed && !unlimitedGuesses) lose();
-                else if(!alreadyPlayed && wordOfTheDay != word){
-                    numGuesses++;
-                    setLength(wordLength);
-                }
-                saveResults();
-            }
+                for(var i = 0; i < numLettersSolved; i++){
+                    let charIndex = Math.floor(Math.random() * nameText.length);
 
-        }
-
-        function changeBtnColor(letter, color){
-            for (let i = 0; i < letterBtns.length; i++) {
-                if(letterBtns[i].innerText.toLowerCase() == letter){
-                    let currentColor = letterBtns[i].style.backgroundColor;
-                    if(color == "rgb(152, 209, 166)" || (color == "yellow" && currentColor != "rgb(152, 209, 166)") || currentColor == ""){
-                        letterBtns[i].style.backgroundColor = color;
+                    while(solvedLetters.includes(charIndex)){ 
+                        if(charIndex == nameText.length - 1) charIndex = 0;
+                        else charIndex++;
                     }
+                    
+                    solvedLetters.push(charIndex);
+                    
+                    name.innerText = name.innerText.substring(0, charIndex) + nameText[charIndex] + name.innerText.substring(charIndex + 1);
                 }
             }
-        }
 
-        function showOverlay(){
-            document.getElementsByClassName("overlay")[0].style.opacity = 1;
-            document.getElementsByClassName("overlay")[0].style.visibility = "visible";
-            setTimeout(() => {
-                document.getElementsByClassName("overlayContent")[0].style.transform = "translateY(0)";
-            }, 500)
-        }
+            function stopScramble(){
+                clearInterval(unscrambleLoop);
+                clearInterval(scrambleLoop);
+                solvedLetters = [];
+            }
 
-        function hideOverlay(){
-            document.getElementsByClassName("overlay")[0].style.opacity = 0;
-            document.getElementsByClassName("overlay")[0].style.visibility = "hidden";
-            setTimeout(() => {
-                document.getElementsByClassName("overlayContent")[0].style.transform = "translateY(-200%)";
-            }, 500);
-        }
+            document.getElementById("emailForm").onsubmit = (e) => {
+                e.preventDefault();
 
-        function wordError(word){
-            let errorEl = document.getElementById("error");
-            if(word == undefined) errorEl.innerText = "Invalid Word";
-            else errorEl.innerText = "\"" + word.toUpperCase() + "\" Not in Wordlist";
+                var form = document.getElementById("emailForm");
+                var email = document.getElementsByName("email")[0].value;
+                var message = document.getElementsByName("message")[0].value;
+                var status = document.getElementById("form-status");
 
-            errorEl.style.top = "20px";
-            setTimeout(() => {
-                errorEl.style.top = "-100px";
-            }, 1750)
-        }
+                if(message == "" || email == ""){
+                    status.innerText = "Please fill out all fields.";
+                    status.style.opacity = 1;
+                    return;
+                }
 
-        function correctWord(){
-            document.getElementById("result").innerText = "You Win!";
-            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay;
-            alreadyPlayed = true;
-            showOverlay();
-            saveResults();
-            
-            initConfetti();
-            render();
-        }
+                document.getElementById("plane").style.animation = "fly 2.5s";
 
-        function lose(){
-            document.getElementById("result").innerText = "You ran out of guesses!";
-            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay;
-            alreadyPlayed = true;
-            showOverlay();
-            saveResults();
-        }
+                var data = new FormData(event.target);
 
-        function endGame(){
-            document.getElementById("result").innerText = "Game Over!";
-            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay;
-            document.getElementsByClassName("xBtn")[0].style.display = "none";
-            document.getElementsByClassName("shareBtn")[0].onclick = () => {
-                hideOverlay();
+                fetch(event.target.action, {
+                    method: form.method,
+                    body: data,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }).then(response => {
+                    status.innerHTML = "Message sent";
+                    status.style.opacity = 1;
+                    form.reset();
+                }).catch(error => {
+                    status.innerHTML = "Oops! There was a problem sending your message";
+                    status.style.opacity = 1;
+                    console.log(error);
+                });
+            }
+
+            var animationOver = true;
+            function copyEmail(){
+                navigator.clipboard.writeText("FinSoehn@gmail.com");
+                if(!animationOver) return;
+                animationOver = false;
+                let copyText = document.getElementById("copyText");
+                copyText.style.top = 0;
                 setTimeout(() => {
-                    document.getElementsByClassName("xBtn")[0].style.display = "flex";
-                    document.getElementsByClassName("shareBtn")[0].onclick = () => {newGame()};
-                }, 500)
-            }
-            showOverlay();
-            numGuesses = 6;
-            oldWord = savedData.savedGames[wordLength - 2].word;
-            savedData.savedGames[wordLength - 2].word = "";
-            savedData.savedGames[wordLength - 2].guesses = "";
-            setLength(wordLength);
-        }
-
-        function saveResults(){
-            if(wordOfTheDay != undefined){  
-                savedData.savedGames[wordLength - 2].guesses = "";
-                for(let i = 0; i < disps.length; i++){
-                    savedData.savedGames[wordLength - 2].guesses += disps[i].innerText;
-                }
-            }
-            window.localStorage.setItem("KiddleData", JSON.stringify(savedData));
-        }
-
-        function setLength(length){
-            savedData.lastLength = length;
-            saveResults();
-
-            reset();
-
-            grid.innerHTML = "";
-            wordLength = length;
-            document.documentElement.style.setProperty('--wordLength', length);
-            switch(length){
-                case 2:
-                    wordList = twoLetter;
-                    break;
-                case 3:
-                    wordList = threeLetter;
-                    break;
-                case 4:
-                    wordList = fourLetter;
-                    break;
-                case 5:
-                    wordList = fiveLetter;
-                    break;
+                    animationOver = true;
+                    copyText.style.top = "-150px";
+                }, 1500);
             }
 
-            for(let i = 0; i < (wordLength * numGuesses); i++){
-                let letterDisp = document.createElement("h1");
-                letterDisp.classList = "letterDisp";
-                grid.appendChild(letterDisp);
-            }
 
-            restoreSession();
-        }
-
-        function reset(){
-            level = 0;
-            alreadyPlayed = false;
-            for (let i = 0; i < letterBtns.length; i++) {
-                letterBtns[i].style.cssText = "";
-            }
-            for (let i = 0; i < disps.length; i++) {
-                disps[i].style.cssText = "";
-                disps[i].innerText = "";
-            }
-        }
-   
-        function newGame(){
-            numGuesses = 6;
-            oldWord = savedData.savedGames[wordLength - 2].word;
-            savedData.savedGames[wordLength - 2].word = "";
-            savedData.savedGames[wordLength - 2].guesses = "";
-            setLength(wordLength);
-            hideOverlay();
-        }
-   </script>
-</body>
+        </script>
+    </body>
 </html>
