@@ -214,15 +214,7 @@
             transform: translateX(-50%);
         }
 
-        @media only screen and (max-width: 400px) {
-            .hideMobile{
-                display: none;
-            }
 
-            .title{
-                margin-right: 0;
-            }
-        }
 
         noscript p{
             width: 100%;
@@ -320,6 +312,17 @@
         .wordList p {
             margin: 0;
         }
+
+        #checkBoxText{
+            text-align: left;
+
+        }
+
+        @media only screen and (max-width: 423px) {
+            #checkBoxText, .newGameBtn{
+                width: 75px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -405,7 +408,7 @@
     <div class="row">
         <button class="row smallRow newGameBtn" onclick="toggleCheckbox()">
             <img src="checked.png" width="20" id="unlimitedGuesses">
-            <p style="text-align: left;">Unlimited guesses</p>
+            <p id="checkBoxText">Unlimited guesses</p>
         </button>
         <div class="row smallRow">
             <button onclick="endGame();" class="newGameBtn">End Game</button>
