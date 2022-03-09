@@ -490,7 +490,7 @@
         function correctWord(){
             document.getElementById("result").innerText = "You Win!";
             document.getElementById("result").style.color = "green";
-            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + ", a teacher at scona";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay;
             alreadyPlayed = true;
             showOverlay();
             saveResults();
@@ -499,7 +499,7 @@
         function lose(){
             document.getElementById("result").innerText = "You Lose!";
             document.getElementById("result").style.color = "red";
-            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + ", a teacher at scona";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay;
             alreadyPlayed = true;
             showOverlay();
             saveResults();
