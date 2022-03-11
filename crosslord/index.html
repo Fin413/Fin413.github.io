@@ -43,7 +43,7 @@
         
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <script>
-            function onSuccess(googleUser) {
+            function onSignIn(googleUser) {
                 console.log(googleUser);
                 document.querySelector("h1").innerHTML = "Hello " + googleUser.getBasicProfile().getGivenName() + "!";
                 document.querySelector("img").src = googleUser.getBasicProfile().getImageUrl();
