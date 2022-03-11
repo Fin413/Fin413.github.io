@@ -27,26 +27,50 @@
                 margin-left: auto;
                 margin-right: auto;
             }
+
+            #userDisplay{
+                position: fixed;
+                top: -200px;
+                left: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 4px 0 rgb(0 0 0 / 25%);
+                padding: 0px 25px 0px 25px;
+                font-size: 20px;
+                min-width: 250px;
+                transition: all 1s;
+            }
+
+            #profilePhoto{
+                border-radius: 100%;
+                margin-right: 15px;
+                border: 1px solid black;
+            }
         </style>
     </head>
     <body>
         <h1>Scona Cross Lord</h1>
+
+        <div id="userDisplay">
+            <img src="" alt="profile photo" id="profilePhoto" width="40">
+            <p id="name"></p>
+        </div>
 
         <div id="signinOptions">
             <button>Continue as Guest</button>
             <h2>Or</h2>
             <div id="googleSignin"></div>
         </div>
-
-        <img>
-        <p></p>
-        <h1></h1>
         
         <script>
+            var email; 
             function onSuccess(googleUser) {
-                document.querySelector("h1").innerHTML = "Hello " + googleUser.getBasicProfile().getGivenName() + "!";
-                document.querySelector("p").innerHTML = googleUser.getBasicProfile().getEmail();
-                document.querySelector("img").src = googleUser.getBasicProfile().getImageUrl();
+                document.getElementById("signinOptions").display = "none";
+                email = googleUser.getBasicProfile().getEmail();
+                document.getElementById("name").innerText = googleUser.getBasicProfile().getGivenName();
+                document.getElementById("profilePhoto").src = googleUser.getBasicProfile().getImageUrl();
+                document.getElementById("userDisplay").style.top = 0;
             }
             function onFailure(error) {
                 console.log(error);
@@ -54,10 +78,10 @@
             function renderButton() {
                 gapi.signin2.render('googleSignin', {
                     'scope': 'profile email',
-                    'width': 240,
+                    'width': 250,
                     'height': 50,
                     'longtitle': true,
-                    'theme': 'dark', //light?
+                    'theme': 'light', //light?
                     'onsuccess': onSuccess,
                     'onfailure': onFailure
                 });
