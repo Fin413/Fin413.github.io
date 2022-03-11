@@ -44,7 +44,7 @@
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <script>
             function onSignIn(googleUser) {
-                console.log(googleUser);
+                console.log(googleUser.getBasicProfile());
                 document.querySelector("h1").innerHTML = "Hello " + googleUser.getBasicProfile().getGivenName() + "!";
                 document.querySelector("img").src = googleUser.getBasicProfile().getImageUrl();
             }
