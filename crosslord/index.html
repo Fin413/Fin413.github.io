@@ -30,38 +30,39 @@
         </style>
     </head>
     <body>
-        <h1>Strathcona Online</h1>
+        <h1>Scona Cross Lord</h1>
 
         <div id="signinOptions">
             <button>Continue as Guest</button>
             <h2>Or</h2>
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            <div id="googleSignin"></div>
         </div>
 
         <img>
+        <p></p>
         <h1></h1>
         
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
         <script>
-            function onSignIn(googleUser) {
-                console.log(googleUser.getBasicProfile().getEmail());
+            function onSuccess(googleUser) {
                 document.querySelector("h1").innerHTML = "Hello " + googleUser.getBasicProfile().getGivenName() + "!";
+                document.querySelector("p").innerHTML = googleUser.getBasicProfile().getEmail();
                 document.querySelector("img").src = googleUser.getBasicProfile().getImageUrl();
             }
             function onFailure(error) {
                 console.log(error);
             }
-            // function renderButton() {
-            //     gapi.signin2.render('googleSignin', {
-            //         'scope': 'profile email',
-            //         'width': 240,
-            //         'height': 50,
-            //         'longtitle': true,
-            //         'theme': 'dark', //light?
-            //         'onsuccess': onSuccess,
-            //         'onfailure': onFailure
-            //     });
-            // }
+            function renderButton() {
+                gapi.signin2.render('googleSignin', {
+                    'scope': 'profile email',
+                    'width': 240,
+                    'height': 50,
+                    'longtitle': true,
+                    'theme': 'light', //light?
+                    'onsuccess': onSuccess,
+                    'onfailure': onFailure
+                });
+            }
         </script>
+        <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
     </body>
 </html>
