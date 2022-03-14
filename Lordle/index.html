@@ -336,10 +336,30 @@
 
         var level = 0;
         // lords, scona, pride, crest, emily, merch, serve, brice, gerun, grant, lyons, brice, buffi, Irwin, Andoh, Perry, Dubyk, Rolph, lions
+        
+        // yummy, smith, drama, think, teach, learn, lyons, study, grant, rolpg, buffi, tutor, sport, learn, roars, lions, crest, scona
+
+//         var nextWord = [
+//             "andoh",
+//             "pride",
+//             "serve",
+//             "emily",
+//             "grade",
+//         ]
+        
+//         var extraText = [
+//             ", a teacher at scona",
+//             "",
+//             "",
+//             ", Scona's resident ghost!",
+//             "",
+//             ", a teacher at scona",
+//         ]
+        
         var disps = document.getElementsByClassName("letterDisp");
         var overlayContent = document.getElementsByClassName("overlayContent")[0]
         var letterBtns = document.getElementsByClassName("letterBtn");
-        var wordOfTheDay = "smith"; // lowercase only
+        var wordOfTheDay = "yummy"; // lowercase only
         var savedData = JSON.parse(window.localStorage.getItem("LordleData"));
         var alreadyPlayed = false;
         var nextWord = new Date().setHours(24,0,0,0);
@@ -490,7 +510,7 @@
         function correctWord(){
             document.getElementById("result").innerText = "You Win!";
             document.getElementById("result").style.color = "green";
-            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + ", a scona teacher";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + ", happy pi day!";
             alreadyPlayed = true;
             showOverlay();
             saveResults();
@@ -499,7 +519,7 @@
         function lose(){
             document.getElementById("result").innerText = "You Lose!";
             document.getElementById("result").style.color = "red";
-            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + ", a scona teacher";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + ", happy pi day!";
             alreadyPlayed = true;
             showOverlay();
             saveResults();
