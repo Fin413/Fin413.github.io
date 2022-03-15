@@ -7,10 +7,20 @@
     <link rel="icon" type="image/svg" href="lion.svg">
     <title>Cross Lord</title>
     <style>
+        @font-face {
+            font-family: 'sport';
+            src: url('fonts/OldSport.eot'); /* IE9 Compat Modes */
+            src: url('fonts/OldSport.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+                url('fonts/OldSport.woff2') format('woff2'), /* Super Modern Browsers */
+                url('fonts/OldSport.woff') format('woff'), /* Pretty Modern Browsers */
+                url('fonts/OldSport.ttf')  format('truetype'); /* Safari, Android, iOS */
+        }
+
         body{
             font-family: Arial, Helvetica, sans-serif;
             background-color: #F1C548;
             text-align: center;
+            font-family: sport;
         }
 
         button{
@@ -83,6 +93,7 @@
 
         .letter:after{
             content: attr(num);
+            font-family: Arial, Helvetica, sans-serif;
             position: absolute;
             top: 0;
             left: 0;
@@ -196,7 +207,7 @@
         var email; 
 
         function onSuccess(googleUser) {
-            document.getElementById("googleSignIn").style.display = "none";
+            document.getElementById("googleSignin").style.display = "none";
             email = googleUser.getBasicProfile().getEmail();
             document.getElementById("name").innerText = googleUser.getBasicProfile().getGivenName();
             document.getElementById("profilePhoto").src = googleUser.getBasicProfile().getImageUrl();
