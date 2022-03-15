@@ -35,8 +35,9 @@
         } */
 
         #title{
-            margin: 10px;
+            /* margin: 10px; */
             margin-top: 25px;
+            margin-bottom: 0;
         }
 
         #googleSignin{
@@ -47,7 +48,7 @@
 
         #userDisplay{
             position: fixed;
-            top: -200px;
+            top: 0px;
             /* CHANGE TOP TO -200 AT START */
             box-sizing: border-box;
             background-color: #F1C548;
@@ -74,7 +75,7 @@
 
         @media only screen and (max-width: 1000px) {
             #title{
-                margin: 10px;
+                margin: 10px 0 0 0 ;
             }
 
             #userDisplay{
@@ -162,6 +163,15 @@
             max-width: 80px;
             min-width: 60px;
         }
+
+        #logoutBtn{
+            display: none;
+            border: none;
+            font-family: Sport;
+            background-color: transparent;
+            color: #977a2b;
+            cursor: pointer;
+        }
         
 
         
@@ -175,7 +185,7 @@
     </div>
 
     <h1 id="title">Scona Cross Lord</h1>
-
+    <button onclick="logout()" id="logoutBtn">Logout</button>
 
     <div id="googleSignin"></div>
 
@@ -231,8 +241,17 @@
         }
         var email; 
 
+        function logout(){
+            window.open(
+                'https://mail.google.com/mail/u/0/?logout&hl=en',
+                '_blank'
+            );
+        }
+
+
         function onSuccess(googleUser) {
             document.getElementById("googleSignin").style.display = "none";
+            document.getElementById("logoutBtn").style.display = "block";
             email = googleUser.getBasicProfile().getEmail();
             document.getElementById("name").innerText = googleUser.getBasicProfile().getGivenName();
             document.getElementById("profilePhoto").src = googleUser.getBasicProfile().getImageUrl();
