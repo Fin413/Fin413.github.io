@@ -33,21 +33,16 @@
             cursor: pointer;
         }
 
-        #signinOptions{
-            border: 1px solid black;
-            padding: 25px;
-            width: fit-content;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-left: auto;
-            margin-right: auto;
+        #googleSignin{
+            margin: auto;
         }
 
         #userDisplay{
             position: fixed;
             top: -200px;
             /* CHANGE TOP TO -200 AT START */
+            background-color: #F1C548;
+            z-index: 5;
             left: 0;
             display: flex;
             align-items: center;
@@ -66,6 +61,14 @@
         #profilePhoto{
             border-radius: 100%;
             margin-right: 10px;
+        }
+
+        @media only screen and (max-width: 1000px) {
+            #userDisplay{
+                position: relative;
+                width: 100%;
+                box-shadow: none;
+            }
         }
 
         #crosswordGrid{
@@ -145,12 +148,14 @@
     </style>
 </head>
 <body>
-    <h1>Scona Cross Lord</h1>
 
     <div id="userDisplay">
         <img src="" alt="profile photo" id="profilePhoto" width="30">
         <p id="name"></p>
     </div>
+
+    <h1>Scona Cross Lord</h1>
+
 
     <div id="googleSignin"></div>
 
