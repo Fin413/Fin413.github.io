@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="848263526344-2g4pudfnuc60gkq92ehghhhep99n88fq.apps.googleusercontent.com">
+    <link rel="icon" type="image/svg" href="lion.svg">
+    <title>Cross Lord</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #F1C548;
+            text-align: center;
+        }
+
+        button{
+            background-color: white;
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        button:hover{
+            cursor: pointer;
+        }
+
+        #signinOptions{
+            border: 1px solid black;
+            padding: 25px;
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #userDisplay{
+            position: fixed;
+            top: 0px;
+            /* CHANGE TOP TO -200 AT START */
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px 0 rgb(0 0 0 / 25%);
+            padding: 0px 25px 0px 25px;
+            font-size: 20px;
+            min-width: 250px;
+            transition: all 1s;
+        }
+
+        #userDisplay p{
+            margin-bottom: 17px;
+        }
+
+        #profilePhoto{
+            border-radius: 100%;
+            margin-right: 10px;
+        }
+
+        #crosswordGrid{
+            display: grid;
+            grid-template-columns: repeat(5, 50px);
+            /* grid-template-rows: repeat(5, 50px); */
+            width: 100%;
+            overflow: scroll;
+            grid-auto-rows: 50px;
+            /* border: 1px solid black; */
+            grid-template-areas: 
+                "l . . . b "
+        
+            ;
+        }
+
+        .letter, .black{
+            border: 1px solid black;
+            /* grid-area: l; */
+            width: 50px;
+            height: 50px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .letter:after{
+            content: attr(num);
+            position: absolute;
+            top: 0;
+            left: 0;
+            grid-area: l;
+        }
+
+        .black{
+            background-color: black;
+            grid-area: b;
+        }
+
+        .row{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            touch-action: manipulation;
+        }
+
+        .letterBtnContainer{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 5px;
+        }
+
+        .letterBtn{
+            font-weight: bold;
+            height: 50px;
+            max-width: 40px;
+            flex: 1;
+            border-radius: 5px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            background-color: #D3D6DA;
+        }
+
+        .biggerBtn{
+            max-width: 80px;
+            min-width: 60px;
+        }
+        
+
+        
+    </style>
+</head>
+<body>
+    <h1>Scona Cross Lord</h1>
+
+    <div id="userDisplay">
+        <img src="" alt="profile photo" id="profilePhoto" width="30">
+        <p id="name"></p>
+    </div>
+
+    <div id="googleSignin"></div>
+
+    <div id="crosswordGrid">
+        <!-- First row -->
+        <div class="letter" num="1"></div>
+        <!-- <div class="blank"></div> -->
+        <div class="black"></div>
+        <!-- <div class="letter"></div> -->
+        <!-- <div class="letter"></div> -->
+    </div>
+
+    <div class="letterBtnContainer">
+        <div class="row">
+            <button class="letterBtn" onclick="typeLetter(this)">Q</button>
+            <button class="letterBtn" onclick="typeLetter(this)">W</button>
+            <button class="letterBtn" onclick="typeLetter(this)">E</button>
+            <button class="letterBtn" onclick="typeLetter(this)">R</button>
+            <button class="letterBtn" onclick="typeLetter(this)">T</button>
+            <button class="letterBtn" onclick="typeLetter(this)">Y</button>
+            <button class="letterBtn" onclick="typeLetter(this)">U</button>
+            <button class="letterBtn" onclick="typeLetter(this)">I</button>
+            <button class="letterBtn" onclick="typeLetter(this)">O</button>
+            <button class="letterBtn" onclick="typeLetter(this)">P</button>
+        </div>
+        <div class="row">
+            <button class="letterBtn" onclick="typeLetter(this)">A</button>
+            <button class="letterBtn" onclick="typeLetter(this)">S</button>
+            <button class="letterBtn" onclick="typeLetter(this)">D</button>
+            <button class="letterBtn" onclick="typeLetter(this)">F</button>
+            <button class="letterBtn" onclick="typeLetter(this)">G</button>
+            <button class="letterBtn" onclick="typeLetter(this)">H</button>
+            <button class="letterBtn" onclick="typeLetter(this)">J</button>
+            <button class="letterBtn" onclick="typeLetter(this)">K</button>
+            <button class="letterBtn" onclick="typeLetter(this)">L</button>
+        </div>
+        <div class="row">
+            <button class="biggerBtn letterBtn" onclick="guessWord()">ENTER</button>
+            <button class="letterBtn" onclick="typeLetter(this)">Z</button>
+            <button class="letterBtn" onclick="typeLetter(this)">X</button>
+            <button class="letterBtn" onclick="typeLetter(this)">C</button>
+            <button class="letterBtn" onclick="typeLetter(this)">V</button>
+            <button class="letterBtn" onclick="typeLetter(this)">B</button>
+            <button class="letterBtn" onclick="typeLetter(this)">N</button>
+            <button class="letterBtn" onclick="typeLetter(this)">M</button>
+            <button class="biggerBtn letterBtn" onclick="deleteLetter()"><img class="backspaceImg" src="backspace.svg" width="25"></button>
+        </div>
+    </div>
+    
+    <script>
+        var crossword = {
+            
+        }
+        var email; 
+
+        function onSuccess(googleUser) {
+            document.getElementById("googleSignIn").style.display = "none";
+            email = googleUser.getBasicProfile().getEmail();
+            document.getElementById("name").innerText = googleUser.getBasicProfile().getGivenName();
+            document.getElementById("profilePhoto").src = googleUser.getBasicProfile().getImageUrl();
+            document.getElementById("userDisplay").style.top = 0;
+        }
+
+        function onFailure(error) {
+            console.log(error);
+        }
+
+        function renderButton() {
+            gapi.signin2.render('googleSignin', {
+                'scope': 'profile email',
+                'width': 250,
+                'height': 50,
+                'longtitle': true,
+                'theme': 'light', //light?
+                'onsuccess': onSuccess,
+                'onfailure': onFailure
+            });
+        }
+    </script>
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+</body>
+</html>
