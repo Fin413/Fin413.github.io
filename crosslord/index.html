@@ -40,7 +40,7 @@
 
         #userDisplay{
             position: fixed;
-            top: -200px;
+            top: 0px;
             box-sizing: border-box;
             /* CHANGE TOP TO -200 AT START */
             background-color: #F1C548;
@@ -57,7 +57,7 @@
         }
 
         #userDisplay p{
-            margin-bottom: 17px;
+            margin: 20px 0 15px 0;
         }
 
         #profilePhoto{
@@ -70,6 +70,13 @@
                 position: relative;
                 width: 100%;
                 box-shadow: none;
+                margin-top: 10px;
+                margin-bottom: -5px;
+                background-color: transparent;
+            }
+
+            #userDisplay p{
+                margin: 5px 0 0 0;
             }
         }
 
@@ -152,8 +159,8 @@
 <body>
 
     <div id="userDisplay">
-        <img src="" alt="profile photo" id="profilePhoto" width="30">
-        <p id="name"></p>
+        <img src="profile.jpeg" alt="profile photo" id="profilePhoto" width="30">
+        <p id="name">Name</p>
     </div>
 
     <h1>Scona Cross Lord</h1>
