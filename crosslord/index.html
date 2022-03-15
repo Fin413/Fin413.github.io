@@ -252,7 +252,7 @@
 
         function onSuccess(googleUser) {
             document.getElementById("googleSignin").style.display = "none";
-            document.getElementById("logoutBtn").style.display = "block";
+            document.getElementById("logoutBtn").style.display = "inline-block";
             email = googleUser.getBasicProfile().getEmail();
             document.getElementById("name").innerText = googleUser.getBasicProfile().getGivenName();
             document.getElementById("profilePhoto").src = googleUser.getBasicProfile().getImageUrl();
