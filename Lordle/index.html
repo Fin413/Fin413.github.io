@@ -337,7 +337,7 @@
         var level = 0;
         // lords, scona, pride, crest, emily, merch, serve, brice, gerun, grant, lyons, brice, buffi, Irwin, Andoh, Perry, Dubyk, Rolph, lions
         
-        // pride, andoh, yummy, smith, drama, think, teach, learn, lyons, study, grant, rolpg, buffi, tutor, sport, learn, roars, lions, crest, scona
+        // serve, pride, andoh, yummy, smith, drama, think, teach, learn, lyons, study, grant, rolpg, buffi, tutor, sport, learn, roars, lions, crest, scona
 
 //         var nextWord = [
 //             "andoh",
@@ -359,7 +359,7 @@
         var disps = document.getElementsByClassName("letterDisp");
         var overlayContent = document.getElementsByClassName("overlayContent")[0]
         var letterBtns = document.getElementsByClassName("letterBtn");
-        var wordOfTheDay = "serve"; // lowercase only
+        var wordOfTheDay = "vetch"; // lowercase only
         var savedData = JSON.parse(window.localStorage.getItem("LordleData"));
         var alreadyPlayed = false;
         var nextWord = new Date().setHours(24,0,0,0);
@@ -510,7 +510,7 @@
         function correctWord(){
             document.getElementById("result").innerText = "You Win!";
             document.getElementById("result").style.color = "green";
-            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + "";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + ", a teacher at scona";
             alreadyPlayed = true;
             showOverlay();
             saveResults();
@@ -519,7 +519,7 @@
         function lose(){
             document.getElementById("result").innerText = "You Lose!";
             document.getElementById("result").style.color = "red";
-            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + "";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + ", a teacher at scona";
             alreadyPlayed = true;
             showOverlay();
             saveResults();
