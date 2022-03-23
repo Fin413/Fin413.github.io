@@ -7,6 +7,12 @@
     <link rel="icon" type="image/svg" href="lion.svg">
     <title>Cross Lord</title>
     <style>
+        :root{
+            --size: 50px;
+            --fontSize: 15px;
+            --gridGap: 5px;
+        }
+
         @font-face {
             font-family: 'sport';
             src: url('fonts/OldSport.eot'); /* IE9 Compat Modes */
@@ -93,27 +99,30 @@
             }
         }
 
-        #crosswordGrid{
-            display: grid;
-            grid-template-columns: repeat(5, 50px);
-            /* grid-template-rows: repeat(5, 50px); */
+        #crosswordContainer{
             width: 100%;
+            display: inline-block;
             overflow: scroll;
-            grid-auto-rows: 50px;
-            /* border: 1px solid black; */
-            grid-template-areas: 
-                "l . . . b "
-        
-            ;
+            touch-action: manipulation;
         }
 
-        .letter, .black{
+        .gridRow {
+            display: grid;
+            grid-template-columns: repeat(45, var(--size));
+            gap: var(--gridGap);
+        }
+
+        .letter{
             border: 1px solid black;
-            /* grid-area: l; */
-            width: 50px;
-            height: 50px;
+            grid-area: l;
+            width: var(--size);
+            height: var(--size);
             box-sizing: border-box;
             position: relative;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .letter:after{
@@ -121,13 +130,8 @@
             font-family: Arial, Helvetica, sans-serif;
             position: absolute;
             top: 0;
-            left: 0;
-            grid-area: l;
-        }
-
-        .black{
-            background-color: black;
-            grid-area: b;
+            left: 1px;
+            font-size: var(--fontSize);
         }
 
         .row{
@@ -190,13 +194,480 @@
 
     <div id="googleSignin"></div>
 
-    <div id="crosswordGrid">
+    <div id="crosswordContainer">
         <!-- First row -->
-        <div class="letter" num="1"></div>
-        <!-- <div class="blank"></div> -->
-        <div class="black"></div>
-        <!-- <div class="letter"></div> -->
-        <!-- <div class="letter"></div> -->
+        <div class="gridRow">
+            <div class="letter" num="1" style="grid-column-start: 7;"></div>
+            <div class="letter" num="2" style="grid-column-start: 12;"></div>
+            <div class="letter" num="3" style="grid-column-start: 17;"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" num="4" style="grid-column-start: 6"></div>
+            <div class="letter" across="4" down="1" style="grid-column-start: 7"></div>
+            <div class="letter" across="4" style="grid-column-start: 8"></div>
+            <div class="letter" across="4" style="grid-column-start: 9"></div>
+            <div class="letter" across="4" style="grid-column-start: 10"></div>
+            <div class="letter" across="4" style="grid-column-start: 11"></div>
+            <div class="letter" across="4" down="2" style="grid-column-start: 12"></div>
+            <div class="letter" across="4" style="grid-column-start: 13"></div>
+            <div class="letter" down="3" style="grid-column-start: 17"></div>
+            <div class="letter" num="5" style="grid-column-start: 25"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" num="6" style="grid-column-start: 4"></div>
+
+            <div class="letter" down="1" style="grid-column-start: 7"></div>
+
+            <div class="letter" down="2" style="grid-column-start: 12"></div>
+
+            <div class="letter" down="3" style="grid-column-start: 17"></div>
+
+            <div class="letter" down="5" style="grid-column-start: 25"></div>
+
+            <div class="letter" num="7" style="grid-column-start: 33"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" num="8" style="grid-column-start: 3"></div>
+            <div class="letter" across="8" down="6" style="grid-column-start: 4"></div>
+            <div class="letter" across="8" style="grid-column-start: 5"></div>
+            <div class="letter" across="8" style="grid-column-start: 6"></div>
+            <div class="letter" across="8" down="1" style="grid-column-start: 7"></div>
+            <div class="letter" across="8" style="grid-column-start: 8"></div>
+            <div class="letter" across="8" style="grid-column-start: 9"></div>
+
+            <div class="letter" down="2" style="grid-column-start: 12"></div>
+
+            <div class="letter" num="9" style="grid-column-start: 14"></div>
+            <div class="letter" across="9" style="grid-column-start: 15"></div>
+            <div class="letter" across="9" style="grid-column-start: 16"></div>
+            <div class="letter" across="9" down="3" style="grid-column-start: 17"></div>
+
+            <div class="letter" num="10" style="grid-column-start: 20"></div>
+            <div class="letter" across="10" style="grid-column-start: 21"></div>
+            <div class="letter" across="10" style="grid-column-start: 22"></div>
+            <div class="letter" across="10" style="grid-column-start: 23"></div>
+            <div class="letter" across="10" style="grid-column-start: 24"></div>
+            <div class="letter" across="10" down="5" style="grid-column-start: 25"></div>
+            <div class="letter" across="10" style="grid-column-start: 26"></div>
+
+            <div class="letter" down="7" style="grid-column-start: 33"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="6" style="grid-column-start: 4"></div>
+
+            <div class="letter" down="2" style="grid-column-start: 12"></div>
+
+            <div class="letter" down="9" style="grid-column-start: 14"></div>
+
+            <div class="letter" down="3" style="grid-column-start: 17"></div>
+
+            <div class="letter" down="10" style="grid-column-start: 20"></div>
+
+            <div class="letter" down="5" style="grid-column-start: 25"></div>
+
+            <div class="letter" num="11" down="7" style="grid-column-start: 33"></div>
+            <div class="letter" across="11" style="grid-column-start: 34"></div>
+            <div class="letter" num="12" across="11" style="grid-column-start: 35"></div>
+            <div class="letter" across="11" style="grid-column-start: 36"></div>
+            <div class="letter" across="11" style="grid-column-start: 37"></div>
+            <div class="letter" across="11" style="grid-column-start: 38"></div>
+            <div class="letter" across="11" style="grid-column-start: 39"></div>
+            <div class="letter" across="11" style="grid-column-start: 40"></div>
+            <div class="letter" across="11" style="grid-column-start: 41"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="6" style="grid-column-start: 4"></div>
+
+            <div class="letter" down="2" style="grid-column-start: 12"></div>
+
+            <div class="letter" down="9" style="grid-column-start: 14"></div>
+
+            <div class="letter" down="3" style="grid-column-start: 17"></div>
+
+            <div class="letter" down="10" style="grid-column-start: 20"></div>
+
+            <div class="letter" num="13" down="5" style="grid-column-start: 25"></div>
+            <div class="letter" num="14" across="13" style="grid-column-start: 26"></div>
+
+            <div class="letter" down="7" style="grid-column-start: 33"></div>
+
+            <div class="letter" down="12" style="grid-column-start: 35"></div>
+
+            <div class="letter" num="15" style="grid-column-start: 42"></div>
+            <div class="letter" num="16" across="15" style="grid-column-start: 43"></div>
+            <div class="letter" across="15" style="grid-column-start: 44"></div>
+
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="6" style="grid-column-start: 4"></div>
+            <div class="letter" down="9" style="grid-column-start: 14"></div>
+            <div class="letter" down="10" style="grid-column-start: 20"></div>
+            <div class="letter" num="18" style="grid-column-start: 32"></div>
+            <div class="letter" down="7" across="18" style="grid-column-start: 33"></div>
+            <div class="letter" down="12" style="grid-column-start: 35"></div>
+            <div class="letter" down="16" style="grid-column-start: 43"></div>
+            <div class="letter" down="14" style="grid-column-start: 26"></div>
+            <div class="letter" num="17" style="grid-column-start: 28"></div>
+            <!-- <div class="letter" down="16" style="grid-column-start: 43"></div> -->
+
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="6" style="grid-column-start: 4"></div>
+            <div class="letter" down="9" style="grid-column-start: 14"></div>
+            <div class="letter" down="12" style="grid-column-start: 35"></div>
+            <div class="letter" down="18" style="grid-column-start: 32"></div>
+            <!-- <div class="letter" down="15" style="grid-column-start: 43"></div> -->
+
+            <div class="letter" num="19" style="grid-column-start: 18"></div>
+            <div class="letter" across="19" style="grid-column-start: 19"></div>
+            
+            <div class="letter" num="20" down="14" style="grid-column-start: 26"></div>
+            <div class="letter" across="20" style="grid-column-start: 27"></div>
+            <div class="letter" across="20" down="17" style="grid-column-start: 28"></div>
+            <div class="letter" across="20" style="grid-column-start: 29"></div>
+
+            <div class="letter" num="21" style="grid-column-start: 41"></div>
+            <div class="letter" num="22" across="21" style="grid-column-start: 42"></div>
+            <div class="letter" across="21" down="16" style="grid-column-start: 43"></div>
+            <div class="letter" across="21" style="grid-column-start: 44"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" num="23" style="grid-column-start: 2"></div>
+            <div class="letter" across="23" style="grid-column-start: 3"></div>
+            <!-- <div class="letter" across="23" style="grid-column-start: 4"></div> -->
+            <div class="letter" num="24" across="23" style="grid-column-start: 5"></div>
+            <div class="letter" across="23" style="grid-column-start: 6"></div>
+            <div class="letter" across="23" style="grid-column-start: 7"></div>
+
+            <div class="letter" across="23" down="6" style="grid-column-start: 4"></div>
+            <div class="letter" down="9" style="grid-column-start: 14"></div>
+            <div class="letter" down="12" across="25" style="grid-column-start: 35"></div>
+            <div class="letter" down="18" across="25" style="grid-column-start: 32"></div>
+            <div class="letter" down="14" style="grid-column-start: 26"></div>
+            <div class="letter" down="17" style="grid-column-start: 28"></div>
+            <div class="letter" down="19" style="grid-column-start: 18"></div>
+
+            <div class="letter" num="25" style="grid-column-start: 31"></div>
+            <div class="letter" across="25" style="grid-column-start: 33"></div>
+            <div class="letter" num="26" across="25" style="grid-column-start: 34"></div>
+
+            <div class="letter" down="22" style="grid-column-start: 42"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="9" across="27" style="grid-column-start: 14"></div>
+            <div class="letter" down="14" style="grid-column-start: 26"></div>
+            <div class="letter" down="17" style="grid-column-start: 28"></div>
+            <div class="letter" down="19" style="grid-column-start: 18"></div>
+            <div class="letter" down="24" style="grid-column-start: 5"></div>
+            <div class="letter" down="22" style="grid-column-start: 42"></div>
+            <div class="letter" down="25" style="grid-column-start: 31"></div>
+            <div class="letter" down="26" style="grid-column-start: 34"></div>
+            <div class="letter" num="27" style="grid-column-start: 12"></div>
+            <div class="letter" num="28" across="27" style="grid-column-start: 13"></div>
+            <!-- <div class="letter" across="27" style="grid-column-start: 12"></div> -->
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="14" style="grid-column-start: 26"></div>
+            <div class="letter" down="17" style="grid-column-start: 28"></div>
+            <div class="letter" down="19" style="grid-column-start: 18"></div>
+            <div class="letter" down="22" style="grid-column-start: 42"></div>
+            <div class="letter" down="24" style="grid-column-start: 5"></div>
+            <div class="letter" num="29" style="grid-column-start: 9"></div>
+            <div class="letter" down="25" style="grid-column-start: 31"></div>
+            <div class="letter" down="26" style="grid-column-start: 34"></div>
+            <div class="letter" down="28" style="grid-column-start: 13"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="14" style="grid-column-start: 26"></div>
+            <div class="letter" down="17" style="grid-column-start: 28"></div>
+            <div class="letter" down="19" style="grid-column-start: 18"></div>
+            <div class="letter" num="31" style="grid-column-start: 40"></div>
+            <div class="letter" across="31" style="grid-column-start: 41"></div>
+            <div class="letter" down="22" across="31" style="grid-column-start: 42"></div>
+            <div class="letter" num="30" style="grid-column-start: 4"></div>
+            <div class="letter" down="24" across="30" style="grid-column-start: 5"></div>
+            <div class="letter" across="30" style="grid-column-start: 6"></div>
+            <div class="letter" across="30" style="grid-column-start: 7"></div>
+            <div class="letter" across="30" style="grid-column-start: 8"></div>
+            <div class="letter" across="30" down="29" style="grid-column-start: 9"></div>
+            <div class="letter" across="30" style="grid-column-start: 10"></div>
+            <div class="letter" down="25" style="grid-column-start: 31"></div>
+            
+            <div class="letter" down="26" style="grid-column-start: 34"></div>
+            <div class="letter" down="28" style="grid-column-start: 13"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="14" style="grid-column-start: 26"></div>
+            <div class="letter" down="17" style="grid-column-start: 28"></div>
+            <div class="letter" down="19" style="grid-column-start: 18"></div>
+            <div class="letter" down="22" style="grid-column-start: 42"></div>
+            <div class="letter" down="24" style="grid-column-start: 5"></div>
+            <div class="letter" down="29" style="grid-column-start: 9"></div>
+            <div class="letter" num="32" style="grid-column-start: 11"></div>
+            <div class="letter" down="25" style="grid-column-start: 31"></div>
+            <div class="letter" down="26" style="grid-column-start: 34"></div>
+            <div class="letter" down="28" style="grid-column-start: 13"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="14" style="grid-column-start: 26"></div>
+            <div class="letter" down="17" style="grid-column-start: 28"></div>
+            <div class="letter" down="19" style="grid-column-start: 18"></div>
+            <div class="letter" num="33" style="grid-column-start: 8"></div>
+            <div class="letter" down="29" across="33" style="grid-column-start: 9"></div>
+            <div class="letter" across="33" style="grid-column-start: 10"></div>
+            <div class="letter" across="33" down="32" style="grid-column-start: 11"></div>
+            <div class="letter" across="33" style="grid-column-start: 12"></div>
+            <div class="letter" across="33" down="28" style="grid-column-start: 13"></div>
+            <!-- <div class="letter" down="32" style="grid-column-start: 11"></div> -->
+            <div class="letter" down="25" style="grid-column-start: 31"></div>
+            <div class="letter" num="34" down="26" style="grid-column-start: 34"></div>
+            <div class="letter" across="34" style="grid-column-start: 35"></div>
+            <div class="letter" across="34" style="grid-column-start: 36"></div>
+            <div class="letter" across="34" style="grid-column-start: 37"></div>
+            <div class="letter" across="34" style="grid-column-start: 38"></div>
+            <div class="letter" across="34" style="grid-column-start: 39"></div>
+            <div class="letter" across="34" style="grid-column-start: 40"></div>
+            <div class="letter" across="34" style="grid-column-start: 41"></div>
+            <div class="letter" across="34" down="22" style="grid-column-start: 42"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="14" style="grid-column-start: 26"></div>
+            <div class="letter" down="17" style="grid-column-start: 28"></div>
+            <div class="letter" down="19" across="35" style="grid-column-start: 18"></div>
+            <div class="letter" down="22" style="grid-column-start: 42"></div>
+            <div class="letter" down="29" style="grid-column-start: 9"></div>
+            <div class="letter" down="32" style="grid-column-start: 11"></div>
+            <!-- <div class="letter" down="35" style="grid-column-start: 17"></div> -->
+            <div class="letter" down="26" style="grid-column-start: 34"></div>
+
+            <div class="letter" num="35" style="grid-column-start: 17"></div>
+            <div class="letter" num="36" across="35" style="grid-column-start: 19"></div>
+            <div class="letter" down="25" style="grid-column-start: 31"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="14" style="grid-column-start: 26"></div>
+            <div class="letter" num="37" down="17" style="grid-column-start: 28"></div>
+            <div class="letter" num="38" across="37" style="grid-column-start: 29"></div>
+            <div class="letter" num="39" style="grid-column-start: 39"></div>
+            <div class="letter" across="39" style="grid-column-start: 40"></div>
+            <div class="letter" across="39" style="grid-column-start: 41"></div>
+            <div class="letter" down="22" across="39" style="grid-column-start: 42"></div>
+            <div class="letter" across="39" style="grid-column-start: 43"></div>
+            <div class="letter" num="40" across="39" style="grid-column-start: 44"></div>
+            <div class="letter" down="32" style="grid-column-start: 11"></div>
+            <div class="letter" down="35" style="grid-column-start: 17"></div>
+            <div class="letter" down="36" style="grid-column-start: 19"></div>
+            <div class="letter" down="25" style="grid-column-start: 31"></div>
+            <div class="letter" down="26" style="grid-column-start: 34"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="14" style="grid-column-start: 26"></div>
+            <div class="letter" down="22" style="grid-column-start: 42"></div>
+            <div class="letter" down="32" style="grid-column-start: 11"></div>
+            <div class="letter" down="35" style="grid-column-start: 17"></div>
+            <div class="letter" down="38" style="grid-column-start: 29"></div>
+            <div class="letter" down="25" style="grid-column-start: 31"></div>
+            <div class="letter" down="26" style="grid-column-start: 34"></div>
+            <div class="letter" down="40" style="grid-column-start: 44"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="14" style="grid-column-start: 26"></div>
+            <div class="letter" down="32" style="grid-column-start: 11"></div>
+            <div class="letter" num="41" style="grid-column-start: 1"></div>
+            <div class="letter" down="35" style="grid-column-start: 17"></div>
+            <div class="letter" down="38" style="grid-column-start: 29"></div>
+            <div class="letter" down="25" style="grid-column-start: 31"></div>
+            <div class="letter" down="26" style="grid-column-start: 34"></div>
+            <div class="letter" down="40" style="grid-column-start: 44"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="14" across="42" style="grid-column-start: 26"></div>
+
+            <div class="letter" num="43" across="42" style="grid-column-start: 27"></div>
+            <div class="letter" down="32" style="grid-column-start: 11"></div>
+            <div class="letter" down="41" style="grid-column-start: 1"></div>
+            <div class="letter" down="35" style="grid-column-start: 17"></div>
+            <div class="letter" num="42" style="grid-column-start: 25"></div>
+            <div class="letter" down="38" style="grid-column-start: 29"></div>
+            <div class="letter" down="25" style="grid-column-start: 31"></div>
+            <div class="letter" num="44" down="26" style="grid-column-start: 34"></div>
+            <div class="letter" down="40" style="grid-column-start: 44"></div>
+            <div class="letter" num="45" across="44" style="grid-column-start: 35"></div>
+            <div class="letter" across="44" style="grid-column-start: 36"></div>
+
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" num="46" style="grid-column-start: 9"></div>
+            <div class="letter" across="46" style="grid-column-start: 10"></div>
+            <div class="letter" down="32" across="46" style="grid-column-start: 11"></div>
+            <div class="letter" num="47" across="46" style="grid-column-start: 12"></div>
+            <div class="letter" across="46" style="grid-column-start: 13"></div>
+            <div class="letter" down="41" style="grid-column-start: 1"></div>
+            <div class="letter" down="35" style="grid-column-start: 17"></div>
+            <div class="letter" down="42" style="grid-column-start: 25"></div>
+            <div class="letter" down="38" style="grid-column-start: 29"></div>
+
+            <div class="letter" down="43" style="grid-column-start: 27"></div>
+            <div class="letter" down="25" style="grid-column-start: 31"></div>
+            <div class="letter" down="40" style="grid-column-start: 44"></div>
+            <div class="letter" down="45" style="grid-column-start: 35"></div>
+
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="47" style="grid-column-start: 12"></div>
+            <div class="letter" down="41" style="grid-column-start: 1"></div>
+            <div class="letter" num="48" style="grid-column-start: 15"></div>
+            <div class="letter" down="35" style="grid-column-start: 17"></div>
+            <div class="letter" num="49" style="grid-column-start: 23"></div>
+            <div class="letter" down="42" style="grid-column-start: 25"></div>
+            <div class="letter" down="43" style="grid-column-start: 27"></div>
+            <div class="letter" num="50" down="38" style="grid-column-start: 29"></div>
+            <div class="letter" across="50" style="grid-column-start: 30"></div>
+            <div class="letter" across="50" down="25" style="grid-column-start: 31"></div>
+            <div class="letter" across="50" style="grid-column-start: 32"></div>
+            <div class="letter" across="50" style="grid-column-start: 33"></div>
+            <div class="letter" down="40" style="grid-column-start: 44"></div>
+            <div class="letter" num="51" style="grid-column-start: 42"></div>
+            <div class="letter" down="45" style="grid-column-start: 35"></div>
+
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="47" style="grid-column-start: 12"></div>
+            <div class="letter" down="41" style="grid-column-start: 1"></div>
+            <div class="letter" num="52" style="grid-column-start: 3"></div>
+            <div class="letter" down="48" style="grid-column-start: 15"></div>
+            <div class="letter" down="35" style="grid-column-start: 17"></div>
+            <div class="letter" down="49" style="grid-column-start: 23"></div>
+            <div class="letter" down="42" style="grid-column-start: 25"></div>
+            <div class="letter" down="43" style="grid-column-start: 27"></div>
+            <div class="letter" down="25" style="grid-column-start: 31"></div>
+            <div class="letter" down="40" style="grid-column-start: 44"></div>
+            <div class="letter" down="51" style="grid-column-start: 42"></div>
+            <div class="letter" down="45" style="grid-column-start: 35"></div>
+
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" num="54" style="grid-column-start: 9"></div>
+            <div class="letter" num="55" across="54" style="grid-column-start: 10"></div>
+            <div class="letter" across="54" style="grid-column-start: 11"></div>
+            <div class="letter" across="54" down="47" style="grid-column-start: 12"></div>
+            <div class="letter" across="54" style="grid-column-start: 13"></div>
+            <div class="letter" num="56" across="54" style="grid-column-start: 14"></div>
+            <div class="letter" across="54" down="48" style="grid-column-start: 15"></div>
+            <div class="letter" down="43" style="grid-column-start: 27"></div>
+
+            <div class="letter" num="58" down="25" style="grid-column-start: 31"></div>
+
+            <div class="letter" across="58" style="grid-column-start: 32"></div>
+            <div class="letter" num="59" across="58"style="grid-column-start: 33"></div>
+
+            <div class="letter" num="60" style="grid-column-start: 41"></div>
+            <div class="letter" down="51" across="60" style="grid-column-start: 42"></div>
+            <div class="letter" across="60" style="grid-column-start: 43"></div>
+            <div class="letter" down="40" across="60" style="grid-column-start: 44"></div>
+            <div class="letter" across="60" style="grid-column-start: 45"></div>
+
+            <div class="letter" num="53" down="41" style="grid-column-start: 1"></div>
+            <div class="letter" across="53" style="grid-column-start: 2"></div>
+            <div class="letter" across="53" down="52" style="grid-column-start: 3"></div>
+            <div class="letter" across="53" style="grid-column-start: 4"></div>
+            <div class="letter" across="53" style="grid-column-start: 5"></div>
+
+            <div class="letter" num="57" down="35" style="grid-column-start: 17"></div>
+            <div class="letter" across="57" style="grid-column-start: 18"></div>
+            <div class="letter" across="57" style="grid-column-start: 19"></div>
+            <div class="letter" across="57" style="grid-column-start: 20"></div>
+            <div class="letter" across="57" style="grid-column-start: 21"></div>
+            <div class="letter" across="57" style="grid-column-start: 22"></div>
+            <div class="letter" across="57" down="49" style="grid-column-start: 23"></div>
+            <div class="letter" across="57" style="grid-column-start: 24"></div>
+            <div class="letter" across="57" down="42" style="grid-column-start: 25"></div>
+            <div class="letter" down="45" style="grid-column-start: 35"></div>
+
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="47" style="grid-column-start: 12"></div>
+            <div class="letter" down="55" style="grid-column-start: 10"></div>
+            
+            <div class="letter" down="52" style="grid-column-start: 3"></div>
+
+            <div class="letter" down="41" style="grid-column-start: 1"></div>
+
+            <div class="letter" down="56" style="grid-column-start: 14"></div>
+
+            <div class="letter" down="35" style="grid-column-start: 17"></div>
+            <div class="letter" down="43" style="grid-column-start: 27"></div>
+            <div class="letter" down="40" style="grid-column-start: 44"></div>
+            <div class="letter" down="51"style="grid-column-start: 42"></div>
+
+            <div class="letter" down="59" style="grid-column-start: 33"></div>
+            <div class="letter" down="45" style="grid-column-start: 35"></div>
+
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" num="62" style="grid-column-start: 7"></div>
+            <div class="letter" across="62" style="grid-column-start: 8"></div>
+            <div class="letter" across="62" style="grid-column-start: 9"></div>
+            <div class="letter" across="62" down="55" style="grid-column-start: 10"></div>
+
+            <div class="letter" num="61" style="grid-column-start: 2"></div>
+            <div class="letter" down="52" across="61" style="grid-column-start: 3"></div>
+
+            <div class="letter" num="63" style="grid-column-start: 13"></div>
+            <div class="letter" across="63" down="56" style="grid-column-start: 14"></div>
+            <div class="letter" across="63" style="grid-column-start: 15"></div>
+            <div class="letter" across="63" style="grid-column-start: 16"></div>
+            <div class="letter" across="63" down="35" style="grid-column-start: 17"></div>
+            <div class="letter" down="43" style="grid-column-start: 27"></div>
+            <div class="letter" down="51"style="grid-column-start: 42"></div>
+
+            <div class="letter" num="64" style="grid-column-start: 32"></div>
+            <div class="letter" across="64" down="59" style="grid-column-start: 33"></div>
+            <div class="letter" across="64" style="grid-column-start: 34"></div>
+            <div class="letter" across="64" down="45" style="grid-column-start: 35"></div>
+            <div class="letter" across="64" style="grid-column-start: 36"></div>
+        </div>
+
+        <div class="gridRow">
+            
+            <div class="letter" down="56" style="grid-column-start: 14"></div>
+            <div class="letter" num="65" down="52" style="grid-column-start: 3"></div>
+            <div class="letter" across="65" style="grid-column-start: 4"></div>
+            <div class="letter" across="65" style="grid-column-start: 5"></div>
+            <div class="letter" across="65" style="grid-column-start: 6"></div>
+            <div class="letter" across="65" down="62" style="grid-column-start: 7"></div>
+            <div class="letter" down="43" style="grid-column-start: 27"></div>
+            <div class="letter" down="59" style="grid-column-start: 33"></div>
+            <div class="letter" down="45" style="grid-column-start: 35"></div>
+        </div>
+
+        <div class="gridRow">
+            <div class="letter" down="59" style="grid-column-start: 33"></div>
+        </div>
     </div>
 
     <div class="letterBtnContainer">
@@ -237,10 +708,112 @@
     </div>
     
     <script>
-        var crossword = {
-            
-        }
+        var size = 50;
+        var crossword = [
+            {
+                down: "bone"
+            },
+            {
+                down: "lordle"
+            },
+            {
+                down: "themes"
+            },
+            {
+                across: "otteson"
+            },
+            {
+                down: "lyons"
+            },
+            {
+                down: "gaylord"
+            },
+            {
+                down: "lords"
+            }
+        ]
+
+        var down = [
+            "bone",
+            "lordle",
+            "themes",
+            "lyons",
+            "gaylord",
+            "lords",
+            "sconies",
+            "calm",
+            "share",
+            "utquiministrat",
+            "lit",
+            "bikeathons",
+            "cap",
+            "diplomas",
+            "caflanding",
+            "irwin",
+            "springawakening",
+            "rolliemiles",
+            "prize",
+            "track",
+            "edgarlab",
+            "goldthorpes",
+            "ap",
+            "shanks",
+            "sports pro",
+            "forsyth",
+            "crest",
+            "sperling",
+            "hodgkins",
+            "pelletier",
+            "yonge",
+            "day",
+            "brice",
+            "bsa",
+            "red",
+            "merch",
+            "ly"
+        ]
+
+        var across = [
+            ""
+        ]
         var email; 
+
+        var letters = document.getElementsByClassName("letter");
+        var selected = letters[0];
+
+        for(let i = 0; i < letters.length; i++){
+            letters[i].setAttribute("onclick", "selectLetter(this)");
+        }
+
+        document.onkeydown = (e) => {
+            console.log(e.key)
+            if(e.key == "Backspace"){
+                deleteLetter();
+            }else if(e.key == "Enter"){
+                guessWord();
+            }else if((/[a-zA-Z]/).test(e.key) && e.key.length == 1){
+                typeLetter({innerText: e.key.toLocaleUpperCase()});
+            }
+        }
+
+        function typeLetter(letter){
+            let num = selected.getAttribute("num");
+            let across = selected.getAttribute("across");
+            let down = selected.getAttribute("down");
+
+            selected.innerText = letter.innerText;
+        }
+
+        function deleteLetter(){
+            console.log("DFDF")
+            selected.innerText = "";
+        }
+
+        function selectLetter(el){
+            selected.style.removeProperty("border-width");
+            el.style.borderWidth = "3px";
+            selected = el;
+        }
 
         function logout(){
             window.open(
@@ -273,6 +846,13 @@
                 'onsuccess': onSuccess,
                 'onfailure': onFailure
             });
+        }
+
+        function resize(tempSize){
+            size += tempSize;
+            document.documentElement.style.setProperty('--size', size + "px");
+            document.documentElement.style.setProperty('--fontSize', (size * (3 / 10)) + "px");
+            document.documentElement.style.setProperty('--gridGap', (size * (1 / 10)) + "px");
         }
     </script>
     <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
