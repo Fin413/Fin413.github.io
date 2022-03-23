@@ -9,8 +9,10 @@
     <style>
         :root{
             --size: 50px;
-            --fontSize: 15px;
+            --letterSize: 20px; 
+            --numSize: 15px;
             --gridGap: 5px;
+            --paddingSize: 3px;
         }
 
         @font-face {
@@ -101,6 +103,7 @@
 
         #crosswordContainer{
             width: 100%;
+            margin: 10px;
             display: inline-block;
             overflow: scroll;
             touch-action: manipulation;
@@ -110,6 +113,8 @@
             display: grid;
             grid-template-columns: repeat(45, var(--size));
             gap: var(--gridGap);
+            margin: auto;
+            width: fit-content;
         }
 
         .letter{
@@ -119,10 +124,11 @@
             height: var(--size);
             box-sizing: border-box;
             position: relative;
-
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: var(--letterSize);
+            padding-top: var(--paddingSize);
         }
 
         .letter:after{
@@ -131,7 +137,7 @@
             position: absolute;
             top: 0;
             left: 1px;
-            font-size: var(--fontSize);
+            font-size: var(--numSize);
         }
 
         .row{
@@ -178,7 +184,14 @@
             cursor: pointer;
         }
         
-
+        .zoomContainer{
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            padding-right: 10px;
+            padding-bottom: 10px;
+            z-index: 10;
+        }
         
     </style>
 </head>
@@ -670,6 +683,11 @@
         </div>
     </div>
 
+    <div class="zoomContainer">
+        <button class="zoomBtn" onclick="resize(5)">+</button>
+        <button class="zoomBtn" onclick="resize(-5)">-</button>
+    </div>
+
     <div class="letterBtnContainer">
         <div class="row">
             <button class="letterBtn" onclick="typeLetter(this)">Q</button>
@@ -708,7 +726,6 @@
     </div>
     
     <script>
-        var size = 50;
         var crossword = [
             {
                 down: "bone"
@@ -732,7 +749,6 @@
                 down: "lords"
             }
         ]
-
         var down = [
             "bone",
             "lordle",
@@ -772,21 +788,22 @@
             "merch",
             "ly"
         ]
-
         var across = [
             ""
         ]
         var email; 
 
         var letters = document.getElementsByClassName("letter");
+        var mainNum = null;
         var selected = letters[0];
+        var size = 50;
+        var nextLetter = false;
 
         for(let i = 0; i < letters.length; i++){
             letters[i].setAttribute("onclick", "selectLetter(this)");
         }
 
         document.onkeydown = (e) => {
-            console.log(e.key)
             if(e.key == "Backspace"){
                 deleteLetter();
             }else if(e.key == "Enter"){
@@ -802,17 +819,45 @@
             let down = selected.getAttribute("down");
 
             selected.innerText = letter.innerText;
+
+            if(mainNum != null){
+                nextLetter = true;
+                for(let i = 0; i < letters.length; i++){
+                    if(letters[i].innerText == "" && (letters[i].getAttribute("across") == mainNum || letters[i].getAttribute("down") == mainNum)){
+                        selectLetter(letters[i]);
+                        return;
+                    }
+                }
+
+                mainNum = null;
+            }
+
         }
 
         function deleteLetter(){
-            console.log("DFDF")
+            let num = selected.getAttribute("num");
+            let across = selected.getAttribute("across");
+            let down = selected.getAttribute("down");
+
             selected.innerText = "";
+        }
+
+        function guessWord(){
+
         }
 
         function selectLetter(el){
             selected.style.removeProperty("border-width");
             el.style.borderWidth = "3px";
             selected = el;
+
+            if(mainNum == null && selected.getAttribute("num") != null){
+                mainNum = selected.getAttribute("num");
+            }else if(!nextLetter){
+                mainNum = null;
+            }
+
+            nextLetter = false;
         }
 
         function logout(){
@@ -849,10 +894,12 @@
         }
 
         function resize(tempSize){
-            size += tempSize;
+            if((tempSize < 0 && size > 5) || (tempSize > 0 && size < 100)) size += tempSize;
             document.documentElement.style.setProperty('--size', size + "px");
-            document.documentElement.style.setProperty('--fontSize', (size * (3 / 10)) + "px");
+            document.documentElement.style.setProperty('--numSize', (size * (3 / 10)) + "px");
+            document.documentElement.style.setProperty('--letterSize', (size * (6 / 10)) + "px");
             document.documentElement.style.setProperty('--gridGap', (size * (1 / 10)) + "px");
+            document.documentElement.style.setProperty('--paddingSize', (size * (1 / 10)) + "px");
         }
     </script>
     <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
