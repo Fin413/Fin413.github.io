@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: SketchAPI 2021.4.25.11 <https://api.sketch.io/> -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketchjs="https://sketch.io/dtd/" sketchjs:metadata="eyJuYW1lIjoiRHJhd2luZy01LnNrZXRjaHBhZCIsInN1cmZhY2UiOnsibWV0aG9kIjoiZmlsbCIsImJsZW5kIjoibm9ybWFsIiwiZW5hYmxlZCI6dHJ1ZSwib3BhY2l0eSI6MSwidHlwZSI6InBhdHRlcm4iLCJwYXR0ZXJuIjp7InR5cGUiOiJwYXR0ZXJuIiwicmVmbGVjdCI6Im5vLXJlZmxlY3QiLCJyZXBlYXQiOiJyZXBlYXQiLCJzbW9vdGhpbmciOmZhbHNlLCJzcmMiOiJ0cmFuc3BhcmVudExpZ2h0Iiwic3giOjEsInN5IjoxLCJ4MCI6MC41LCJ4MSI6MSwieTAiOjAuNSwieTEiOjF9fSwiY2xpcFBhdGgiOnsiZW5hYmxlZCI6dHJ1ZSwic3R5bGUiOnsic3Ryb2tlU3R5bGUiOiJibGFjayIsImxpbmVXaWR0aCI6MX19LCJkZXNjcmlwdGlvbiI6Ik1hZGUgd2l0aCBTa2V0Y2hwYWQiLCJtZXRhZGF0YSI6e30sImV4cG9ydERQSSI6NzIsImV4cG9ydEZvcm1hdCI6InBuZyIsImV4cG9ydFF1YWxpdHkiOjAuOTUsInVuaXRzIjoicHgiLCJ3aWR0aCI6NTAwLCJoZWlnaHQiOjUwMCwicGFnZXMiOlt7IndpZHRoIjo1MDAsImhlaWdodCI6NTAwfV0sInV1aWQiOiJmN2M0NTJmNy0wZGRkLTQ0ODctOTMwNS1hM2Q1YTExMmE2MWEifQ==" width="500" height="500" viewBox="0 0 500 500" sketchjs:version="2021.4.25.11">
+<path sketchjs:tool="square" style="fill: #fdfd96; mix-blend-mode: source-over; fill-opacity: 1; vector-effect: non-scaling-stroke;" d="M0 0 L1117.69 0 1117.69 1117.69 0 1117.69 z" transform="matrix(0.5392208319056099,0.001992573130292714,-0.001992573130292714,0.5392208319056099,-46.826722297096495,-49.349409980151655)"/>
+<path sketchjs:tool="ring" style="fill: #9d9d02; mix-blend-mode: source-over; fill-opacity: 1; vector-effect: non-scaling-stroke;" d="M193.78 0 C300.81 0 387.57 86.76 387.57 193.78 387.57 300.81 300.81 387.57 193.78 387.57 86.76 387.57 0 300.81 0 193.78 0 86.76 86.76 0 193.78 0 zM193.78 23.25 C99.6 23.25 23.25 99.6 23.25 193.78 23.25 287.97 99.6 364.32 193.78 364.32 287.97 364.32 364.32 287.97 364.32 193.78 364.32 99.6 287.97 23.25 193.78 23.25 z" transform="matrix(0.8118556075426248,0.0067220912228939484,-0.0067220912228939415,0.811855607542624,95.0525730418302,93.08957267948605)"/>
+<g sketchjs:tool="paintbrush" transform="matrix(0.8095326787550708,0,0,0.8095326787550701,177.25824220514198,259.312696605142)">
+	<filter filterUnits="userSpaceOnUse" id="5f22e676_x2d7070_x2d4fd6_x2dbc71_x2d2d90c86a3416_blur">
+		<feGaussianBlur/>
+	</filter>
+	<path style="fill: none; stroke: #9d9d02; mix-blend-mode: source-over; stroke-dasharray: none; stroke-dashoffset: 0; stroke-linecap: round; stroke-linejoin: miter; stroke-miterlimit: 4; stroke-opacity: 1; stroke-width: 44.5242973315289;" d="M0 0 L0.01 0.01 " filter="url(#5f22e676_x2d7070_x2d4fd6_x2dbc71_x2d2d90c86a3416_blur)"/>
+</g>
+<path sketchjs:tool="path" style="fill: #9d9d02; stroke: #9d9d02; mix-blend-mode: source-over; paint-order: stroke fill markers; fill-opacity: 1; stroke-dasharray: none; stroke-dashoffset: 0; stroke-linecap: round; stroke-linejoin: miter; stroke-miterlimit: 4; stroke-opacity: 1; stroke-width: 32;" d="M184.28 0 C184.13 91.39 0.41 90.3 0 0.73 z" transform="matrix(0.6700576847515796,0,0,0.6350526724118658,187.1752869553823,315.38990136369284)"/>
+<g sketchjs:tool="paintbrush" transform="matrix(0.8095326787550708,0,0,0.8095326787550701,322.30268300514194,259.312696605142)">
+	<filter filterUnits="userSpaceOnUse" id="2097532b_x2da546_x2d410a_x2d98d1_x2d58d26a6da22d_blur">
+		<feGaussianBlur/>
+	</filter>
+	<path style="fill: none; stroke: #9d9d02; mix-blend-mode: source-over; stroke-dasharray: none; stroke-dashoffset: 0; stroke-linecap: round; stroke-linejoin: miter; stroke-miterlimit: 4; stroke-opacity: 1; stroke-width: 44.5242973315289;" d="M0 0 L0.01 0.01 " filter="url(#2097532b_x2da546_x2d410a_x2d98d1_x2d58d26a6da22d_blur)"/>
+</g>
+</svg>
