@@ -13,6 +13,19 @@
             --accentColor: #FFFF;
         }
 
+        /* .main::-webkit-scrollbar {
+            width: 100px;
+        }
+
+        .main::-webkit-scrollbar-track {
+            background: grey;
+        }
+
+        .main::-webkit-scrollbar-thumb {
+            background: blue;
+        } */
+
+ 
         body,
         html {
             height: 100%;
@@ -654,7 +667,7 @@
         }
         
         .tip {
-            max-width: 80%;
+            width: 80%;
             margin: auto;
             margin-top: 75px;
             border: 1px solid black;
@@ -953,6 +966,7 @@
             transition: transform 400ms, border-radius 400ms;
             cursor: pointer;
             border-radius: 5px;
+            height: 100px;
         }
 
         .imgDisp img:hover{
@@ -961,8 +975,6 @@
 
         .inputsContainer{
             display: flex;
-            /* justify-content: start; */
-            /* align-items: flex-start; */
         }
 
         #inputErrText{
@@ -1862,8 +1874,9 @@
             }, 1000);
             if (index == 3) {
                 hideElement(document.getElementsByClassName("jobs")[0]);
-                if(phase != 10) main.style.overflowY = "hidden";
-                main.style.justifyContent = "center";
+
+                // if(phase != 10) main.style.overflowY = "hidden";
+                // main.style.justifyContent = "center";
                 disableSkipBtn(false);
 
                 console.log(phase)
@@ -1873,8 +1886,6 @@
                     else document.getElementById("aboveMinimum").innerText = "Your job pays " + formatMoney(wage) + " which is " + formatMoney(wage - 15) + " above minimum wage in Alberta.";
 
                 }else showElement(document.getElementsByClassName("jobOptions")[0]);
-
-
             }
         }
 
@@ -2217,7 +2228,7 @@
                 let newJob = document.createElement("div");
                 newJob.classList = "gridItem";
 
-                newJob.append(img);
+                // newJob.append(img);
                 newJob.append(itemInfo);
 
                 grid.append(newJob);
