@@ -31,7 +31,7 @@
             overflow-x: hidden;
             margin: 0;
             font-family: sport;
-            touch-action: none;
+            touch-action: pan-y, pan-x;
         }
 
         /* button{
@@ -110,7 +110,8 @@
             display: inline-block;
             overflow: scroll;
             height: 55vh;
-            touch-action: none;
+            touch-action: pan-y, pan-x;
+
             position: relative;
             border-top: 1px solid black;
             border-bottom: 1px solid black;
@@ -1053,13 +1054,14 @@
         var size = 50;
         var nextLetter = false;
 
+        positionZoomBtns();
+
         window.onresize = () => { positionZoomBtns() };
 
         function positionZoomBtns(){
             let top = document.getElementById("crosswordContainer").offsetTop;
             document.getElementsByClassName("zoomContainer")[0].style.top = top + 5 + "px";
         }
-        
 
         for(let i = 0; i < letters.length; i++){
             letters[i].setAttribute("onclick", "selectLetter(this)");
