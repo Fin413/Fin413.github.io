@@ -359,7 +359,7 @@
         var disps = document.getElementsByClassName("letterDisp");
         var overlayContent = document.getElementsByClassName("overlayContent")[0]
         var letterBtns = document.getElementsByClassName("letterBtn");
-        var wordOfTheDay = "yonge"; // lowercase only
+        var wordOfTheDay = "spare"; // lowercase only
         var savedData = JSON.parse(window.localStorage.getItem("LordleData"));
         var alreadyPlayed = false;
         var nextWord = new Date().setHours(24,0,0,0);
@@ -510,7 +510,7 @@
         function correctWord(){
             document.getElementById("result").innerText = "You Win!";
             document.getElementById("result").style.color = "green";
-            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + ", a teacher at scona";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + "";
             alreadyPlayed = true;
             showOverlay();
             saveResults();
@@ -519,7 +519,7 @@
         function lose(){
             document.getElementById("result").innerText = "You Lose!";
             document.getElementById("result").style.color = "red";
-            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + ", a teacher at scona";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + "";
             alreadyPlayed = true;
             showOverlay();
             saveResults();
