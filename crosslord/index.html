@@ -1198,7 +1198,7 @@
         }
         
         window.onresize = () => { positionZoomBtns() };
-        // window.onbeforeunload = () => { saveProgress() };
+        window.onbeforeunload = () => { saveProgress() };
         
         function hideOverlay(){
             document.getElementsByClassName("overlayContainer")[0].style.opacity = 0;
