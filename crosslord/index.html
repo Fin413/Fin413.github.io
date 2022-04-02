@@ -253,20 +253,21 @@
             z-index: 10;
             font-family: 'Open Sans', sans-serif;
             text-align: left;
+            pointer-events: none;
         }
 
-        .hints{
+        .rowToColumn{
             display: flex;
             flex-direction: row;
             width: 100%;
             justify-content: center;
+            margin: auto;
         }
 
         .across, .down{
             width: 50%;
             margin: 50px;
             text-align: left;
-            /* padding: 50px; */
             max-width: 800px;
         }
 
@@ -281,7 +282,7 @@
         }
 
         @media only screen and (max-width: 800px) {
-            .hints{
+            .rowToColumn{
                 flex-direction: column;
                 align-items: center;
             }
@@ -305,7 +306,7 @@
             }
         }
 
-        #printBtn{
+        .imageBtn{
             display: flex;
             border: 1px solid black;
             background-color: rgba(0,0,0,0.1);
@@ -321,12 +322,12 @@
         }
 
         @media(hover){
-            #printBtn:hover{
+            .imageBtn:hover{
                 border: 5px solid black;
             }
         }
 
-        #printBtn img{
+        .imageBtn img{
             margin-right: 15px;
         }
 
@@ -439,6 +440,7 @@
     <div id="messageBox">
         <h3 class="message">Progress Saved</h3>
         <h3 class="message">Incorrect</h3>
+        <h3 class="message">Puzzle Not Solved</h3>
     </div>
 
     <div class="row" style="justify-content: space-evenly; max-width: 800px; margin: auto">
@@ -911,11 +913,13 @@
         </div>
     </div>
 
-    <button onclick="saveProgress(); showMessage(0);" id="printBtn"> <img src="save.svg" width="25">Save Progress</button>
-    <button onclick="print()" id="printBtn"> <img src="print.svg" width="25">Print Crossword</button>
+    <div class="rowToColumn" style="max-width: 800px">
+        <button onclick="checkSolved()" class="imageBtn"><img src="key.svg" width="25">Check Solution</button>
+        <button onclick="saveProgress(); showMessage(0);" class="imageBtn"><img src="save.svg" width="25">Save Progress</button>
+    </div>
+    <button onclick="print()" class="imageBtn"><img src="print.svg" width="25">Print Crossword</button>
 
-
-    <div class="hints">
+    <div class="rowToColumn">
         <div class="across">
             <h1>Across</h1>
             <div class="words">
@@ -935,7 +939,7 @@
     <script>
         // stuff
         // figure out print
-        // check if correct
+        // figure out scroll bars 
 
         const down = {
             1: {
@@ -1231,6 +1235,7 @@
         }
 
         var addHints = document.getElementsByClassName("words");
+
         for (const property in across) {
             addHints[0].innerHTML += "<p>" + property + ": " + across[property].hint + "</p>";
         }
@@ -1238,17 +1243,16 @@
             addHints[1].innerHTML += "<p>" + property + ": " + down[property].hint + "</p>";
         }
 
-        var letters = document.getElementsByClassName("letter");
-        var acrossHintEl = document.getElementById("acrossHint");
-        var downHintEl = document.getElementById("downHint");
-        var hintContainer = document.getElementsByClassName("tooltipContainer")[0];
-        var message = document.getElementsByClassName("message");
-
-        var email; 
-        var mainNum = null;
-        var selected = letters[0];
+        const letters = document.getElementsByClassName("letter");
+        const acrossHintEl = document.getElementById("acrossHint");
+        const downHintEl = document.getElementById("downHint");
+        const hintContainer = document.getElementsByClassName("tooltipContainer")[0];
+        const message = document.getElementsByClassName("message");
+        
         var size = 50;
+        var mainNum = null;
         var nextLetter = false;
+        var selected = letters[0];
 
         positionZoomBtns();
         loadProgress();
@@ -1273,7 +1277,7 @@
         }
 
         window.onresize = () => { positionZoomBtns() };
-        window.onbeforeunload = () => { saveProgress() };
+        // window.onbeforeunload = () => { saveProgress() };
 
         function positionZoomBtns(){
             let top = document.getElementById("crosswordContainer").offsetTop;
@@ -1293,7 +1297,7 @@
 
         function print(){
             var crossword = document.getElementById("crosswordContainer").innerHTML;
-            var hints = document.getElementsByClassName("hints")[0].innerHTML;
+            var hints = document.getElementsByClassName("rowToColumn")[1].innerHTML;
             var a = window.open('', '', 'height=500, width=800');
             a.document.write('<html>');
             a.document.write('<head><style>');
@@ -1346,9 +1350,17 @@
 
         function checkSolved(){
             for(let i = 0; i < letters.length; i++){
-                if(letters[i].innerText == "") return;
-                // else if(letters[i] != )
+                if(letters[i].getAttribute("num") != null){
+                    selected = letters[i];
+                    if(guessWord(true) == false) break;
+                }
+
+                if(i == letters.length - 1){
+                    win();
+                    return;
+                }
             }
+            showMessage(2);
         }
 
         function showHints(downNum, acrossNum){
@@ -1398,7 +1410,7 @@
         function saveProgress(){
             let data = [];
             for(let i = 0; i < letters.length; i++){
-                console.log(letters[i].style.backgroundColor)
+                // console.log(letters[i].style.backgroundColor)
                 if(letters[i].style.backgroundColor != ""){
                     data.push(letters[i].innerText.toLowerCase());
                 }else{
@@ -1411,7 +1423,7 @@
         function showMessage(index){
             let el = document.getElementById("messageBox");
             for(let i = 0; i < message.length; i++){
-                message[index].style.display = "none";
+                message[i].style.display = "none";
             }
             message[index].style.display = "block";
             el.style.bottom = 0;
@@ -1422,9 +1434,12 @@
             },1500)
         }
 
-        function guessWord(){
+        function guessWord(checkAll){
             let acrossNum = selected.getAttribute("across");
             let downNum = selected.getAttribute("down");
+            let incorrect = true;
+
+            // if(checkAll) incorrect = false;
 
             let wordAcross = "";
             let wordDown = "";
@@ -1440,32 +1455,39 @@
 
             wordDown = wordDown.toLowerCase();
             wordAcross =  wordAcross.toLowerCase();
-                
-            for (const property in across) {
-                console.log(across[property].word, wordAcross)
-                if(across[property].word == wordAcross){
-                    for(let i = 0; i < letters.length; i++){
-                        if(letters[i].getAttribute("across") == acrossNum){
-                            letters[i].style.backgroundColor = "#377748";
+
+            if(wordAcross != ""){
+                for (const property in across) {
+                    if(across[property].word == wordAcross){
+                        for(let i = 0; i < letters.length; i++){
+                            if(letters[i].getAttribute("across") == acrossNum){
+                                letters[i].style.backgroundColor = "#377748";
+                            }
                         }
+                        incorrect = false;
+                        break;
                     }
-                    return;
+                }
+            }
+            
+            if(wordDown != ""){
+                for (const property in down) {
+                    if(down[property].word == wordDown){
+                        for(let i = 0; i < letters.length; i++){
+                            if(letters[i].getAttribute("down") == downNum){
+                                letters[i].style.backgroundColor = "#377748";
+                            }
+                        }
+                        incorrect = false;
+                        break;
+                    }
                 }
             }
 
-            for (const property in down) {
-                console.log(down[property].word, wordDown)
-                if(down[property].word == wordDown){
-                    for(let i = 0; i < letters.length; i++){
-                        if(letters[i].getAttribute("down") == downNum){
-                            letters[i].style.backgroundColor = "#377748";
-                        }
-                    }
-                    return;
-                }
-            }
+            // if(checkAll && incorrect) return false;
+            if(checkAll) return true;
 
-            showMessage(1);
+            if(incorrect) showMessage(1);
         }
 
         function resize(tempSize){
