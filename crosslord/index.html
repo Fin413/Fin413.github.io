@@ -606,8 +606,8 @@
             <div class="gridRow">
                 <div class="letter" down="29" style="grid-column-start: 9"></div>
                 <div class="letter" down="32" style="grid-column-start: 11"></div>
-                <div class="letter" down="19" across="35" style="grid-column-start: 18"></div>
                 <div class="letter" num="35" down="35" across="35" style="grid-column-start: 17"></div>
+                <div class="letter" down="19" across="35" style="grid-column-start: 18"></div>
                 <div class="letter" num="36" down="36" across="35" style="grid-column-start: 19"></div>
                 <div class="letter" down="14" style="grid-column-start: 26"></div>
                 <div class="letter" down="17" style="grid-column-start: 28"></div>
@@ -1394,6 +1394,8 @@
 
             wordDown = wordDown.toLowerCase();
             wordAcross =  wordAcross.toLowerCase();
+
+            console.log(wordAcross)
 
             let incorrect = isWordIncorrect(wordAcross, across, "across", acrossNum) && isWordIncorrect(wordDown, down, "down", downNum);
 
