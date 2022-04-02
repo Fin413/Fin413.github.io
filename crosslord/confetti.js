@@ -118,7 +118,7 @@ render = () => {
     // Fire off another round of confetti
     if (confetti.length <= 75) initConfetti(true);
 
-    window.requestAnimationFrame(render);
+    animationFrame = window.requestAnimationFrame(render);
 };
 
 window.addEventListener('resize', function () {
