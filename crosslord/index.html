@@ -1332,10 +1332,9 @@
         }
 
         function deleteLetter(){
-            let num = selected.getAttribute("num");
-            let across = selected.getAttribute("across");
-            let down = selected.getAttribute("down");
-            selected.innerText = "";
+            if(selected.style.backgroundColor != "rgb(55, 119, 72)"){
+                selected.innerText = "";
+            }
         }
 
         function loadProgress(){
