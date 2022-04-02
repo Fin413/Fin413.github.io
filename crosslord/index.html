@@ -1193,6 +1193,13 @@
         positionZoomBtns();
         loadProgress();
 
+        for(let i = 0; i < letters.length; i++){
+            letters[i].setAttribute("onclick", "selectLetter(this)");
+        }
+        
+        window.onresize = () => { positionZoomBtns() };
+        // window.onbeforeunload = () => { saveProgress() };
+        
         function hideOverlay(){
             document.getElementsByClassName("overlayContainer")[0].style.opacity = 0;
             setTimeout(() => {
@@ -1205,13 +1212,6 @@
             if(document.getElementById("emailInput").value == "" || !solved) return false;
             return true;
         }
-
-        for(let i = 0; i < letters.length; i++){
-            letters[i].setAttribute("onclick", "selectLetter(this)");
-        }
-
-        window.onresize = () => { positionZoomBtns() };
-        window.onbeforeunload = () => { saveProgress() };
 
         function positionZoomBtns(){
             let top = document.getElementById("crosswordContainer").offsetTop;
@@ -1379,7 +1379,6 @@
         function guessWord(checkAll){
             let acrossNum = selected.getAttribute("across");
             let downNum = selected.getAttribute("down");
-            let incorrect = true;
 
             let wordAcross = "";
             let wordDown = "";
@@ -1396,38 +1395,43 @@
             wordDown = wordDown.toLowerCase();
             wordAcross =  wordAcross.toLowerCase();
 
-            if(wordAcross != ""){
-                for (const property in across) {
-                    if(across[property].word.toLowerCase() == wordAcross){
-                        for(let i = 0; i < letters.length; i++){
-                            if(letters[i].getAttribute("across") == acrossNum){
-                                letters[i].style.backgroundColor = "#377748";
-                            }
-                        }
-                        incorrect = false;
-                        break;
-                    }
-                }
-            }
-            
-            if(wordDown != ""){
-                for (const property in down) {
-                    if(down[property].word.toLowerCase() == wordDown){
-                        for(let i = 0; i < letters.length; i++){
-                            if(letters[i].getAttribute("down") == downNum){
-                                letters[i].style.backgroundColor = "#377748";
-                            }
-                        }
-                        incorrect = false;
-                        break;
-                    }
-                }
-            }
+            let incorrect = isWordIncorrect(wordAcross, across, "across", acrossNum) && isWordIncorrect(wordDown, down, "down", downNum);
 
             if(checkAll && incorrect) return false;
             else if(checkAll) return true;
 
             if(incorrect) showMessage(1);
+        }
+
+        function isWordIncorrect(guessWord, wordList, attr, num){
+            if(guessWord == "") return true;
+
+            for (const property in wordList) {
+                if(wordList[property].word.includes(" ")){
+                    let altWords = wordList[property].word.split(" ");
+                    for(let i = 0; i < altWords.length; i++){
+                        if(altWords[i].toLowerCase() == guessWord){
+                            markCorrect(attr, num);
+                            return false;
+                        }
+                    }
+                }else{  
+                    if(wordList[property].word.toLowerCase() == guessWord){
+                        markCorrect(attr, num);
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        function markCorrect(attr, num){
+            for(let i = 0; i < letters.length; i++){
+                if(letters[i].getAttribute(attr) == num){
+                    letters[i].style.backgroundColor = "#377748";
+                }
+            }
         }
 
         function resize(tempSize){
