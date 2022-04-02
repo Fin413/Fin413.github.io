@@ -1422,8 +1422,8 @@
                 }
             }
 
-            // if(checkAll && incorrect) return false;
-            if(checkAll) return true;
+            if(checkAll && incorrect) return false;
+            else if(checkAll) return true;
 
             if(incorrect) showMessage(1);
         }
