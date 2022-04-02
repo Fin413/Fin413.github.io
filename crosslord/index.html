@@ -482,7 +482,7 @@
                 <div class="letter" down="10" style="grid-column-start: 20"></div>
                 <div class="letter" down="14" style="grid-column-start: 26"></div>
                 <div class="letter" num="17" down="17" style="grid-column-start: 28"></div>
-                <div class="letter" num="18" across="18" style="grid-column-start: 32"></div>
+                <div class="letter" num="18" across="18" down="18" style="grid-column-start: 32"></div>
                 <div class="letter" down="7" across="18" style="grid-column-start: 33"></div>
                 <div class="letter" down="12" style="grid-column-start: 35"></div>
                 <div class="letter" down="16" style="grid-column-start: 43"></div>
@@ -1198,7 +1198,7 @@
         }
         
         window.onresize = () => { positionZoomBtns() };
-        window.onbeforeunload = () => { saveProgress() };
+        // window.onbeforeunload = () => { saveProgress() };
         
         function hideOverlay(){
             document.getElementsByClassName("overlayContainer")[0].style.opacity = 0;
