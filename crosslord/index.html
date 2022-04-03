@@ -71,13 +71,20 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            overflow: scroll;
+            overflow: hidden;
             height: 60vh;
             touch-action: pan-x pan-y;
             position: relative;
             background-color: #F1C548;
             box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px 5px inset;
+            touch-action: none;
+        }
 
+        #crossword{
+            position: absolute;
+            touch-action: none;
+            padding: 1000px;
+            transform: translate(-50%, -50%);
         }
 
         .gridRow {
@@ -395,7 +402,7 @@
     </div>
 
     <div id="crosswordContainer">
-        <div style="margin: auto;">
+        <div id="crossword" style="top: 50%; left: 50%;">
             <div class="gridRow">
                 <div class="letter" num="1" down="1" style="grid-column-start: 7;"></div>
                 <div class="letter" num="2" down="2"style="grid-column-start: 12;"></div>
@@ -870,14 +877,13 @@
 
     <p style="opacity: 0.5">Created by Finlay Soehn and Jawad Makki</p>
 
-    <iframe src="crosslord.pdf" id="crosswordPdf">
-        <!-- <embed type="application/pdf" src="crosslord.pdf" id="pdfDocument" width="100%" height="100%"/> -->
-    </iframe>
+    <iframe src="crosslord.pdf" id="crosswordPdf"></iframe>
 
     <script src="confetti.js"></script>
     <script src="mobileTouch.js"></script>
+    <script src="dragControls.js"></script>
     <script>
-        // print might still be skuffed
+        // fix the crossword navigation
 
         const down = {
             1: {
@@ -1194,7 +1200,7 @@
         var size = 50;
         var solved = false;
         var mainNum = null;
-        var nextLetter = false;
+        var mainIndex = [null, null];
         var selected = letters[0];
         var animationFrame;
 
@@ -1207,6 +1213,7 @@
         
         window.onresize = () => { positionZoomBtns() };
         // window.onbeforeunload = () => { saveProgress() };
+
         
         function hideOverlay(){
             document.getElementsByClassName("overlayContainer")[0].style.opacity = 0;
@@ -1238,44 +1245,33 @@
         }
 
         function printCrosslord(){
-            let objFra = document.getElementById('crosswordPdf');
-            objFra.contentWindow.focus();
-            objFra.contentWindow.print();
-            // var crossword = document.getElementById("crosswordContainer").innerHTML;
-            // var hints = document.getElementsByClassName("rowToColumn")[1].innerHTML;
-            // var a = window.open('', '', 'height=500, width=800');
-            // a.document.write('<html>');
-            // a.document.write('<head><style>');
-            // a.document.write('@page {size: landscape}');
-            // a.document.write('body {font-family:sans-serif;}');
-            // a.document.write('#title {width: 100%; text-align: center; font-size:100px; font-family: arial}')
-            // a.document.write('.gridRow {display: grid;grid-template-columns: repeat(45, 40px); gap: 5px; width: fit-content; margin: 0 40px; box-sizing: border-box}');
-            // a.document.write('.letter{ border: 1px solid black; grid-area: l; width: 40px; height: 40px; box-sizing: border-box; position: relative; display: flex; align-items: center; justify-content: center; font-size: 25px; padding-top: 4px; /* background-color: white; */}');
-            // a.document.write('.letter:after{ content: attr(num); font-family: Arial, Helvetica, sans-serif; position: absolute; top: 0; left: 1px; font-size: 15px;}');
-            // a.document.write('.hints{display: flex; page-break-before: always; flex-direction: row;width: 100%;justify-content: center;}.across, .down{width: 50%;margin: 50px;text-align: left;/* padding: 50px; */max-width: 800px;}.across h1, .down h1{text-align: center;}.words{background-color: rgba(0,0,0,0.1);padding: 5px 25px;}');
-            // a.document.write('</style></head>');
-            // a.document.write('<body><h1 id="title">Scona Crosslord</h1>');
-            // a.document.write(crossword);
-            // a.document.write('<div class="hints">' + hints + " </div>");
-            // a.document.write('</body></html>');
-            // a.document.close();
-            // a.print();
+            let pdf = document.getElementById('crosswordPdf');
+            pdf.contentWindow.focus();
+            pdf.contentWindow.print();
         }
 
-        function selectLetter(el){
+        function selectLetter(el, noChange){
+            let num = el.getAttribute("num") == null ? "noValue" : el.getAttribute("num");
+            let downNum = el.getAttribute("down");
+            let acrossNum = el.getAttribute("across");
+
             selected.style.removeProperty("border-width");
             el.style.borderWidth = "3px";
-            selected = el;
 
-            showHints(selected.getAttribute("down"), selected.getAttribute("across"));
-
-            if(mainNum == null && selected.getAttribute("num") != null){
-                mainNum = selected.getAttribute("num");
-            }else if(!nextLetter){
-                mainNum = null;
+            if(!noChange){
+                if(downNum == null || num == acrossNum){
+                    mainNum = acrossNum;
+                    mainIndex = ["a", parseInt(el.style.gridColumnStart)]
+                }else if(acrossNum == null || num == downNum){
+                    mainNum = downNum;
+                    mainIndex = ["d", getRowIndex(el)];
+                }else{
+                    mainNum = null;
+                }
             }
 
-            nextLetter = false;
+            selected = el;
+            showHints(downNum, acrossNum);
         }
 
         function typeLetter(letter){
@@ -1284,14 +1280,28 @@
             }
 
             if(mainNum != null){
-                nextLetter = true;
                 for(let i = 0; i < letters.length; i++){
-                    if(letters[i].innerText == "" && (letters[i].getAttribute("across") == mainNum || letters[i].getAttribute("down") == mainNum)){
-                        selectLetter(letters[i]);
+                    if(mainIndex[0] == "a" && mainIndex[1] + 1 == letters[i].style.gridColumnStart && letters[i].getAttribute("across") == mainNum){
+                        selectLetter(letters[i], true);
+                        mainIndex[1] = parseInt(letters[i].style.gridColumnStart);
+                        return;
+                    }
+                    if(mainIndex[0] == "d" && mainIndex[1] + 1 == getRowIndex(letters[i]) && letters[i].getAttribute("down") == mainNum){
+                        selectLetter(letters[i], true);
+                        mainIndex[1] = getRowIndex(letters[i]);
                         return;
                     }
                 }
                 mainNum = null;
+            }
+        }
+
+        function getRowIndex(el){
+            let rows = document.getElementsByClassName("gridRow");
+            for(let i = 0; i < rows.length; i++){
+                if(rows[i] == el.parentElement){
+                    return i;
+                }
             }
         }
 
@@ -1345,6 +1355,18 @@
         function deleteLetter(){
             if(selected.style.backgroundColor != "rgb(55, 119, 72)"){
                 selected.innerText = "";
+                for(let i = 0; i < letters.length; i++){
+                    if(mainIndex[0] == "a" && mainIndex[1] - 1 == letters[i].style.gridColumnStart && letters[i].getAttribute("across") == mainNum){
+                        selectLetter(letters[i], true);
+                        mainIndex[1] = parseInt(letters[i].style.gridColumnStart);
+                        return;
+                    }
+                    if(mainIndex[0] == "d" && mainIndex[1] - 1 == getRowIndex(letters[i]) && letters[i].getAttribute("down") == mainNum){
+                        selectLetter(letters[i], true);
+                        mainIndex[1] = getRowIndex(letters[i]);
+                        return;
+                    }
+                }
             }
         }
 
