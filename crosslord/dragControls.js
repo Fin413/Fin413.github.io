@@ -21,6 +21,7 @@ crossword.onwheel = e => {
 
 crossword.onmousedown = e => {
     startingCoord = [e.clientX, e.clientY];
+    alert("mouse down detected")
 }
 
 window.onmouseup = () => {
