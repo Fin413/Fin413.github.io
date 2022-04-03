@@ -3,7 +3,7 @@ var prevDiff = -1;
 
 function init() {
     // Install event handlers for the pointer target
-    var el=document.getElementById("crosswordContainer");
+    var el=document.getElementById("crossword");
     el.onpointerdown = pointerdown_handler;
     el.onpointermove = pointermove_handler;
 
