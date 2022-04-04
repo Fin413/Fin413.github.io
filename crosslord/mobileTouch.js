@@ -24,10 +24,6 @@ function pointerdown_handler(ev) {
 }
 
 function pointermove_handler(ev) {
-    if(startingCoord != undefined){
-        moveCrossword(ev.clientX, ev.clientY, startingCoord[0] - ev.clientX, startingCoord[1] - ev.clientY);
-    }
-
     for (var i = 0; i < evCache.length; i++) {
         if (ev.pointerId == evCache[i].pointerId) {
             evCache[i] = ev;
@@ -52,6 +48,8 @@ function pointermove_handler(ev) {
 
         // Cache the distance for the next move event
         prevDiff = curDiff;
+    }else if(startingCoord != undefined){
+        moveCrossword(ev.clientX, ev.clientY, startingCoord[0] - ev.clientX, startingCoord[1] - ev.clientY);
     }
 }
 
