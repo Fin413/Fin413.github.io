@@ -1099,18 +1099,18 @@
         function deleteLetter(){
             if(selected.style.backgroundColor != "rgb(55, 119, 72)"){
                 selected.innerText = "";
-               
-                for(let i = 0; i < letters.length; i++){
-                    if(mainIndex[0] == "a" && mainIndex[1] - 1 == letters[i].style.gridColumnStart && letters[i].getAttribute("across") == mainNum){
-                        selectLetter(letters[i], true);
-                        mainIndex[1] = parseInt(letters[i].style.gridColumnStart);
-                        return;
-                    }
-                    if(mainIndex[0] == "d" && mainIndex[1] - 1 == getRowIndex(letters[i]) && letters[i].getAttribute("down") == mainNum){
-                        selectLetter(letters[i], true);
-                        mainIndex[1] = getRowIndex(letters[i]);
-                        return;
-                    }
+            }
+
+            for(let i = 0; i < letters.length; i++){
+                if(mainIndex[0] == "a" && mainIndex[1] - 1 == letters[i].style.gridColumnStart && letters[i].getAttribute("across") == mainNum){
+                    selectLetter(letters[i], true);
+                    mainIndex[1] = parseInt(letters[i].style.gridColumnStart);
+                    return;
+                }
+                if(mainIndex[0] == "d" && mainIndex[1] - 1 == getRowIndex(letters[i]) && letters[i].getAttribute("down") == mainNum){
+                    selectLetter(letters[i], true);
+                    mainIndex[1] = getRowIndex(letters[i]);
+                    return;
                 }
             }
         }
