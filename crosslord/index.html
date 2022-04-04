@@ -1174,7 +1174,9 @@
             wordDown = wordDown.toLowerCase();
             wordAcross =  wordAcross.toLowerCase();
 
-            let incorrect = isWordIncorrect(wordAcross, across, "across", acrossNum) && isWordIncorrect(wordDown, down, "down", downNum);
+            let acrossIncorrect = isWordIncorrect(wordAcross, across, "across", acrossNum);
+            let downIncorrect = isWordIncorrect(wordDown, down, "down", downNum);
+            let incorrect = acrossIncorrect && downIncorrect;
 
             if(checkAll && incorrect) return false;
             else if(checkAll) return true;
@@ -1183,8 +1185,8 @@
         }
 
         function isWordIncorrect(guessWord, wordList, attr, num){
+            console.log("word")
             if(guessWord == "") return true;
-
             for (const property in wordList) {
                 if(wordList[property].word.includes(" ")){
                     let altWords = wordList[property].word.split(" ");
