@@ -4,7 +4,13 @@ var crosswordDimensions = crossword.getBoundingClientRect();
 
 var container = document.getElementById("crosswordContainer");
 
-var tempScale = container.offsetHeight / crossword.offsetHeight;
+var tempScale;
+if(container.offsetHeight > container.offsetWidth){
+    tempScale = container.offsetWidth / crossword.offsetWidth;
+}else{
+    tempScale = container.offsetHeight / crossword.offsetHeight;
+}
+
 if(tempScale > 2) tempScale = 2;
 else if(tempScale < 0.1) tempScale = 0.1;
 
