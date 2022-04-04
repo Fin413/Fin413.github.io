@@ -24,9 +24,9 @@ container.onwheel = e => {
     e.preventDefault();
 
     if(e.deltaY > 0){
-        resize(-5, e);
+        resize(-2, e);
     }else{
-        resize(5, e);
+        resize(2, e);
     }
 
     return false;
