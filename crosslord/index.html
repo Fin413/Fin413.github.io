@@ -1189,19 +1189,18 @@
         }
 
         function isWordIncorrect(guessWord, wordList, attr, num){
-            console.log("word")
             if(guessWord == "") return true;
             for (const property in wordList) {
                 if(wordList[property].word.includes(" ")){
                     let altWords = wordList[property].word.split(" ");
                     for(let i = 0; i < altWords.length; i++){
-                        if(altWords[i].toLowerCase() == guessWord){
+                        if(num == property && altWords[i].toLowerCase() == guessWord){
                             markCorrect(attr, num);
                             return false;
                         }
                     }
                 }else{  
-                    if(wordList[property].word.toLowerCase() == guessWord){
+                    if(num == property && wordList[property].word.toLowerCase() == guessWord){
                         markCorrect(attr, num);
                         return false;
                     }
