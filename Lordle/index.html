@@ -104,25 +104,20 @@
 
         .overlayContent{
             position: relative;
-            width: 50%;
-            padding: 50px;
             background-color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            transition: transform 500ms;
-            margin-bottom: 100px;
-            transform: translateY(-200%);
             border-radius: 10px;
-            font-family: sport;
+            padding: 50px 50px;
+            width: 50%;
+            max-height: 50vh;
+            overflow: scroll;
             text-align: center;
         }
 
         .overlayContent h1{
-            margin: 0;
+            display: block;
             font-family: sport;
             color: green;
+            margin: auto;
         }
 
         .overlayContent h3{
@@ -130,6 +125,10 @@
             margin-bottom: 0;
             font-family: 'Open Sans', sans-serif;
 
+        }
+
+        .overlayContent p {
+            font-family: 'sport';
         }
         
         #countDown{
@@ -239,16 +238,16 @@
     <h2 id="error">Not in Wordlist</h2>
 
     <div class="overlay">
-        <div class="overlayContent row">
+        <div class="overlayContent">
             <h1 id="result">You Win!</h1>
             <p id="wordReveal">The word was Scona</p>
-            <img src="lion.svg" width="100">
+            <img src="lion.svg" width="100" style="display: block; margin: auto">
             <button onclick="share()" class="shareBtn">
                 Share
                 <p id="copied">Results Copied to Clipboard</p>
             </button>
 
-            <h3>We've sadly run out of Scona themed 5 letter words, but it's not over! Check out the <a href="https://soehn.ca/crosslord/">Scona CrossLord</a> for the chance to win Scona Merch. Lordle Freeplay Mode will also be available by the end of the week!</h3>
+            <h3>We've sadly run out of Scona themed 5 letter words, but it's not over! Check out the <a href="https://soehn.ca/crosslord/">Scona CrossLord</a> for the chance to win Scona Merch and a Gift Card. Lordle Freeplay Mode will also be available by the end of the week!</h3>
             <p id="countDown">Thanks for Playing!</p>
             <button onclick="hideOverlay()" class="xBtn"></button>
         </div>
