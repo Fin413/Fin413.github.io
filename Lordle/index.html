@@ -6,6 +6,9 @@
     <link rel="icon" type="image/x-icon" href="lion.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lordle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <style>
         @font-face {
             font-family: 'sport';
@@ -125,10 +128,12 @@
         .overlayContent h3{
             margin-top: 50px;
             margin-bottom: 0;
+            font-family: 'Open Sans', sans-serif;
+
         }
         
         #countDown{
-            margin: 0;
+            /* margin: 0; */
         }
 
         .shareBtn{
@@ -243,8 +248,8 @@
                 <p id="copied">Results Copied to Clipboard</p>
             </button>
 
-            <h3>Next word in</h3>
-            <p id="countDown">00:00:00</p>
+            <h3>We've sadly run out of Scona themed 5 letter words, but it's not over! Check out the <a href="https://soehn.ca/crosslord/">Scona CrossLord</a> for the chance to win Scona Merch. Lordle Freeplay Mode will also be available by the end of the week!</h3>
+            <p id="countDown">Thanks for Playing!</p>
             <button onclick="hideOverlay()" class="xBtn"></button>
         </div>
     </div>
@@ -336,30 +341,10 @@
 
         var level = 0;
         // lords, scona, pride, crest, emily, merch, serve, brice, gerun, grant, lyons, brice, buffi, Irwin, Andoh, Perry, Dubyk, Rolph, lions
-        
-        // serve, pride, andoh, yummy, smith, drama, think, teach, learn, lyons, study, grant, rolpg, buffi, tutor, sport, learn, roars, lions, crest, scona
-
-//         var nextWord = [
-//             "andoh",
-//             "pride",
-//             "serve", pools spare perry
-//             "emily",
-//             "grade",
-//         ]
-        
-//         var extraText = [
-//             ", a teacher at scona",
-//             "",
-//             "",
-//             ", Scona's resident ghost!",
-//             "",
-//             ", a teacher at scona",
-//         ]
-        
         var disps = document.getElementsByClassName("letterDisp");
         var overlayContent = document.getElementsByClassName("overlayContent")[0]
         var letterBtns = document.getElementsByClassName("letterBtn");
-        var wordOfTheDay = "class"; // lowercase only
+        var wordOfTheDay = "lords"; // lowercase only
         var savedData = JSON.parse(window.localStorage.getItem("LordleData"));
         var alreadyPlayed = false;
         var nextWord = new Date().setHours(24,0,0,0);
@@ -466,8 +451,8 @@
         }
 
         function showOverlay(){
-            countDown();
-            countDownInterval = setInterval(countDown, 1000);
+            // countDown();
+            // countDownInterval = setInterval(countDown, 1000);
             document.getElementsByClassName("overlay")[0].style.opacity = 1;
             document.getElementsByClassName("overlay")[0].style.visibility = "visible";
             setTimeout(() => {
@@ -488,7 +473,7 @@
         }
 
         function hideOverlay(){
-            clearInterval(countDownInterval);
+            // clearInterval(countDownInterval);
             document.getElementsByClassName("overlay")[0].style.opacity = 0;
             document.getElementsByClassName("overlay")[0].style.visibility = "hidden";
             setTimeout(() => {
@@ -510,7 +495,7 @@
         function correctWord(){
             document.getElementById("result").innerText = "You Win!";
             document.getElementById("result").style.color = "green";
-            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + "";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay;
             alreadyPlayed = true;
             showOverlay();
             saveResults();
@@ -519,7 +504,7 @@
         function lose(){
             document.getElementById("result").innerText = "You Lose!";
             document.getElementById("result").style.color = "red";
-            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay + "";
+            document.getElementById("wordReveal").innerText = "The word was " + wordOfTheDay;
             alreadyPlayed = true;
             showOverlay();
             saveResults();
