@@ -1581,18 +1581,13 @@
 
             console.log(crossword.offsetWidth, document.getElementById("crosswordContainer").offsetWidth / scale)
 
-            if(crossword.offsetWidth <= document.getElementById("crosswordContainer").offsetWidth / scale){
-                xPos = originX;
-            }else{
                 xPos = originX - xDistFromCenter;
-            }
+            
 
-            if(crossword.offsetHeight <= document.getElementById("crosswordContainer").offsetHeight / scale){
-                yPos = originY
-            }else{
+
 
                 yPos = originY - yDistFromCenter;
-            }
+            
     
             // xPos -= xDistFromCenter;
             // yPos -= currentCenterY;
