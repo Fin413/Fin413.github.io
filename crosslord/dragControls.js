@@ -11,9 +11,9 @@ crossword.onwheel = e => {
     e.preventDefault();
 
     if(e.deltaY > 0){
-        resize(5, e);
-    }else{
         resize(-5, e);
+    }else{
+        resize(5, e);
     }
 
     return false;
