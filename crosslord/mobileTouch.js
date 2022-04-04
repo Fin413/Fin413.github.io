@@ -19,12 +19,12 @@ function pointerdown_handler(ev) {
     // The pointerdown event signals the start of a touch interaction.
     // This event is cached to support 2-finger gestures
     evCache.push(ev);
-    startingCoord = [e.clientX, e.clientY];
+    startingCoord = [ev.clientX, ev.clientY];
 }
 
 function pointermove_handler(ev) {
     if(startingCoord != undefined){
-        moveCrossword(e.clientX, e.clientY, startingCoord[0] - e.clientX, startingCoord[1] - e.clientY);
+        moveCrossword(ev.clientX, ev.clientY, startingCoord[0] - ev.clientX, startingCoord[1] - ev.clientY);
     }
 
     for (var i = 0; i < evCache.length; i++) {
