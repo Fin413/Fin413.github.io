@@ -1,9 +1,14 @@
 var startingCoord;
 const crossword = document.getElementById("crossword");
 var crosswordDimensions = crossword.getBoundingClientRect();
-var scale = 1;
 
 var container = document.getElementById("crosswordContainer");
+
+var tempScale = container.offsetHeight / crossword.offsetHeight;
+if(tempScale > 2) tempScale = 2;
+else if(tempScale < 0.1) tempScale = 0.1;
+
+var scale = tempScale;
 
 var xPos = ((document.getElementById("crosswordContainer").offsetWidth / 2) / scale) - (document.getElementById("crossword").offsetWidth / 2);
 var yPos =((document.getElementById("crosswordContainer").offsetHeight / 2) / scale) - (document.getElementById("crossword").offsetHeight / 2);
