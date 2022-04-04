@@ -4,7 +4,7 @@ var prevDiff = -1;
 function init() {
     // Install event handlers for the pointer target
     var el = document.getElementById("crosswordContainer");
-    crossword.style.opacity = 1;
+    document.getElementById("crossword").style.opacity = 1;
     el.onpointerdown = pointerdown_handler;
     el.onpointermove = pointermove_handler;
 
