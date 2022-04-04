@@ -7,7 +7,7 @@ var xPos = ((document.getElementById("crosswordContainer").offsetWidth / 2) / sc
 var yPos =((document.getElementById("crosswordContainer").offsetHeight / 2) / scale) - (document.getElementById("crossword").offsetHeight / 2);
 crossword.style.transform = "scale(" + scale + ") " + "translate(" + xPos + "px," + yPos + "px)";
 
-document.getElementById("crosswordContainer").onwheel = e => {
+crossword.onwheel = e => {
     e.preventDefault();
 
     if(e.deltaY > 0){
