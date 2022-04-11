@@ -1138,8 +1138,12 @@
             let data = JSON.parse(window.localStorage.getItem("crosslord"));
             if(data != null){
                 for(let i = 0; i < data.length; i++){
-                    if(i = 171 && letters.length != 332){
+                    if(i >= 171 && letters.length != 332){
                         // added this cuz I changed a word and the saved data doesnt load properly with an extra letter added
+                        if(data[i] != data[i].toUpperCase()){
+                            letters[i - 1].style.backgroundColor = "rgb(55, 119, 72)";
+                        }
+                        letters[i - 1].innerText = data[i];
                         continue;
                     }
                     if(data[i] != data[i].toUpperCase()){
