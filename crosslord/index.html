@@ -929,11 +929,6 @@
             addHints[1].innerHTML += "<p>" + property + ": " + down[property].hint + "</p>";
         }
 
-        if(letters.length != 332){
-            // added this cuz I changed a word and the saved data doesnt load properly with an extra letter added
-            saveProgress();
-        }
-
         const letters = document.getElementsByClassName("letter");
         const acrossHintEl = document.getElementById("acrossHint");
         const downHintEl = document.getElementById("downHint");
@@ -946,6 +941,11 @@
         var mainIndex = [null, null];
         var selected = letters[0];
         var animationFrame;
+
+        if(letters.length != 332){
+            // added this cuz I changed a word and the saved data doesnt load properly with an extra letter added
+            saveProgress();
+        }
 
         positionZoomBtns();
         loadProgress();
