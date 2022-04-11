@@ -392,12 +392,22 @@
     <div class="overlayContainer">
         <div class="overlayContent">
             <h1>YOU SOLVED THE CROSSLORD!</h1>
-            
+
+            <!-- 
+                this is for after the contest is over
+
             <div class="row">
                 <img src="lion.svg" alt="lion logo" width="100" class="lion">
                 <img src="lion.svg" alt="lion logo" width="100">
                 <img src="lion.svg" alt="lion logo" width="100" style="filter: invert(85%) sepia(93%) saturate(589%) hue-rotate(320deg) brightness(100%) contrast(90%);">
             </div> 
+            -->
+            
+            <p>Enter your school email to be added to the prize raffle</p>
+            <form action="https://gmail.us14.list-manage.com/subscribe/post?u=74ecf8fdbd1f274fa6bd7c4fe&amp;id=21ac531501" method="post" target="_blank" onsubmit="return validateForm()">
+                <input type="email" placeholder="HansVanGinhoven@share.epsb.ca" name="EMAIL" id="emailInput">
+                <input type="submit" value="Submit">
+            </form>
 
             <h1>Thanks for playing!</h1>
         </div>
@@ -1128,6 +1138,10 @@
             let data = JSON.parse(window.localStorage.getItem("crosslord"));
             if(data != null){
                 for(let i = 0; i < data.length; i++){
+                    if(i = 171 && letters.length != 332){
+                        // added this cuz I changed a word and the saved data doesnt load properly with an extra letter added
+                        continue;
+                    }
                     if(data[i] != data[i].toUpperCase()){
                         letters[i].style.backgroundColor = "rgb(55, 119, 72)";
                     }
