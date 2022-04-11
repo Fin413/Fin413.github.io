@@ -942,11 +942,6 @@
         var selected = letters[0];
         var animationFrame;
 
-        if(letters.length != 332){
-            // added this cuz I changed a word and the saved data doesnt load properly with an extra letter added
-            saveProgress();
-        }
-
         positionZoomBtns();
         loadProgress();
 
@@ -1141,6 +1136,11 @@
 
         function loadProgress(){
             let data = JSON.parse(window.localStorage.getItem("crosslord"));
+            if(data.length != 332){
+                // i added this cause i added a new letter and it messed up the loading
+                saveProgress();
+                return;
+            }
             if(data != null){
                 for(let i = 0; i < data.length; i++){
                     if(data[i] != data[i].toUpperCase()){
