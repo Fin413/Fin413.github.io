@@ -1088,6 +1088,7 @@
             document.getElementsByClassName("imageBtn")[1].onclick = saveProgress;
             for(let i = 0; i < letters.length; i++){
                 letters[i].innerText = "";
+                letters[i].style.backgroundColor = "";
             }
             solved = false;
             saveProgress();
@@ -1149,7 +1150,7 @@
                     saveProgress();
                     return;
                 }
-                
+
                 for(let i = 0; i < data.length; i++){
                     if(data[i] != data[i].toUpperCase()){
                         letters[i].style.backgroundColor = "rgb(55, 119, 72)";
