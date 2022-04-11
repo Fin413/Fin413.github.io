@@ -1143,12 +1143,13 @@
 
         function loadProgress(){
             let data = JSON.parse(window.localStorage.getItem("crosslord"));
-            if(data.length != 332){
-                // i added this cause i added a new letter and it messed up the load
-                saveProgress();
-                return;
-            }
             if(data != null){
+                if(data.length != 332){
+                    // i added this cause i added a new letter and it messed up the load
+                    saveProgress();
+                    return;
+                }
+                
                 for(let i = 0; i < data.length; i++){
                     if(data[i] != data[i].toUpperCase()){
                         letters[i].style.backgroundColor = "rgb(55, 119, 72)";
