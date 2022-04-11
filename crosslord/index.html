@@ -1086,7 +1086,7 @@
 
         function restart(){
             document.getElementsByClassName("imageBtn")[1].innerHTML = "<img src='save.svg' width='25'> Save Progress";
-            document.getElementsByClassName("imageBtn")[1].onclick = saveProgress;
+            document.getElementsByClassName("imageBtn")[1].onclick = () => {saveProgress(); showMessage(0);};
             for(let i = 0; i < letters.length; i++){
                 letters[i].innerText = "";
                 letters[i].style.backgroundColor = "";
