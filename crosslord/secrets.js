@@ -1,3 +1,6 @@
+// cheating is bad kids >:(
+// if ur seeing this u suck
+
 const across = {
     4: {
         word: "Robinson",
