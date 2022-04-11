@@ -6,9 +6,6 @@
     <link rel="icon" type="image/x-icon" href="lion.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lordle</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <style>
         @font-face {
             font-family: 'sport';
@@ -42,7 +39,6 @@
             height: 50px;
             font-size: 25px;
             text-align: center;
-            /* background-color: grey; */
             border: 2px solid grey;
             line-height: 50px;
             margin: 0;
@@ -77,6 +73,7 @@
             cursor: pointer;
             border: none;
             background-color: #D3D6DA;
+            color: black;
         }
 
         button{
@@ -108,9 +105,14 @@
             border-radius: 10px;
             padding: 50px 50px;
             width: 50%;
-            max-height: 50vh;
-            overflow: scroll;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 50px;
+            transform: translateY(-200%);
+            transition: transform 500ms;
         }
 
         .overlayContent h1{
@@ -130,10 +132,6 @@
         .overlayContent p {
             font-family: 'sport';
         }
-        
-        #countDown{
-            /* margin: 0; */
-        }
 
         .shareBtn{
             margin-top: 25px;
@@ -145,6 +143,20 @@
             position: relative;
             background-color: white;
             font-family: sport;
+            transition: box-shadow 300ms;
+        }
+
+        .playAgainBtn{
+            background-color: #C1343F;
+            color: #F1C548;
+            margin: auto; 
+            margin-bottom: 25px;
+            display: block;
+            letter-spacing: 1px;
+            border: none;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            transition: box-shadow 300ms;
+            display: none;
         }
 
         #copied{
@@ -173,6 +185,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: transform 300ms;
         }
 
         .xBtn::before{
@@ -181,6 +194,20 @@
             display: inline-block;
             line-height: 30px;
             transform: rotate(45deg);
+        }
+
+        @media (hover){
+            .xBtn:hover{
+                transform: rotate(90deg);
+            }
+
+            .shareBtn:hover{
+                box-shadow: 0 0 0 1px black;
+            }
+
+            .playAgainBtn:hover{
+                box-shadow: none;
+            }
         }
 
         .backspaceImg{
@@ -225,14 +252,7 @@
         noscript p{
             width: 100%;
             text-align: center;
-        }
-
-        #thanks{
-            margin-top: 50px;
-            color: black;
-        }
-
-       
+        }      
     </style>
 </head>
 <body>
@@ -244,14 +264,13 @@
         <div class="overlayContent">
             <h1 id="result">You Win!</h1>
             <p id="wordReveal">The word was Scona</p>
-            <img src="lion.svg" width="100" style="display: block; margin: auto">
+            <img src="lion.svg" width="100">
+            <button class="shareBtn" onclick="playAgain()">Play Again</button>
             <button onclick="share()" class="shareBtn">
                 Share
                 <p id="copied">Results Copied to Clipboard</p>
             </button>
 
-            <h3>We've sadly run out of Scona themed 5 letter words, but it's not over! Check out the <a href="https://soehn.ca/crosslord/">Scona CrossLord</a> for the chance to win Scona Merch and a Gift Card. Lordle Freeplay Mode will also be available by the end of the week!</h3>
-            <h1 id="thanks">Thanks for Playing!</h1>
             <button onclick="hideOverlay()" class="xBtn"></button>
         </div>
     </div>
@@ -300,6 +319,8 @@
             <h1 class="letterDisp"></h1>
         </div>
 
+        <button class="playAgainBtn shareBtn" onclick="playAgain()">Play Again</button>
+
         <div class="letterBtnContainer">
             <div class="row">
                 <button class="letterBtn" onclick="typeLetter(this)">Q</button>
@@ -340,17 +361,47 @@
 
     <script src="words.js"></script>
     <script>
-
-        var level = 0;
-        // lords, scona, pride, crest, emily, merch, serve, brice, gerun, grant, lyons, brice, buffi, Irwin, Andoh, Perry, Dubyk, Rolph, lions
         var disps = document.getElementsByClassName("letterDisp");
         var overlayContent = document.getElementsByClassName("overlayContent")[0]
         var letterBtns = document.getElementsByClassName("letterBtn");
-        var wordOfTheDay = "lords"; // lowercase only
         var savedData = JSON.parse(window.localStorage.getItem("LordleData"));
+
+        var level = 0;
+        var wordOfTheDay;
         var alreadyPlayed = false;
-        var nextWord = new Date().setHours(24,0,0,0);
-        var countDownInterval;
+        var sconaWords = [
+            "lords", 
+            "scona", 
+            "pride", 
+            "crest", 
+            "emily", 
+            "merch", 
+            "serve", 
+            "brice", 
+            "gerun", 
+            "grant", 
+            "lyons", 
+            "brice", 
+            "buffi", 
+            "irwin", 
+            "andoh", 
+            "perry", 
+            "dubyk", 
+            "rolph", 
+            "lions",
+            "smith",
+            "drama",
+            "music",
+            "tutor",
+            "class",
+            "pools",
+            "learn",
+            "study",
+            "lunch"
+        ];
+
+        if(savedData == null) wordOfTheDay = playAgain();
+        else wordOfTheDay = savedData.word;
 
         if(savedData != undefined && savedData.word == wordOfTheDay){
             for(let i = 0; i < savedData.guesses.length; i++){
@@ -371,6 +422,26 @@
             }else if((/[a-zA-Z]/).test(e.key) && e.key.length == 1){
                 typeLetter({innerText: e.key.toLocaleUpperCase()});
             }
+        }
+
+        function playAgain(){
+            let oldWord = wordOfTheDay;
+            while(oldWord == wordOfTheDay){
+                wordOfTheDay = sconaWords[Math.floor(Math.random() * sconaWords.length)];
+            }
+
+            level = 0;
+            window.localStorage.setItem("LordleData", JSON.stringify({word: wordOfTheDay, guesses: ""}));
+            alreadyPlayed = false;
+            for(let i = 0; i < disps.length; i++){
+                disps[i].innerText = "";
+                disps[i].removeAttribute("style");
+            }
+            for(let i = 0; i < letterBtns.length; i++){
+                letterBtns[i].removeAttribute("style");
+            }
+            hideOverlay();
+            document.getElementsByClassName("playAgainBtn")[0].style.display = "none";
         }
 
         function typeLetter(btn){
@@ -453,29 +524,16 @@
         }
 
         function showOverlay(){
-            // countDown();
-            // countDownInterval = setInterval(countDown, 1000);
             document.getElementsByClassName("overlay")[0].style.opacity = 1;
             document.getElementsByClassName("overlay")[0].style.visibility = "visible";
             setTimeout(() => {
+                console.log("fhdjsaldfgsauifgeuiwfegilw")
                 document.getElementsByClassName("overlayContent")[0].style.transform = "translateY(0)";
             }, 500)
         }
 
-        function countDown(){
-            let timer = document.getElementById("countDown");
-            var diff = nextWord - (new Date().getTime());
-            var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            if(hours < 10) hours = "0" + hours;
-            if(minutes < 10) minutes = "0" + minutes;
-            if(seconds < 10) seconds = "0" + seconds;
-            timer.innerText = hours + ":" + minutes + ":" + seconds;
-        }
-
         function hideOverlay(){
-            // clearInterval(countDownInterval);
+            document.getElementsByClassName("playAgainBtn")[0].style.display = "block";
             document.getElementsByClassName("overlay")[0].style.opacity = 0;
             document.getElementsByClassName("overlay")[0].style.visibility = "hidden";
             setTimeout(() => {
@@ -487,7 +545,6 @@
             let errorEl = document.getElementById("error");
             if(word == undefined) errorEl.innerText = "Invalid Word";
             else errorEl.innerText = "\"" + word.toUpperCase() + "\" Not in Wordlist";
-
             errorEl.style.top = "20px";
             setTimeout(() => {
                 errorEl.style.top = "-100px";
