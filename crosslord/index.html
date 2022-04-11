@@ -163,7 +163,6 @@
             margin: 2px;
             cursor: pointer;
             border: none;
-            color: black;
             background-color: rgba(255,255,255,0.4);
         }
 
@@ -277,7 +276,6 @@
             transition: box-shadow 400ms;
             margin: auto;
             margin-top: 50px;
-            color: black;
         }
 
         @media(hover){
@@ -394,11 +392,13 @@
     <div class="overlayContainer">
         <div class="overlayContent">
             <h1>YOU SOLVED THE CROSSLORD!</h1>
-            <p>Enter your school email to be added to the prize raffle</p>
-            <form action="https://gmail.us14.list-manage.com/subscribe/post?u=74ecf8fdbd1f274fa6bd7c4fe&amp;id=21ac531501" method="post" target="_blank" onsubmit="return validateForm()">
-                <input type="email" placeholder="HansVanGinhoven@share.epsb.ca" name="EMAIL" id="emailInput">
-                <input type="submit" value="Submit">
-            </form>
+            
+            <div class="row">
+                <img src="lion.svg" alt="lion logo" width="100" class="lion">
+                <img src="lion.svg" alt="lion logo" width="100">
+                <img src="lion.svg" alt="lion logo" width="100" style="filter: invert(85%) sepia(93%) saturate(589%) hue-rotate(320deg) brightness(100%) contrast(90%);">
+            </div> 
+
             <h1>Thanks for playing!</h1>
         </div>
         <canvas id="confetti" onclick="hideOverlay()"></canvas>
@@ -642,6 +642,7 @@
             <div class="gridRow">
                 <div class="letter" down="29" style="grid-column-start: 9"></div>
                 <div class="letter" down="32" style="grid-column-start: 11"></div>
+                <div class="letter" down="28" style="grid-column-start: 13"></div>
                 <div class="letter" num="35" down="35" across="35" style="grid-column-start: 17"></div>
                 <div class="letter" down="19" across="35" style="grid-column-start: 18"></div>
                 <div class="letter" num="36" down="36" across="35" style="grid-column-start: 19"></div>
@@ -899,7 +900,7 @@
             </div>
         </div>
     </div>
-    <p>See also <a href="http://soehn.ca/lordle">Scona Lordle</a></p>
+
     <p style="opacity: 0.5">Created by Finlay Soehn and Jawad Makki</p>
 
     <iframe src="crosslord.pdf" id="crosswordPdf"></iframe>
@@ -907,7 +908,7 @@
     <script src="confetti.js"></script>
     <script src="mobileTouch.js"></script>
     <script src="dragControls.js"></script>
-    <script src="secrets.js"></script>
+    <script src="clearText.js"></script>
     <script>
         var addHints = document.getElementsByClassName("words");
 
@@ -1191,7 +1192,6 @@
         }
 
         function isWordIncorrect(guessWord, wordList, attr, num){
-            console.log("word")
             if(guessWord == "") return true;
             for (const property in wordList) {
                 if(wordList[property].word.includes(" ")){
