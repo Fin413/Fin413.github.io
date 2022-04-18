@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+</head>
+<body>
+    <p id="statusText">hhh</p>
+    <p>Your ID is: <span id="id"></span></p>
+    <input type="text" id="message" placeholder="Enter message here">
+    <input type="button" value="Send" onclick="send()">
+    <script>
+        var peer = new Peer();
+        var conn;
+        var statusText = document.getElementById("statusText");
+
+        if(window.location.href.includes("?id=")){
+            statusText.innerText = "Connecting...";
+        }else{
+            statusText.innerText = "Wating for connection...";
+        }
+
+        
+        peer.on('open', function(id) {
+            document.getElementById("id").innerText = id;
+            let url = window.location.href;
+            if(url.includes("?id=")){
+                let id = window.location.href.substring(url.indexOf("?id=") + 4);
+                conn = peer.connect(id);
+                init();
+            }
+        });
+
+        peer.on('connection', function(c) {
+            console.log("someone connected!");
+            conn = c;
+            init();
+        });
+
+        function init(){
+            conn.on('data', function(data) {
+                if(data == "hello world"){
+                    statusText.innerText = "Connected!";
+                }
+                document.getElementById("id").innerText = data;
+            });
+
+            setTimeout(() => {conn.send("hello world");}, 500);
+        }
+
+        function send(){
+            console.log("message sent!")
+            conn.send(document.getElementById("message").value);
+        }
+    </script>
+</body>
+</html>
