@@ -13,7 +13,7 @@
         #canvas, #drawCanvas{
             position: absolute;
             top: 0;
-            bottom: 0;
+            left: 0;
         }
         .info{
             position: absolute;
@@ -120,7 +120,7 @@
             });
 
             document.getElementById("id").innerText = "";
-            setTimeout(() => { conn.send(confirmationMessage); }, 1000);
+            setInterval(() => { conn.send(confirmationMessage); }, 1000);
         }
 
         window.onmousemove = (e) => {
