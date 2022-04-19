@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+    <style>
+        .you{
+            background-color: rgba(0,0,255,0.5);
+        }
+
+        .you, .otherPerson{
+            color: white;
+            border-radius: 10px;
+            padding: 5px 10px;
+        }
+
+        .otherPerson{
+            background-color: rgba(0,255,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <p id="statusText">hhh</p>
+    <p id="id"></p>
+    <p id="messages"></p>
+    <input type="text" id="message" placeholder="Enter message here">
+    <input type="button" id="sendBtn" value="Send" onclick="send()">
+    <script>
+        const confirmationMessage = "pisspeepeepisspoop";
+        let connCode =  (Math.floor(Math.random() * 9999) + 1000);
+        var peer = new Peer(confirmationMessage + connCode);
+        var conn;
+        var statusText = document.getElementById("statusText");
+
+        if(window.location.href.includes("?id=")){
+            statusText.innerText = "Connecting...";
+        }else{
+            statusText.innerText = "Wating for connection...";
+
+            peer.on('connection', function(c) {
+                conn = c;
+                console.log("someone connected");
+                console.log(c);
+                init();
+            });
+        }
+
+        peer.on('open', function(id) {
+            let url = window.location.href;
+            alert(id)
+
+            if(url.includes("?id=")){
+                let id = window.location.href.substring(url.indexOf("?id=") + 4);
+                conn = peer.connect(confirmationMessage + id);
+                init();
+            }else{
+                document.getElementById("id").innerText = "Connection Code: " + connCode;
+            }
+        });
+
+        function init(){
+            conn.on('data', function(data) {
+                console.log(data);
+                if(data == confirmationMessage){
+                    statusText.innerText = "Connected!";
+                    document.getElementById("sendBtn").disabled = false;
+                }else{
+                    let temp = document.createElement("p");
+                    temp.innerHTML = "<span class='otherPerson'>NOT YOU:</span> " + data;
+                    document.getElementById("messages").appendChild(temp);
+                }
+            });
+
+            conn.on('close', function() {
+                alert("disconnected!");
+            })
+
+            peer.on('error', function(err) {
+                alert('' + err);
+            })
+
+            document.getElementById("id").innerText = "";
+            setInterval(() => { conn.send(confirmationMessage); }, 1000);
+
+            alert("connected!");
+        }
+
+        function send(){
+            let message = document.getElementById("message").value;
+            document.getElementById("message").value = "";
+            let temp = document.createElement("p");
+            temp.innerHTML = "<span class='you'>YOU:</span> " + message;
+            document.getElementById("messages").appendChild(temp);
+            conn.send(message);
+        }
+    </script>
+</body>
+</html>
