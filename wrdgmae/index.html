@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>word gmea</title>
+    <link rel="icon" type="image/x-icon" href="./media/favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body{
+   
+            font-family: 'comic sans';
+            margin: 50px 10px;
+            background: url("media/background.png") repeat;
+            background-size: 200px;
+        }
+        body button{
+            margin: 15px;
+            font-family: 'comic sans';
+        }
+
+        input[type=text]{
+            cursor: text;
+            font-family: 'comic sans';
+        }
+
+        .defaultInput{
+            border: 1px solid black;
+            cursor: pointer;
+            background-color: white;
+            padding: 5px 10px;
+            border-radius: 0px;
+            font-family: 'comic sans';
+
+        }
+
+        #characterSelector{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .arrowBtn{
+            font-weight: bold;
+            font-size: 25px;
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .arrowBtn:hover{
+            transform: scale(1.3);
+        }
+
+        #headingImg{
+            width: 500px;
+            margin-right: 50px;
+            /* animation: size 5s infinite; */
+        }
+
+        .main{
+            display: flex;
+            width: fit-content;
+            margin: auto;
+            margin-bottom: 100px;
+            background-color: white;
+        }
+
+        .inputContainer{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: fit-content;
+            margin: auto;
+        }
+
+        @media only screen and (max-width: 1050px) {
+            .main{
+                flex-direction: column;
+            }
+            #headingImg{
+                margin-right: 0;
+            }
+        }
+
+        .squigglyBorder{
+            background: url("media/border.png");
+            background-size: cover;
+            padding: 25px 40px;
+        }
+
+        #errorText{
+            color: red;
+            animation: scale 500ms infinite;
+        }
+
+        @keyframes scale{
+            0%{ transform: scale(1) rotate(10deg);}
+            50%{ transform: scale(1.1) rotate(-10deg);}
+            100%{ transform: scale(1) rotate(10deg);}
+        }
+
+        @keyframes size{
+            0%{ transform: scale(1);}
+            50%{ transform: scale(1.05);}
+            100%{ transform: scale(1);}
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <img src="media/logo.png" alt="word game logo" id="headingImg">
+
+        <div class="inputContainer">
+            <p>Enter a Name</p>
+            <input type="text" class="defaultInput" id="name" placeholder="Enter your name">
+            <p>Select a Charater</p>
+            <div id="characterSelector">
+                <button class="arrowBtn" onclick="selectAvatar(-1)"><</button>
+                <img id="avatar" src="media/mario.png" alt="avatar image">
+                <button class="arrowBtn" onclick="selectAvatar(1)">></button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="squigglyBorder inputContainer">
+        <div>
+            <button class="defaultInput" onclick="create()">Create Game</button>
+        </div>
+        <p style="margin-top: 0">Or</p>
+        <form onsubmit="join(event)">
+            <input class="defaultInput" type="text" name="code" id="code" placeholder="Enter game code">
+            <input class="defaultInput" type="submit" value="Join">
+        </form>
+        <p id="errorText"></p>
+    </div>
+    <script src="main.js"></script>
+    <script>
+        var error = document.getElementById("errorText");
+
+        function create(){
+            if(document.getElementById("name").value == ""){
+                error.innerText = "Enter a Name!";
+            }else{
+                window.location.href = "./game.html?name=" +  encodeURI(document.getElementById("name").value) + "&tar=" + avatar;
+            }
+        }
+
+        function join(e){
+            e.preventDefault();
+
+            if(document.getElementById("name").value == ""){
+                error.innerText = "Enter a Name!";
+            }else if(document.getElementById("code").value == ""){
+                error.innerText = "Enter a Code!";
+            }else{
+                window.location.href = "./game.html?id=" + document.getElementById("code").value + "&name=" +  encodeURI(document.getElementById("name").value) + "&tar=" + avatar;
+            }
+        }
+    </script>
+</body>
+</html>
