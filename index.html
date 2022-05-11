@@ -7,11 +7,6 @@
         <link rel="icon" href="favicon.svg">
 
         <style>
-            .hideMe{
-                height: 0;
-                margin: 0;
-                opacity: 0;
-            }
             :root{
                 --cursorAnimation: blink 1s steps(2, start) infinite;
             }
@@ -517,7 +512,6 @@
 
                 <form class="fadeScroll" id="emailForm" action="https://formspree.io/f/xrgrzdpk" method="POST">
                     <input placeholder="Your Email" type="email" name="email" />
-                    <input placeholder="Enter Subject" type="text" name="subject" class="hideMe"/>
                     <textarea placeholder="Enter Message" name="message" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
                     <button id="form-button">Send<img id="plane" src="plane.png" width="25px"></button>
                     <p id="form-status" style="opacity: 0; transition: all 1s; color:#499E98;text-align: center;">&nbsp</p>
