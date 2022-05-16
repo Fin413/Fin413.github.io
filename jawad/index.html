@@ -114,7 +114,6 @@
 <body>
     <form onsubmit="event.preventDefault(); calculate()">
         <h1 id="title">Jawad's Fancy Calculus Calculator</h1>
-
         <div class="mainContainer">
             <div class="first">
                 <div class="inputContainer">
@@ -122,8 +121,16 @@
                     <input inputmode="decimal" step="any" id="fanHeight" type="number">
                 </div>
                 <div class="inputContainer">
+                    <label>Highest point of the ride (m)</label>
+                    <input inputmode="decimal" step="any" id="tipHeight" type="number">
+                </div>
+                <div class="inputContainer">
                     <label>Max Height of Egg (m)</label>
                     <input inputmode="decimal" step="any" id="eggHeight" type="number">
+                </div>
+                <div class="inputContainer">
+                    <label>Min Height of Egg (m)</label>
+                    <input inputmode="decimal" step="any" id="eggHeightMin" type="number">
                 </div>
                 <div class="inputContainer">
                     <label>Length of String (m)</label>
@@ -166,9 +173,22 @@
   
 
     <script>
+        var input = document.querySelectorAll("input");
+        input[4].value = 0.420; // len string
+        input[1].value = 0.779; // h tip
+        input[2].value = 0.500; // h max
+        input[3].value = 0.190; // h min
+        input[0].value = 0.620; // h fan
+        input[5].value = 0.330; // radius
+        input[6].value = 6.42;
+        input[7].value = 34.3;
+        input[8].value = 9.40;
+
         function calculate(){
             var Hf = parseFloat(document.getElementById("fanHeight").value); // fan height
             var He = parseFloat(document.getElementById("eggHeight").value); // max height of egg
+            var Hmin = parseFloat(document.getElementById("eggHeightMin").value); // min height of egg while max speed
+            var Htip = parseFloat(document.getElementById("tipHeight").value); // Highest point of swings ride
             var L = parseFloat(document.getElementById("length").value); // length of string
             var Rfan = parseFloat(document.getElementById("radius").value); // radius of the fan
             var t1 = parseFloat(document.getElementById("1").value);
@@ -182,17 +202,30 @@
 
             document.getElementById("error").innerHTML = "&nbsp;";
 
-            var Acf = 9.81 / Math.tan(Math.asin((Hf - He) / L)); // final centripetal acceleration
-            var Rf = Math.sqrt(Math.pow(L, 2) - Math.pow(Hf - He, 2)) + Rfan; // final radius
-            var Ri = Rfan; // initial radius
 
-            var V1 = 4 * Math.sqrt(Acf) * (Math.pow(Rf, 3/2) - Math.pow(Ri, 3/2));
-            V1 = V1 / (9 * (Rf - Ri));
+            var Rmin = Math.sqrt(Math.pow(L, 2) - Math.pow(Htip - He, 2));
+            Rmin += Math.sqrt(Math.pow(Rfan, 2) - Math.pow(Htip - Hf, 2));
+            var Rmax = Math.sqrt(Math.pow(L + Rfan, 2) - Math.pow(Hf - Hmin, 2));
+            var Ravg = (Rmin + Rmax) / 2; // average radius
 
-            var V2 = 9.81 * (Math.sqrt(Math.pow(L, 2) - Math.pow(Hf - He, 2)) + Rfan);
-            V2 = Math.sqrt(V2 / Math.tan(Math.asin((Hf - He) / L)));
+
+            var Ang1 = Math.asin((Htip - He) / L);
+            var Ang2 = Math.asin((Hf - Hmin) / (Rfan + L));
+            var AvgAng = (Ang1 + Ang2) / 2; // average angle
+
+
+            var Acf = 9.81 / Math.tan(AvgAng); // final centripetal acceleration
+
+
+            var V1 = 4 * Math.sqrt(Acf) * (Math.pow(Ravg, 3/2) - Math.pow(Rfan, 3/2));
+            V1 /= (9 * (Ravg - Rfan));
+
+
+            var V2 = Math.sqrt((9.81 * Ravg) / Math.tan(AvgAng));
+
 
             var V3 = V2 / 2; // Vf = 0
+
 
             var total = ((V1 * t1) + (V2 * t2) + (V3 * t3)) / (t1 + t2 + t3);
 
