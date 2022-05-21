@@ -804,7 +804,7 @@
         function startCountdown(startTime){
             timer = setInterval(() => {
                 let now = new Date().getTime();
-                tempNum = 10 - Math.floor((now - startTime) / 1000);
+                tempNum = 60 - Math.floor((now - startTime) / 1000);
                 if(tempNum <= 0){
                     clearInterval(timer);
                     if(drawing){
