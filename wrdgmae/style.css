@@ -1,8 +1,0 @@
-@font-face {
-    font-family: 'comic sans';
-    src: url('./media/ComicSansMS.eot'); /* IE9 Compat Modes */
-    src: url('./media/ComicSansMS.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-         url('./media/ComicSansMS.woff2') format('woff2'), /* Super Modern Browsers */
-         url('./media/ComicSansMS.woff') format('woff'), /* Pretty Modern Browsers */
-         url('./media/ComicSansMS.ttf')  format('truetype'); /* Safari, Android, iOS */
-  }
