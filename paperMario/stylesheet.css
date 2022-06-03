@@ -153,12 +153,7 @@ p{
     justify-content: center;
     gap: 10%;
     width: 100%;
-    /* margin-top: 150px; */
-    /* margin-bottom: -20px;
-    margin-top: -20px; */
     z-index: 9;
-
-    /* margin: 150px 0; */
     position: absolute;
     transform: translateY(-50%);
 }
@@ -264,19 +259,13 @@ p{
     /* box-shadow:inset 0px 0px 0px 10px #f00; */
 }
 
-.noSelect{
-    user-drag: none; 
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-}
 .marioImg{
     animation: marioJump 5s infinite;
     width: 5vw;
+    
     min-width: 40px;
     max-width: 50px;
+    max-height: 60px;
 }
 
 .right:nth-child(2){
