@@ -326,12 +326,14 @@ p{
 .brandon{
     width: 20vw;
     min-width: 150px;
+    max-width: 250px;
 }
 .coffee{
     position: absolute;
     transform: rotate(-90deg);
     width: 8vw;
     min-width: 50px;
+    max-width: 100px;
     top: 15%;
     left: 75%;
     animation: coffeeAnimation 1s infinite;
