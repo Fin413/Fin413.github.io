@@ -372,8 +372,8 @@ p{
 
 .cornerMario{
     position: absolute;
-    left: 0;
     bottom: 0;
+    left: 0;
     width: 10vw;
     min-width: 150px;
 }
@@ -386,6 +386,20 @@ p{
 
 .paddingDiv{
     padding: 200px 0;
+}
+
+
+.footer{
+    font-family: 'Super Mario 256';
+    color: #5333B4;
+    position: relative;
+    letter-spacing: 2px;
+    padding: 25px;
+    margin-top: -40px;
+}
+
+.footer h4{
+    margin: 0;
 }
 
 @media screen and (max-width: 700px){
@@ -434,5 +448,10 @@ p{
 
     .countdownLabel{
         font-size: 8vw;
+    }
+
+    .footer{
+        text-align: right;
+        padding-left: 45%;
     }
 }
