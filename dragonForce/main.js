@@ -43,6 +43,7 @@ function nextSong(){
     cd.src = allSongs[currentSong].album;
 
     audio.src = "media/music/" + allSongs[currentSong].audio + ".mp3";
+    if(!isSongPlaying) audio.pause();
 }
 
 function lastSong(){
@@ -57,6 +58,7 @@ function lastSong(){
     cd.src = allSongs[currentSong].album;
 
     audio.src = "media/music/" + allSongs[currentSong].audio + ".mp3";
+    if(!isSongPlaying) audio.pause();
 }
 
 let deleteMe = true;
