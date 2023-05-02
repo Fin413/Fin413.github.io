@@ -16,14 +16,10 @@
             <div class="settingsContainer flexColumn">
                 <label for="imgInput" class="fileInputContainer">
                     <p>Upload Image</p>
-                    <!-- <label for="imgInput" id="fileInputContainer">
-                        <p>Select image</p>
-                    </label> -->
                     <img src="camera.png" alt="camera">
                     <input type="file" accept="image/jpeg, image/png, image/jpg" id="imgInput">
                     <p class="description">Supported image types: jpeg, png, jpg</p>
                 </label>
-            
             
                 <div class="flexRow">
                     <p>Pixel size: <span id="pixelSize">6</span></p>
@@ -39,9 +35,9 @@
                         </div>
                     </div>
             
-                    <div>
+                    <div class="checkboxContainer">
                         <input type="checkbox" id="paletteCheckbox" checked="true" name="paletteCheckbox">
-                        <label for="paletteCheckbox">Use palette</label>
+                        <label for="paletteCheckbox" id="checkboxLabel">Use palette</label>
                     </div>
                 </div>
 
@@ -57,8 +53,6 @@
                 </button>
             </div>
         </div>
-    
-    
     </div>
 
     <script src="palette.js"></script>
