@@ -113,7 +113,8 @@ h1{
 }
 
 .paletteColor{
-    flex: 1;
+    /* flex: 1; */
+    width: 10px;
     height: 100%;
 }
 
