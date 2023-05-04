@@ -124,6 +124,7 @@ h1{
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    position: relative;
     width: 90%;
     height: 20px;
     cursor: pointer;
@@ -149,6 +150,10 @@ h1{
     width: 94%;
     margin-bottom: 3px;
     margin-top: 2px;
+}
+
+.palette:hover > .paletteColor{
+    height: 19px;
 }
 
 .paletteColor{
