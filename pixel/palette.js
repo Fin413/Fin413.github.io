@@ -49,12 +49,6 @@ palettes.forEach((tempPal, i) => {
     paletteOptionsEl.append(temp);
 })
 
-
-// let customBtn = document.createElement("button");
-// customBtn.innerHTML = "Custom";
-// customBtn.id = "customBtn";
-// paletteOptionsEl.append(customBtn);
-
 function addPaletteElement(index, colors){
     let paletteEl = document.createElement("button");
     paletteEl.classList = "palette";
@@ -65,7 +59,8 @@ function addPaletteElement(index, colors){
     colors.forEach((tempColor) => {
         let colorEl = document.createElement("div");
         colorEl.classList = "paletteColor";
-        colorEl.style.backgroundColor = `rgb(${tempColor[0]},${tempColor[1]},${tempColor[2]})`
+        colorEl.style.backgroundColor = `rgb(${tempColor[0]},${tempColor[1]},${tempColor[2]})`;
+        colorEl.style.opacity = 1;
         paletteEl.append(colorEl);
     })
     
