@@ -1,3 +1,10 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 4 version
+*/
+
 
 @font-face {
     font-family: 'dogicaregular';
@@ -12,9 +19,16 @@ body{
     margin: 0;
     font-family: dogicaregular;
     letter-spacing: -3px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     background-color: #5E7EB5;
     background: url("Preview_143.png");
     background-attachment: fixed;
@@ -45,11 +59,18 @@ h1{
 }
 
 .flexRow{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
     background-color: white;
-    box-shadow: 12px 0 white, -12px 0 white, 0 -12px white,  0 12px white, 3px 0 0 6px white, -3px 0 0 6px white, 0 -3px 0 6px white, 0 3px 0 6px white, 15px 0 white,  -15px 0 white, 0 -15px white,  0 15px white, 0 0 0 9px white, 0 6px 0 6px white, 0 -6px 0 6px white, 6px 0 0 6px white, -6px 0 0 6px white;
+    -webkit-box-shadow: 12px 0 white, -12px 0 white, 0 -12px white,  0 12px white, 3px 0 0 6px white, -3px 0 0 6px white, 0 -3px 0 6px white, 0 3px 0 6px white, 15px 0 white,  -15px 0 white, 0 -15px white,  0 15px white, 0 0 0 9px white, 0 6px 0 6px white, 0 -6px 0 6px white, 6px 0 0 6px white, -6px 0 0 6px white;
+            box-shadow: 12px 0 white, -12px 0 white, 0 -12px white,  0 12px white, 3px 0 0 6px white, -3px 0 0 6px white, 0 -3px 0 6px white, 0 3px 0 6px white, 15px 0 white,  -15px 0 white, 0 -15px white,  0 15px white, 0 0 0 9px white, 0 6px 0 6px white, 0 -6px 0 6px white, 6px 0 0 6px white, -6px 0 0 6px white;
 }
 
 .flexRow:nth-of-type(2), .flexRow:nth-of-type(3){
@@ -57,11 +78,22 @@ h1{
 }
 
 .flexColumn{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     margin: 25px;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
     width: fit-content;
 }
 
@@ -89,6 +121,8 @@ h1{
 }
 
 .palette{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     width: 90%;
     height: 20px;
@@ -97,15 +131,19 @@ h1{
     padding: 0;
     background-color: transparent;
     margin: 5px;
+    -webkit-transition: -webkit-box-shadow 300ms;
+    transition: -webkit-box-shadow 300ms;
+    -o-transition: box-shadow 300ms;
     transition: box-shadow 300ms;
+    transition: box-shadow 300ms, -webkit-box-shadow 300ms;
     border-style: solid;
-    border-width: 3px;
-    border-color: transparent;
-    border-image: url(border.png) 1005 round;
+    border-image-slice: 1005;
+    border-image-source: url(border.png);
 }
 
 .palette:hover{
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     height: 25px;
     width: 94%;
     margin-bottom: 3px;
@@ -113,14 +151,22 @@ h1{
 }
 
 .paletteColor{
-    flex: 1;
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
     height: 100%;
 }
 
 #selectedPalette{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     width: 225px;
     padding-right: 10px;
     cursor: pointer;
@@ -128,20 +174,22 @@ h1{
     position: relative;
     background-color: white;
     border-style: solid;
-    border-width: 3px;
-    border-color: transparent;
-    border-image: url(border.png) 1005 round;
+    border-image-slice: 1005;
+    border-image-source: url(border.png);
 }
 
 #selectedPalette img{
     margin-left: 10%;
+    -webkit-transition: 200ms;
+    -o-transition: 200ms;
     transition: 200ms;
     width: 15px;
     pointer-events: none;
 }
 
 #selectedPalette .palette{
-    box-shadow: none;
+    -webkit-box-shadow: none;
+            box-shadow: none;
     pointer-events: none;
 }
 
@@ -151,22 +199,41 @@ h1{
     opacity: 0;
     position: absolute;
     top: 0;
+    -webkit-transition: all 500ms;
+    -o-transition: all 500ms;
     transition: all 500ms;
     background-color: rgb(255, 255, 255);
     width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     padding-bottom: 5px;
     padding-top: 10px;
 }
 
 .checkboxContainer{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
 }
 
 .checkboxContainer img{
@@ -194,7 +261,10 @@ h1{
 
 .defaultBtn p {
     padding-top: 2px;
-    box-shadow: 12px 0 white, -12px 0 white, 0 -12px white,  0 12px white, 3px 0 0 6px white, -3px 0 0 6px white, 0 -3px 0 6px white, 0 3px 0 6px white, 15px 0 black,  -15px 0 black, 0 -15px black,  0 15px black, 0 0 0 9px black, 0 6px 0 6px black, 0 -6px 0 6px black, 6px 0 0 6px black, -6px 0 0 6px black;
+    -webkit-box-shadow: 12px 0 white, -12px 0 white, 0 -12px white,  0 12px white, 3px 0 0 6px white, -3px 0 0 6px white, 0 -3px 0 6px white, 0 3px 0 6px white, 15px 0 black,  -15px 0 black, 0 -15px black,  0 15px black, 0 0 0 9px black, 0 6px 0 6px black, 0 -6px 0 6px black, 6px 0 0 6px black, -6px 0 0 6px black;
+            box-shadow: 12px 0 white, -12px 0 white, 0 -12px white,  0 12px white, 3px 0 0 6px white, -3px 0 0 6px white, 0 -3px 0 6px white, 0 3px 0 6px white, 15px 0 black,  -15px 0 black, 0 -15px black,  0 15px black, 0 0 0 9px black, 0 6px 0 6px black, 0 -6px 0 6px black, 6px 0 0 6px black, -6px 0 0 6px black;
+    -webkit-transition: all 200ms;
+    -o-transition: all 200ms;
     transition: all 200ms;
 }
 
@@ -226,7 +296,9 @@ h1{
 }
 
 #customBtn:hover{
-    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+        -ms-transform: scale(1.1);
+            transform: scale(1.1);
 }
 
 .slider {
@@ -237,6 +309,8 @@ h1{
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s;
+    -webkit-transition: opacity .2s;
+    -o-transition: opacity .2s;
     transition: opacity .2s;
 }
 
@@ -281,9 +355,16 @@ h1{
     padding: 25px 25px;
     padding-top: 10px;
     margin-bottom: 25px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     line-height: 18px;
 }
 
@@ -295,7 +376,10 @@ h1{
 
 @media only screen and (max-width: 800px) {
     .mainContainer{
-        flex-direction: column;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
         margin-bottom: 100px;
     }
     .mainWrapper{
@@ -314,7 +398,10 @@ h1{
         padding: 0;
     }
     .flexRow{
-        flex-direction: column;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
     }
     #pixelSize{
         width: auto;
@@ -354,4 +441,3 @@ h1{
         margin-bottom: 100px;
     }
 }
-
