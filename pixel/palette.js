@@ -43,10 +43,9 @@ var selectedPalette = palettes[0];
 var selectedPaletteEl = addPaletteElement(palettes.indexOf(selectedPalette), selectedPalette);
 selectPaletteBtn.insertAdjacentHTML('afterbegin', selectedPaletteEl.outerHTML);
 
-
 palettes.forEach((tempPal, i) => {
     let temp = addPaletteElement(i, tempPal, paletteOptionsEl);
-    paletteOptionsEl.append(temp);
+    paletteOptionsEl.appendChild(temp);
 })
 
 function addPaletteElement(index, colors){
@@ -59,9 +58,9 @@ function addPaletteElement(index, colors){
     colors.forEach((tempColor) => {
         let colorEl = document.createElement("div");
         colorEl.classList = "paletteColor";
-        colorEl.style.background = "rgb(" + tempColor[0] + "," + tempColor[1] + "," + tempColor[2] + ")";
-        colorEl.style.opacity = 1;
-        paletteEl.append(colorEl);
+        colorEl.style.backgroundColor = `rgb(${tempColor[0]},${tempColor[1]},${tempColor[2]})`
+        // colorEl.style.opacity = 1;
+        paletteEl.appendChild(colorEl);
     })
     
     return paletteEl;
