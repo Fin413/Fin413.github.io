@@ -59,7 +59,7 @@ function addPaletteElement(index, colors){
     colors.forEach((tempColor) => {
         let colorEl = document.createElement("div");
         colorEl.classList = "paletteColor";
-        colorEl.style.background = `rgb(${tempColor[0]},${tempColor[1]},${tempColor[2]})`;
+        colorEl.style.background = "rgb(" + tempColor[0] + "," + tempColor[1] + "," + tempColor[2] + ")";
         colorEl.style.opacity = 1;
         paletteEl.append(colorEl);
     })
