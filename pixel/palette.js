@@ -43,12 +43,12 @@ var selectedPalette = palettes[0];
 var selectedPaletteEl = addPaletteElement(palettes.indexOf(selectedPalette), selectedPalette);
 selectPaletteBtn.insertAdjacentHTML('afterbegin', selectedPaletteEl.outerHTML);
 
-setTimeout(() => {
-    palettes.forEach((tempPal, i) => {
-        let temp = addPaletteElement(i, tempPal, paletteOptionsEl);
-        paletteOptionsEl.append(temp);
-    })
-}, 1000)
+
+palettes.forEach((tempPal, i) => {
+    let temp = addPaletteElement(i, tempPal, paletteOptionsEl);
+    paletteOptionsEl.append(temp);
+})
+
 
 // let customBtn = document.createElement("button");
 // customBtn.innerHTML = "Custom";
