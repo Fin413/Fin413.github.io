@@ -8,7 +8,13 @@ var image;
 var generatedImage;
 var htmlImage;
 
-var test = []
+document.body.onload = () =>{
+    document.querySelector(".settingsContainer").style.opacity = 1;
+    setTimeout(() => {
+        document.getElementById("title").style.marginBottom = "50px";
+    }, 500);
+}
+
 input.addEventListener("change", () => {
     const file = input.files
     image = file[0]
