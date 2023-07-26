@@ -22,12 +22,14 @@ var moveLine = 0;
 
 
 function init(){
-    draw();
-    let overlay = document.getElementById("overlayContainer");
-    overlay.style.clipPath = "polygon(0 0, 100% 0, 100% 0%, 0 0%, 0 100%, 100% 100%, 100% 100%, 0 100%)";
     setTimeout(() => {
-        overlay.style.display = "none";
-    }, 1500);
+        draw();
+        let overlay = document.getElementById("overlayContainer");
+        overlay.style.clipPath = "polygon(0 0, 100% 0, 100% 0%, 0 0%, 0 100%, 100% 100%, 100% 100%, 0 100%)";
+        setTimeout(() => {
+            overlay.style.display = "none";
+        }, 1500);
+    }, 750);
 }
 
 function draw(){
