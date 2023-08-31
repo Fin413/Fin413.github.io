@@ -278,11 +278,13 @@ input[type=file] {
 
 }
 
-@media only screen and (max-height: 710px) {
-    #optionsContainer{
-        display: block;
-        overflow-y: scroll;
-        padding: 8vh 0;
-        height: 84vh;
+@media only screen and (min-width: 680px) {
+    @media only screen and (max-height: 710px) {
+        #optionsContainer{
+            display: block;
+            overflow-y: scroll;
+            padding: 8vh 0;
+            height: 84vh;
+        }
     }
 }
