@@ -32,10 +32,13 @@ function toggleFullscreen(){
 
         collapseBtn.innerHTML = '<img src="collapseSmall.png" alt="collapse icon">';
         collapseBtn.style.right = "344px";
+        collapseBtn.style.display = null;
         collapseBtn.style.borderRight = "none";
         setTimeout(() => {
             collapseBtn.style.transition = "right 1s, box-shadow 400ms";
         },100);
+
+        document.getElementById("mainContainer").removeAttribute("style")
     }else{
         bgrndCanvas.style.opacity = 0;
 
@@ -48,6 +51,11 @@ function toggleFullscreen(){
         collapseBtn.style.transition = "box-shadow 400ms";
         collapseBtn.style.borderRight = "1px solid #00FF00";
         collapseBtn.style.right = "10px";
+        collapseBtn.style.display = "block";
+
+        document.getElementById("mainContainer").style.height = "100vh";
+        document.getElementById("mainContainer").style.justifyContent = "center";
+
     }
 
     fullscreen = !fullscreen;
@@ -109,11 +117,11 @@ collapseBtn.addEventListener("click", (event) => {
     }
 
     if(optionsOpen){
-        document.getElementById("optionsContainer").style.marginRight = "-" + optionsContainer.getBoundingClientRect().width + "px";
+        optionsContainer.style.marginRight = "-" + optionsContainer.getBoundingClientRect().width + "px";
         collapseBtn.firstElementChild.style.transform = "rotate(180deg)";
         collapseBtn.style.right = "-10px";
     } else {
-        document.getElementById("optionsContainer").style.marginRight = 0;
+        optionsContainer.style.marginRight = 0;
         collapseBtn.firstElementChild.style.transform = "rotate(0deg)";
         collapseBtn.style.right = "344px";
     }
