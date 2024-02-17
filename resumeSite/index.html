@@ -74,7 +74,7 @@
         h1{
             font-size: 70px;
             margin-top: 50px;
-            margin-left: 25px;
+            /* margin-left: 25px; */
             font-family: epicAwesome;
             text-align: center;
             margin-bottom: 50px;
@@ -85,10 +85,13 @@
             padding-top: 10px;
             position: relative;
             padding-bottom: 100px;
+
         }
 
         .section:nth-of-type(3){
             background-color: #BAFFC9;
+            overflow-x: hidden;
+            /* position: relative; */
         }
 
         .section:nth-of-type(4){
@@ -323,7 +326,45 @@
                 font-size: 50px;
             }
         }
+
+        .duckContainer{
+            width: 100%;
+            height: 100px;
+            margin-top: 0px;
+            position: relative;
+            overflow-x: hidden;
+            /* overflow-y:hidden; */
+        }
+
+        .duckContainer img{
+            width: 100px;
+            position: absolute;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .footstep{
+            border-radius: 50%;
+            height: 5px;
+            width: 15px;
+            position: absolute;
+            opacity: 0.5;
+            background-color: brown;
+            transition: opacity 2s;
+        }
+
+        .hoverAnim{
+        }
+
+        .hoverAnim:hover{
+            /* width: 100px; */
+        }
         
+        .quack{
+            position: absolute;
+            transition: all 1s;
+            pointer-events: none;
+        }
 
     </style>
 </head>
@@ -381,7 +422,11 @@
         <p class="fadeScroll description">From my personal experience in these camps as well as from independent experimentation, I am familiar with many of the technologies employed in the camps. I also have experience with the Google Suite of tools and Eclass from previous academic exposure. Additionally, I am fairly familiar with database management as a result of my 6 years of experience in web development and related backend/database technologies. </p>
         <p style="text-align: right; margin-left: auto;" class="fadeScroll description"> I work very well in team environments and enjoy collaborative project development. I have a natural curiosity and excel at learning new skills and relevant technologies. I am an excellent problem solver and am self-driven when it comes to accomplishing tasks or finding solutions. It would be a pleasure to learn and share some of my expertise with you. Thank you for your time and consideration.</p>
 
-        <br>
+        <div class="duckContainer">
+            <img src="aaron-kostarelas-duck-run.gif" alt="duck walking gif" id="duck"  draggable="false" ondragstart="return false;">
+        </div>
+        
+
         <h1 class="fadeScroll">Skills</h1>
         <div class="starsContainer">
             <div>
@@ -413,27 +458,27 @@
             <div>
                 <div class="stars">
                     <p>Advanced First Aid</p>
-                    <img src="star.png" alt="star icon" class="intervalFade">
-                    <img src="star.png" alt="star icon" class="intervalFade">
-                    <img src="star.png" alt="star icon" class="intervalFade">
-                    <img src="star.png" alt="star icon" class="intervalFade">
-                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade hoverAnim">
+                    <img src="star.png" alt="star icon" class="intervalFade hoverAnim">
+                    <img src="star.png" alt="star icon" class="intervalFade hoverAnim">
+                    <img src="star.png" alt="star icon" class="intervalFade hoverAnim">
+                    <img src="star.png" alt="star icon" class="intervalFade hoverAnim">
                 </div>
                 <div class="stars">
                     <p>G-Suite</p>
-                    <img src="star.png" alt="star icon" class="intervalFade">
-                    <img src="star.png" alt="star icon" class="intervalFade">
-                    <img src="star.png" alt="star icon" class="intervalFade">
-                    <img src="star.png" alt="star icon" class="intervalFade">
-                    <img src="unfilledStar.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade hoverAnim">
+                    <img src="star.png" alt="star icon" class="intervalFade hoverAnim">
+                    <img src="star.png" alt="star icon" class="intervalFade hoverAnim">
+                    <img src="star.png" alt="star icon" class="intervalFade hoverAnim">
+                    <img src="unfilledStar.png" alt="star icon" class="intervalFade hoverAnim">
                 </div>
                 <div class="stars">
                     <p>Star Drawing</p>
-                    <img src="star.png" alt="star icon" class="intervalFade">
-                    <img src="unfilledStar.png" alt="star icon" class="intervalFade">
-                    <img src="unfilledStar.png" alt="star icon" class="intervalFade">
-                    <img src="unfilledStar.png" alt="star icon" class="intervalFade">
-                    <img src="unfilledStar.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade hoverAnim">
+                    <img src="unfilledStar.png" alt="star icon" class="intervalFade hoverAnim">
+                    <img src="unfilledStar.png" alt="star icon" class="intervalFade hoverAnim">
+                    <img src="unfilledStar.png" alt="star icon" class="intervalFade hoverAnim">
+                    <img src="unfilledStar.png" alt="star icon" class="intervalFade hoverAnim">
                 </div>
            </div>
         </div>
@@ -460,6 +505,70 @@
 
 
     <script>
+        let duck = document.getElementById("duck");
+        let duckPos = 0;
+        let duckSpeed = 2;
+        let frame = 0;
+        var scroll;
+
+        duck.onclick = () => {
+            let text = document.createElement("p");
+            if(duckPos)
+            text.innerText = "QUACK!";
+            text.style.transform = "rotate(" + (Math.random() * (20 - (-20)) + -20) + "deg)";
+            text.style.left = duckPos + 100 + "px";
+            text.style.top = duck.getBoundingClientRect().top + scroll + "px";
+            console.log(duck.getBoundingClientRect().top -scroll )
+            text.classList = "quack";
+
+            document.body.appendChild(text);
+            setTimeout(() => {
+                text.style.top = duck.getBoundingClientRect().top + scroll - 300 + "px";
+                text.style.opacity = 0;
+            }, 10)
+            setTimeout(() => {
+                text.remove();
+            }, 1010)
+        }
+       
+        setInterval(() => {
+            duckPos += duckSpeed;
+            duck.style.left = duckPos + "px";
+            if(duckPos > window.innerWidth + 50) duckPos = -80;
+        }, 20)
+
+        setInterval(() => {
+            duck.src = "frame_" + frame + ".png";
+
+            if(frame == 0){
+                addFootStep(10, 45);
+            }else if(frame == 3){
+                addFootStep(13, 55);
+            }
+
+            frame++;
+            if(frame == 8) frame = 0;
+            
+        }, 100)
+
+        function addFootStep(botOffset, leftoffset){
+            let cont = document.getElementsByClassName("duckContainer")[0];
+            let footStep = document.createElement("div");
+            footStep.classList = "footstep";
+
+            footStep.style.left = duckPos + leftoffset + "px";
+            footStep.style.bottom = botOffset + "px";
+
+            setTimeout(() => {
+                footStep.style.opacity = 0;
+                setTimeout(() => {
+                    footStep.remove();
+                }, 2000)
+            }, (window.innerWidth / 2) / (speed / 0.01) * 1000)
+            cont.appendChild(footStep);
+        }
+
+
         var x = -700;
         var speed = 1;
         setInterval(() => { 
@@ -478,7 +587,9 @@
         window.addEventListener("scroll", fadeInScroll);
 
         function fadeInScroll(){
-            var scroll = window.scrollY;
+
+            console.log(scroll, duck.getBoundingClientRect().top)
+            scroll = window.scrollY;
             
             for(let el of fadeScroll){
                 if(el.opacity == 1) continue;
@@ -497,6 +608,7 @@
                     intervalScroll[i].style.transform = "translateY(0)";
                     if(i < intervalScroll.length - 1){
                         setTimeout(() => {
+                            
                             showMore(i + 1);
                         }, 100);
                     }
