@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About me!</title>
+    <link rel="icon" type="image/x-icon" href="star.jpg">
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <style>
+        @font-face {
+            font-family: epicAwesome;
+            src: url(OpenSans-Regular.ttf);
+        }
+        html{
+            scroll-behavior: smooth;
+        }
+        body{
+            margin: 0;
+            font-family: 'epicAwesome';
+        }
+        path {
+            fill: transparent;
+        }
+        #movingTextContainer{
+            /* margin-top: -50px; */
+            margin:0;
+            margin-bottom: -100px;
+            top: 50px;
+            position: absolute;
+            /* width: 100vw; */
+        }
+        #pictureContainer{
+            /* width: 100%; */
+            display: flex;
+            /* align-items: center; */
+            justify-content: center;
+            /* width: fit-content; */
+            width:100%;
+            position: relative;
+            overflow: hidden;
+            /* padding-bottom: px; */
+            padding-top: 50px;
+            margin-bottom: -25px;
+            
+        }
+        #me{
+            /* transform: rotate(180deg); */
+            width: 50%;
+            
+        }
+        #thumb{
+            position: absolute;
+            right: -3%;
+            bottom: -10%;
+            width: 28%;
+            transform-origin: bottom left;
+            animation: handAnimation 2s ease-in-out infinite;
+        }
+
+        @keyframes handAnimation {
+            0% {
+                transform: rotate(0deg) scaleX(-1);
+            }
+
+            50% {
+                transform: rotate(20deg) scaleX(-1);
+            }
+            100% {
+                transform: rotate(0deg) scaleX(-1);
+            }
+        }
+
+        h1{
+            font-size: 70px;
+            margin-top: 50px;
+            margin-left: 25px;
+            font-family: epicAwesome;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section{
+            background-color: #BAE0FF;
+            padding-top: 10px;
+            position: relative;
+            padding-bottom: 100px;
+        }
+
+        .section:nth-of-type(3){
+            background-color: #BAFFC9;
+        }
+
+        .section:nth-of-type(4){
+            background-color: #FFFEBA;
+        }
+
+        #movingText{
+            font-family: epicAwesome;
+        }
+
+
+        .custom-shape-divider-top-1706328742 {
+            top: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            margin-top: -100px;
+        }
+
+        .custom-shape-divider-top-1706328742 svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 150px;
+
+            /* margin-top: -100px; */
+        }
+
+        .custom-shape-divider-top-1706328742 .shape-fill {
+            fill: #BAE0FF;
+        }
+
+        .awesome:nth-of-type(1){
+            color: #FFFEBA;
+            margin-right: -50%;
+            position: absolute;
+            margin-left: -10px;
+            animation: moveText 2s ease-in-out infinite;
+        }
+        .awesome:nth-of-type(2){
+            color: #FEB3BA;
+            position: absolute;
+            z-index: 0;
+            margin-left: -20px;
+            animation: moveTextFurther 2s ease-in-out infinite;
+        }
+        .awesome:nth-of-type(3){
+            color: #BAFFC9;
+            
+        }
+
+        @keyframes moveText {
+            0% {
+                margin-left: -10px;
+            }
+
+            50% {
+                margin-left: 10px;
+            }
+            100% {
+                margin-left: -10px;
+            }
+        }
+
+        @keyframes moveTextFurther {
+            0% {
+                margin-left: -20px;
+            }
+
+            50% {
+                margin-left: 20px;
+            }
+            100% {
+                margin-left: -20px;
+            }
+        }
+        .header{
+            background-color: white;
+            display: flex;
+            align-items: center;
+        }
+        .header h1{
+            text-align: left;
+            margin: 20px;
+            margin-left: 50px;
+            margin-bottom: 0;
+            font-size: 60px;
+            padding: 15px 15px;
+        }
+
+        #navContainer{
+            flex: 1;
+            display: flex;
+            justify-content: space-evenly;
+        }
+        #navContainer a{
+            
+            background-color: #FEB3BA;
+            font-size: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 10px;
+            padding: 5px 50px;
+            color: black;
+            font-family: epicAwesome;
+            transition: all 500ms;
+        }
+        #navContainer a:nth-of-type(1){
+            background-color: #BAFFC9
+        }
+        #navContainer a:nth-of-type(2){
+            background-color:#FFFEBA;
+        }
+        #navContainer a:hover{
+            padding: 5px 10%;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+
+
+
+
+
+
+
+
+        .custom-shape-divider-top-1706337700 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+
+        .custom-shape-divider-top-1706337700 svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 63px;
+            transform: rotateY(180deg);
+        }
+
+        .custom-shape-divider-top-1706337700 .shape-fill {
+            fill: #FFFFFF;
+        }
+
+        .custom-shape-divider-top-1706337700 .green{
+            fill: #BAE0FF;
+        }
+
+        .custom-shape-divider-top-1706337700 .yellow{
+            fill: #BAFFC9;
+        }
+
+
+
+
+        .stars, .starsContainer{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin: 0 30px;
+        }
+
+        .stars img{
+            width: 50px;
+            margin-left: -5px;
+            margin-right: -5px;
+        }
+
+        .stars p {
+            margin-right: 10px;
+        }
+
+        .fadeScroll, .intervalFade{
+            opacity: 0;
+            transform: translateY(100px);
+            transition: opacity 1s, transform 1s;
+        }
+
+        .intervalFade{
+            transform: translateY(20px);
+            transition: opacity 1s, transform 800ms;
+        }
+
+        .description{
+            padding: 0 10%;
+            width: 50%;
+        }
+        @media only screen and (max-width: 1000px) {
+            #navContainer{
+                display: none;
+            }
+            .header h1{
+                width: 100%;
+                text-align: center;
+                margin-left: 0;
+                margin-bottom: 10px;
+                padding-left: 0;
+                padding-right: 0;
+                margin-right: 0;
+            }
+            #name{
+                width: 100%;
+            }
+
+            .starsContainer{
+                flex-direction: column;
+            }
+
+            .description{
+                width: 75%;
+            }
+            #me{
+                width: 75%;
+                margin-top: 20px;
+            }
+            #thumb{
+                width: 38%;
+                right: -25%;
+            }
+        }
+
+        @media only screen and (max-width: 450px) {
+            .header h1{
+                font-size: 40px;
+            }
+
+            h1{
+                font-size: 50px;
+            }
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div id="name">
+            <h1><span class="awesome">Finlay Soehn</span><span class="awesome">Finlay Soehn</span><span class="awesome">Finlay Soehn</span></h1>
+        </div>
+        <div id="navContainer">
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </div>
+    
+
+    <div class="section">
+        <div class="custom-shape-divider-top-1706337700">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+
+        <svg viewBox="0 0 475 200" id="movingTextContainer">
+            <path id="curve" d="M6,150C49.63,93,105.79,36.65,156.2,47.55,207.89,58.74,213,131.91,264,150c40.67,14.43,108.57-6.91,229-145" />
+            <text x="-200" id="movingText">
+                <textPath xlink:href="#curve">
+                HIRE ME :) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HIRE ME :) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HIRE ME :) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HIRE ME :) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HIRE ME :) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HIRE ME :) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HIRE ME :) 
+                </textPath>
+            </text>
+        </svg>
+        
+        <div id="pictureContainer">
+            <img src="ME.png" alt="picture of me!" id="me">
+            <img src="thumb.png" alt="my thumbs up!" id="thumb">
+        </div>
+    
+        <!-- <div class="headerCurve">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
+                <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
+                <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+            </svg>
+        </div> -->
+    </div>
+
+    <div class="section" id="about">
+        <div class="custom-shape-divider-top-1706337700">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="green shape-fill "></path>
+            </svg>
+        </div>  
+        <h1 class="fadeScroll">About me</h1>
+        <p class="fadeScroll description">My name is Finlay Soehn and I'm in my second year of a Software Enginnering degree at the University of Alberta. I have always wanted to work with DiscoverE, having participated in the summer camps as a child.          </p>
+        <p style="text-align: right; margin-left: auto;" class="fadeScroll description">I have extensive experience with problem-solving and conflict resolution, especially involving younger kids and their parents from my work as a Lifeguard at the Millenium Place Recreational Facility. I would often have to resolve complaints brought up by parents and tactfully ensure the younger children were safe and cautious without hindering their fun. Additionally, because of my lifeguard experience, I have advanced first aid training, including CPR, AED, and O2 Administration with plenty of experience using it.</p>
+        <p class="fadeScroll description">From my personal experience in these camps as well as from independent experimentation, I am familiar with many of the technologies employed in the camps. I also have experience with the Google Suite of tools and Eclass from previous academic exposure. Additionally, I am fairly familiar with database management as a result of my 6 years of experience in web development and related backend/database technologies. </p>
+        <p style="text-align: right; margin-left: auto;" class="fadeScroll description"> I work very well in team environments and enjoy collaborative project development. I have a natural curiosity and excel at learning new skills and relevant technologies. I am an excellent problem solver and am self-driven when it comes to accomplishing tasks or finding solutions. It would be a pleasure to learn and share some of my expertise with you. Thank you for your time and consideration.</p>
+
+        <br>
+        <h1 class="fadeScroll">Skills</h1>
+        <div class="starsContainer">
+            <div>
+                <div class="stars">
+                    <p>Conflict Resolution</p>
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                </div>
+                <div class="stars">
+                    <p>Database Management</p>
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                </div>
+                <div class="stars">
+                    <p>Programming</p>
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                </div>
+            </div>
+            <div>
+                <div class="stars">
+                    <p>Advanced First Aid</p>
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                </div>
+                <div class="stars">
+                    <p>G-Suite</p>
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="unfilledStar.png" alt="star icon" class="intervalFade">
+                </div>
+                <div class="stars">
+                    <p>Star Drawing</p>
+                    <img src="star.png" alt="star icon" class="intervalFade">
+                    <img src="unfilledStar.png" alt="star icon" class="intervalFade">
+                    <img src="unfilledStar.png" alt="star icon" class="intervalFade">
+                    <img src="unfilledStar.png" alt="star icon" class="intervalFade">
+                    <img src="unfilledStar.png" alt="star icon" class="intervalFade">
+                </div>
+           </div>
+        </div>
+
+        
+        
+    </div>
+
+    <div class="section" id="contact">
+        <div class="custom-shape-divider-top-1706337700">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="yellow shape-fill "></path>
+            </svg>
+        </div>  
+        <h1 class="fadeScroll">Contact</h1>
+        <div class="stars fadeScroll">
+            <p><strong>Email:</strong> fsoehn@ualberta.ca</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <p><strong>Mobile Phone:</strong> (780)-909-3586</p>
+        </div>
+        <p style="text-align: center;" class="fadeScroll">Thanks for your time and consideration!</p>
+    </div>
+
+
+
+    <script>
+        var x = -700;
+        var speed = 1;
+        setInterval(() => { 
+            
+            if (x > 8){
+                x = -100;
+            }
+            x += speed
+            document.getElementById("movingText").setAttribute("x", x);
+
+        }, 10);
+
+        var fadeScroll = document.getElementsByClassName("fadeScroll");
+        var intervalScroll = document.getElementsByClassName("intervalFade");
+
+        window.addEventListener("scroll", fadeInScroll);
+
+        function fadeInScroll(){
+            var scroll = window.scrollY;
+            
+            for(let el of fadeScroll){
+                if(el.opacity == 1) continue;
+
+                let halfHeight = el.offsetHeight/2;
+
+                if(el.getBoundingClientRect().top - window.innerHeight < -halfHeight){
+                    el.style.opacity = 1;
+                    el.style.transform = "translateY(0)";
+                }
+            }
+
+            if(intervalScroll.length > 0 && intervalScroll[0].style.opacity != 1 && intervalScroll[0].getBoundingClientRect().top - window.innerHeight < -(intervalScroll[0].offsetHeight/2)){
+                const showMore = i => {
+                    intervalScroll[i].style.opacity = 1;
+                    intervalScroll[i].style.transform = "translateY(0)";
+                    if(i < intervalScroll.length - 1){
+                        setTimeout(() => {
+                            showMore(i + 1);
+                        }, 100);
+                    }
+                }
+
+                showMore(0);
+            }
+        }
+
+    </script>
+</body>
+</html>
