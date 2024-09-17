@@ -193,7 +193,7 @@ function processAudio(type){
 
         ctx.clearRect(0, 0, pixelCanvasSize[0], pixelCanvasSize[1]);
 
-        ctx.lineWidth = thickness;                              // CHNAGE LINE COLOR AND THICKNESS
+        ctx.lineWidth = 10;                              // hard fix at 10 make it resize later
         ctx.strokeStyle = color;
                 
         // ctx.shadowBlur = 10;
