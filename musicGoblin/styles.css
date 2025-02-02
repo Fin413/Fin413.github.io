@@ -10,6 +10,7 @@ body{
     margin: 0;
     background-color: black;
     font-family: pixelFont, monospace, Times, serif;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 p{
     font-size: 18px;
