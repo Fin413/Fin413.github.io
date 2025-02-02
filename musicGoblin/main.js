@@ -19,7 +19,7 @@ var alreadyVisited = false;
 var activeDialog;
 var prenup = false;
 
-var index = 35;
+var index = 0;
 const typeSpeed = 30;
 
 var templateVars = {
