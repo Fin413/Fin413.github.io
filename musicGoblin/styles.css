@@ -242,7 +242,7 @@ button{
 #overlayContainer{
     width: 100%;
     max-width: 600px;
-    height: 100vh;
+    height: 100svh;
     background-color: rgba(0,0,0,0.5);
     z-index: 100;
     position: fixed;
@@ -260,7 +260,7 @@ button{
 }
 
 #outsideImage{
-    height: 100%;
+    height: 100svh;
     transition: transform 1s, opacity 1s;
 }
 
