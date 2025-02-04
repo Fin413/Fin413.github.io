@@ -6,11 +6,17 @@
     font-style: normal;
 }
 
+html {
+    height: -webkit-fill-available;
+}
+
 body{
     margin: 0;
     background-color: black;
     font-family: pixelFont, monospace, Times, serif;
     min-height: 100vh;
+    /* mobile viewport bug fix */
+    min-height: -webkit-fill-available;
 }
 p{
     font-size: 18px;
