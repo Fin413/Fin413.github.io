@@ -26,6 +26,11 @@ var templateVars = {
     name: null
 };
 
+window.onresize = function() {
+    document.body.height = window.innerHeight;
+}
+window.onresize();
+
 window.addEventListener("click", () => {
     if (started) {
         if (!isTyping && activeDialog[index].type == "throwAway") {
