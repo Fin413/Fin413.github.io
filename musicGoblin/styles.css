@@ -10,7 +10,7 @@ body{
     margin: 0;
     background-color: black;
     font-family: pixelFont, monospace, Times, serif;
-    height: 100vh;
+    min-height: 100vh;
 }
 p{
     font-size: 18px;
