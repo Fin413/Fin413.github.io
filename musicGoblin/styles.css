@@ -143,6 +143,7 @@ img{
     margin: 0;
     margin-top: 10px;
 
+    font-size: clamp(10px, 3vw, 20px);
 }
 
 .indent{
@@ -230,7 +231,7 @@ img{
 }
 
 #letterDoneBtn{
-    margin: 10px 0 0 0;
+    margin: 20px 0 0 41%;
     display: block;
 }
 
