@@ -176,9 +176,10 @@ function nextAction(){
             type(text, dialogEl.narrator);
             setTimeout(() => {
                 let dim = document.getElementById("dialogContainer").getBoundingClientRect();
-                let percent = 100 - ((dim.bottom / window.innerHeight) * 100);
-                console.log(dim, percent)
-                continuePrompt.style.bottom = (percent - 7) + "%";
+                let dialogBot = window.innerHeight - dim.bottom - 15; // -15 for box shadow
+                let promptHeight = continuePrompt.offsetHeight + 36; // +36 for 18 top/bot margin
+    
+                continuePrompt.style.bottom = (dialogBot - promptHeight) + "px";//(percent) + "%";
             }, dialogEl.text.length * typeSpeed);
             break;
         case "yesNo":
@@ -337,7 +338,6 @@ function eventHandler(el) {
             break;
         case "swapDialog":
             alreadyVisited = false;
-            index = 0;
             // no break so you always restart when dialog swaps
         case "leave":
             overlay.children[0].style.display = "none";
