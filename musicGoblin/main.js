@@ -26,7 +26,7 @@ var templateVars = {
     name: null
 };
 
-window.addEventListener("click", () => {
+document.addEventListener("click", () => {
     if (started) {
         if (!isTyping && activeDialog[index].type == "throwAway") {
             continuePrompt.style.bottom = "40%";
