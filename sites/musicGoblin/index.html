@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gorthlax's Music Shop</title>
+    <link rel="icon" type="image/x-icon" href="media/images/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+
+    <meta property="og:image" content="https://github.com/Fin413/Fin413.github.io/blob/master/musicGoblin/media/images/newerwares.png" />
+    <meta property="og:title" content="GORTHLAX THE MUSIC GOBLIN HAS NEW WARES FOR YOU!!!" />
+    <meta property="og:description" content="Click here to visit his music shop and see the new arrivals" />
+    <meta property="og:url"content="https://soehn.ca/musicGoblin" />
+
+</head>
+<body>
+    <div id="overlayContainer">
+        <input type="text" id="nameInput" placeholder="Enter name here">
+        <button class="btn">Enter</button>
+
+        <p id="enterText">Click to Enter</p>
+        <img src="media/images/outside.png" alt="" srcset="" id="outsideImage">
+    </div>
+
+    <div id="mainContent">
+
+        <img src="media/images/fadeOut.png" alt="" srcset="" id="fadeOut">
+
+        <img src="media/images/musicGoblinBack1.png" alt="the music goblin" id="musicGoblin">
+        <img src="media/images/letter.png" alt="letter" id="letter">
+        
+        <img src="media/images/stickyHand.png" alt="sticky hand" id="stickyHand">
+
+        <div id="paperContainer">
+            <img src="media/images/paper.png" alt="paper" id="paper">
+            <h2 class="musicText">
+                Waddup I thought this was a awesome-er way to recommend music:
+                
+                <br><br><br>
+
+                The Chats, they're like Bugs but they sing about STIs sometimes >:)
+
+                <br>
+
+                <a href="https://music.apple.com/ca/album/the-clap/1494290993?i=1494290999" class="musicLink" target="_blank">
+                    <img src="media/images/appleMusic.png" alt="apple music logo" class="musicLogo">
+                    Link to apple music 
+                </a>
+               
+                <br>
+
+                <a href="https://open.spotify.com/track/69G5rkmDhkUmW2uk9DQ6O9?si=c9aa305355414d23" class="musicLink" target="_blank">
+                    <img src="media/images/spotify.png" alt="apple music logo" class="musicLogo">
+                    Link to spotify
+                </a>
+
+                <br><br><br>
+
+                Also Bears in Trees are cool I like "Fresh Concrete" a-lot
+
+                <br>
+
+                <a href="https://music.apple.com/ca/album/fresh-concrete/1563818225?i=1563818647" class="musicLink" target="_blank">
+                    <img src="media/images/appleMusic.png" alt="apple music logo" class="musicLogo">
+                    Link to apple music 
+                </a>
+               
+                <br>
+
+                <a href="https://open.spotify.com/track/26GWIsIPRxNhSYWmcksuJc?si=1d65ee6181724755" class="musicLink" target="_blank">
+                    <img src="media/images/spotify.png" alt="apple music logo" class="musicLogo">
+                    Link to spotify
+                </a>
+
+                <br><br><br><br>
+
+                Dearest regards, <br>
+                <span class="indent">Finlay "swag" Soehn</span>
+
+                <br>
+                <br>
+                
+                <button class="btn" id="letterDoneBtn">Done</button>
+            </h2>
+            <h2 class="musicText">
+                DONT SHOW THIS
+            </h2>
+        </div>
+
+        <img src="media/images/desk.png" alt="" id="desk">
+        <div id="deskExtension"></div>
+
+        <p id="speakerName">Gorthlax the Music Goblin:</p>
+        <p id="continuePrompt">Click to continue...</p>
+        
+        <div id="dialogContainer">
+            
+            <p id="dialog"></p>
+
+            <div id="dialogOptionsContainer">
+                <button class="dialogButton">Option 1</button>
+                <button class="dialogButton">Option 2</button>
+                <button class="dialogButton">Option 3</button>
+                <button class="dialogButton">Option 4</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="backgroundMusic" loop="true">
+        <source src="media/audio/gangstasParadise.mp3" type="audio/mp3">
+    </audio>
+    <audio id="kanye">
+        <source src="media/audio/kanye.mp3" type="audio/mp3">
+    </audio>
+    <audio id="scratch">
+        <source src="media/audio/scratch.mp3" type="audio/mp3">
+    </audio>
+    <audio id="slap">
+        <source src="media/audio/slap.mp3" type="audio/mp3">
+    </audio>
+    <audio id="heartbeat" loop="true">
+        <source src="media/audio/heartbeat.mp3" type="audio/mp3">
+    </audio>
+    <audio id="scream">
+        <source src="media/audio/scream.mp3" type="audio/mp3">
+    </audio>
+
+    <script src="main.js"></script>
+    <script src="plot.js"></script>
+    <script src="visitedPlot.js"></script>
+</body>
+</html>

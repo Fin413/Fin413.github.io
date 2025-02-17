@@ -4,446 +4,16 @@
         <title>Home</title>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="icon" href="favicon.svg">
+        <link rel="icon" href="media/favicon.svg">
+        <link rel="stylesheet" href="styles.css">
 
-        <style>
-            :root{
-                --cursorAnimation: blink 1s steps(2, start) infinite;
-            }
-
-            body, html{
-                margin: 0;
-                font-family: 'Courier New', Courier, monospace;
-                background: #0E2A35;
-            }
-
-            .fadeScroll, .intervalFade{
-                opacity: 0;
-                transform: translateY(100px);
-                transition: opacity 1s, transform 1s;
-            }
-
-             /* Scrollbar */
-             ::-webkit-scrollbar {
-                width: 12px;
-            }
-
-            /* Track */
-            ::-webkit-scrollbar-track {
-                background: #4B6269; 
-            }
-            
-            /* Handle */
-            ::-webkit-scrollbar-thumb {
-                background: #091b22; 
-            }
-
-
-            .notSelectable{
-                user-select: none;
-                -moz-user-select: none;
-                -webkit-user-drag: none;
-                -webkit-user-select: none;
-                -ms-user-select: none;
-            }
-
-            .fullHeight{
-                height: 100vh;
-                background-color: #0E2A35;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                text-align: center;
-                padding: 0 50px 0 50px;
-            }
-
-            #name{
-                cursor: pointer;
-                font-family: 'Courier New', Courier, monospace;
-                font-size: 8rem;
-                margin: 0;
-                color: #4B6269;
-            }
-
-            #description{
-                color: #6B9528;
-                text-align: left;
-                word-break: break-all;
-                font-weight: normal;
-                font-size: 20px;
-                margin-bottom: 75px;
-            }
-
-            #description::after{
-                content: "_";
-                animation: var(--cursorAnimation);
-            }
-
-            @media only screen and (max-width: 600px) {
-                #name{
-                    font-size: 20vw;
-                }
-
-                .fullHeight{
-                    padding: 0 25px 0 25px;
-                }
-            }
-
-            #scroll{
-                position: absolute;
-                visibility: hidden;
-                bottom: -100px;
-                opacity: 0;
-                left: 0;
-                right: 0;
-                z-index: 2;
-                margin: auto auto 0 0;
-                text-align: center;
-                color: #4B6269;
-                transition: bottom 1s, visibility 1s, opacity 1s;
-            }
-
-            #scroll p {
-                margin-bottom: -5px;
-                font-size: 20px;
-            }
-
-            .downArrow{
-                border: solid #4B6269;
-                border-width: 0 3px 3px 0;
-                border-radius: 2px;
-                display: inline-block;
-                padding: 5px;
-                transform: rotate(45deg);
-                -webkit-transform: rotate(45deg);
-            }
-
-            .portfolioGrid{
-                background-color: white;
-                display: flex;
-                justify-content: space-evenly;
-                width: 100%;
-                flex-wrap: wrap;
-                /* transform: skewY(-11deg); */
-
-                padding-top: 200px;
-                padding-bottom: 200px;
-                clip-path: polygon(0 15%, 100% 0%, 100% 85%, 0% 100%);
-            }
-
-            @media only screen and (max-width: 800px) {
-                .portfolioGrid{
-                    clip-path: polygon(0 5%, 100% 0%, 100% 95%, 0% 100%);
-                }
-            }
-
-
-            .siteContainer{
-                width: 300px;
-                position: relative;
-                margin: 50px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-direction: column;
-            }
-
-            .siteTitle{
-                text-align: center;
-            }
-
-            .siteThumbnail{
-                transition: margin 1s;
-                width: 100%;
-                cursor: pointer;
-                z-index: 1;
-                transition: opacity 200ms;
-            }
-
-            .siteThumbnail:hover{
-                opacity: 0.5;
-            }
-
-            .siteDescription{
-                transition: visibility 1s, opacity 600ms, top 1s;
-                width: 100%;
-                text-align: center;
-                margin-right: 15px;
-                margin-left: 15px;
-                font-size: 15px;
-                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-            }
-
-            .contactBackground{
-                display: flex;
-                /* width: 100%; */
-           
-                height: 100vh;
-                justify-content: center;
-                flex-direction: column;
-                align-items: center;
-                overflow-x: hidden;
-                overflow-y: hidden;
-            }
-
-            .contactContainer{
-                height: fit-content;
-                margin-top:auto;
-                margin-bottom: auto;
-                display: flex;
-                flex-direction: row;
-            }
-
-            .contactInfo{
-                text-align: right;
-                color: #6B9528;
-                display: flex;
-                align-items: flex-end;
-                flex-direction: column;
-                margin-right: 100px;
-            }
-
-            .title{
-                font-size: 4em;
-                margin: 0;
-            }   
-
-            form{
-                margin-top: 20px;
-                width: 375px;
-                display: flex;
-                justify-content: flex-start;
-                align-items: stretch;
-                flex-direction: column;
-            }
-
-            input[type="email"]{
-                border-radius: 0;
-                /* width: 200px; */
-                border: 1px solid #4B6269;
-                color: white;
-                font-size: 15px;
-                font-family: 'Courier New', Courier, monospace;
-                outline: none;
-                background-color: #0E2A35;
-                margin-bottom: 25px;
-                padding: 5px;
-                padding-left: 10px;
-                padding-right: 10px;
-                padding-top: 8px;
-            }
-
-            textarea{
-                border-radius: 0;
-                font-family: 'Courier New', Courier, monospace;
-                background-color: #0E2A35;
-                border: 1px solid #4B6269;
-                color: white;
-                font-size: 15px;
-                margin-bottom: 40px;
-                resize: none;
-                height: 150px;
-                max-height: 150px;
-                outline: none;
-                padding: 10px;
-            }
-
-            ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-                color: #4B6269;
-                opacity: 1; /* Firefox */
-                font-family: monospace, 'Courier New', Courier;
-            }
-
-            :-ms-input-placeholder { /* Internet Explorer 10-11 */
-                color: #4B6269;
-                font-family: monospace, 'Courier New', Courier;
-            }
-
-            ::-ms-input-placeholder { /* Microsoft Edge */
-                color: #4B6269;
-                font-family: monospace, 'Courier New', Courier;
-            }
-
-            form button{
-                cursor: pointer;
-                background-color: #4B6269;
-                border: none;
-                color: black;
-                padding: 5px;
-                font-family: 'Courier New', Courier, monospace;
-                font-size: 20px;
-                transition: all 500ms;
-                position: relative;
-            }
-
-            form button:hover{
-                background-color: #6B9528;                
-            }
-
-            #plane{
-                margin-bottom: -5px;
-                margin-left: 5px;
-                transition: all 1s;
-            }
-
-            @media only screen and (max-width: 450px) {
-                form{
-                    width: 85vw;
-                }
-            }
-
-            @keyframes fly {
-                0%{
-                    right: 145px;
-                    top: 3px;
-                }
-                75%{
-                    right: -1000px;
-                    top: -1000px;
-                }
-                80%{
-                    opacity: 0;
-                }
-                85%{
-                    right: 145px;
-                    top: 3px;
-                    opacity: 0;
-                }
-                100%{
-                    opacity: 1;
-                }
-            }
-
-
-
-            .textHighlight{
-                cursor: pointer;
-                background-color: #091b22;
-                color: #6B9528;
-                font-family: monospace,'Courier New', Courier;
-                font-size: 15px;
-                padding: 5px;
-                padding-left: 10px;
-                padding-right: 10px;
-                margin-bottom: 30px;
-                letter-spacing: 2px;
-                transition: color 500ms, background-color 500ms, transform 1s, opacity 1s;
-
-            }
-
-            .textHighlight:hover{
-                background-color: white;
-                color: black;
-                /* transform: scale(1.1) translateZ(0); */
-            }
-
-            .greenText{
-                color: #6B9528;
-            }
-
-            @media only screen and (max-width: 900px) {
-                .contactBackground{
-                    padding-top: 50px;
-                    padding-bottom: 50px;
-                }
-
-                .contactContainer{
-                    flex-direction: column;
-                    align-items: center;
-                   
-                }
-
-                .contactInfo{
-                    margin-top: 0;
-                    width: fit-content;
-                    margin-right: 0px;
-                    margin-bottom: 35px;
-                    align-items: center;
-                }
-
-                form{
-                    margin-top: 0;
-                }
-
-            }
-
-            .divider {
-                position: relative;
-                width: 100%;
-                height: 100px;
-            }
-
-            .upright::before {
-                position: absolute;
-                content: "";
-                width: 100%;
-                height: 100%;
-                background-color: #0E2A35;
-                clip-path: polygon(100% 0, 0 0, 0 100%);
-            }
-
-            .reverse::before {
-                position: absolute;
-                content: "";
-                width: 100%;
-                height: 100%;
-                background-color: #0E2A35;
-                clip-path: polygon(0 101%, 100% 0, 100% 101%);
-            }
-
-            @keyframes blink {
-                to{ visibility: hidden; }
-            }
-
-            @keyframes upDown {
-                0%{bottom: 25px}
-                50%{bottom: 10px;}
-                100%{bottom: 25px}
-            }
-
-            footer{
-                background-color: white;
-                height: 100px;
-                clip-path: polygon(0 0, 100% 50%, 100% 100%, 0% 100%);
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                padding-top: 50px;
-                font-weight: bold;
-            }
-
-            footer p{
-                margin: 0;
-                font-weight: bold;
-            }
-
-            button{
-                background-color: transparent;
-                border: none;
-            }
-
-            #copyText{
-                position: fixed;
-                background-color: #4B6269;
-                padding: 10px 20px;
-                color: black;
-                text-align: center;
-                font-size: 20px;
-                top: -150px;
-                left: 50%;
-                z-index: 10;
-                font-weight: bold;
-                transform: translateX(-50%);
-                border-radius: 5px;
-                transition: opacity 750ms, top 750ms;
-            }
-        </style>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     </head>
 
     <body onload="init()">
-        <div class="fullHeight">
+        <div class="sectionContainer nameContainer">
             <h1 id="name" class="notSelectable" aria-lable="Finlay Soehn"></h1>
             <h2 id="description">
                 <span aria-hidden="true">
@@ -468,57 +38,117 @@
                 <i class="downArrow"></i>
             </div> 
         </div>
+
+        <canvas id="upperCanvas"></canvas>
         
-        <div class="portfolioGrid">
-            <div class="intervalFade siteContainer"> 
-                <button onclick="window.location='./oscilloscope'"><img src="oscilloscope.png" class="siteThumbnail notSelectable"></button>
-            </div>
-            <div class="intervalFade siteContainer"> 
-                <button onclick="window.location='./dragonForce'"><img src="dragonForce.png" class="siteThumbnail notSelectable"></button>
-            </div>
-            <div class="intervalFade siteContainer">
-                <button onclick="window.location='./sudoku'"><img src="sudoku.png" class="siteThumbnail notSelectable"></button>
-            </div>
-            <div class="intervalFade siteContainer">
-                <button onclick="window.location='https://itch.io/jam/gmtk-2023/rate/2159594'"><img src="bnb.png" class="siteThumbnail notSelectable"></button>
-            </div>
-            <div class="intervalFade siteContainer">
-                <button onclick="window.location='./pixel'"><img src="pixel.png" class="siteThumbnail notSelectable"></button>
-            </div>
-            <div class="intervalFade siteContainer">
-                <button onclick="window.location='./crosslord'"><img src="crosslord.png" class="siteThumbnail notSelectable"></button>
-            </div>
-            <div class="intervalFade siteContainer">
-                <button onclick="window.location='./pirateGeography'"><img src="pirate.png" class="siteThumbnail notSelectable"></button>
-            </div>
-            <div class="intervalFade siteContainer">
-                <button onclick="window.location='./extension'"><img src="beartracks.png" class="siteThumbnail notSelectable"></button>
-            </div>
-            <div class="intervalFade siteContainer">
-                <button onclick="window.location='./GalacticGainz'"><img src="gainz.png" class="siteThumbnail notSelectable"></button>
-            </div>
-            <div class="intervalFade siteContainer">
-                <button onclick="window.location='./scona-live-3'"><img src="sconaLive.png" class="siteThumbnail notSelectable"></button>
-            </div>
-            <div class="intervalFade siteContainer">
-                <button onclick="window.location='./kiddle'"><img src="kiddle.png" class="siteThumbnail notSelectable"></button>
-            </div>
-            <div class="intervalFade siteContainer">
-                <button onclick="window.location='./progress'"><img src="progressBar.png" class="siteThumbnail notSelectable"></button>
-            </div> 
-            <div class="intervalFade siteContainer">
-                <button onclick="window.location='./5OClock'"><img src="five.png" class="siteThumbnail notSelectable"></button>
+        <div class="sectionContainer portfolioContainer">
+            <h1 class="title scrambleScroll">Projects</h1>
+            <div class="portfolioGrid">
+
+                <div class="siteContainer intervalFade">
+                    <button onclick="window.location='./sites/oscilloscope'" class="siteBtn">
+                        <img src="media/oscilloscope.png" class="siteThumbnail notSelectable" aria-label="Oscilloscope">
+                    </button>
+                    <p class="siteDescription">An oscilloscope simulator that can visualize oscilloscope music (or any other audio signal).</p>
+                </div>
+
+                <div class="siteContainer intervalFade"> 
+                    <button onclick="window.location='./sites/dragonForce'">
+                        <img src="media/dragonForce.png" class="siteThumbnail notSelectable" aria-label="Dragon Force">
+                    </button>
+                    <p class="siteDescription">An audio visualizer utilizing the JS audio (and canvas) API with sine wave math.</p>
+                </div>
+
+                <div class="siteContainer intervalFade">
+                    <button onclick="window.location='./sites/sudoku'">
+                        <img src="media/sudoku.png" class="siteThumbnail notSelectable" aria-label="Sudoku">
+                    </button>
+                    <p class="siteDescription">Generates and solves Sudoku puzzles using a backtracking algorithm.</p>
+                </div>
+
+                <div class="siteContainer intervalFade">
+                    <button onclick="window.location='https://itch.io/jam/gmtk-2023/rate/2159594'">
+                        <img src="media/bnb.png" class="siteThumbnail notSelectable" aria-label="">
+                    </button>
+                    <p class="siteDescription">My team's entry to the 2023 GMTK Game Jam.</p>
+                </div>
+
+                <div class="siteContainer intervalFade">
+                    <button onclick="window.location='./sites/pixel'">
+                        <img src="media/pixel.png" class="siteThumbnail notSelectable" aria-label="Pixel Art Generator">
+                    </button>
+                    <p class="siteDescription">A website to convert images into pixel art with specific palettes.</p>
+                </div>
+
+                <div class="siteContainer intervalFade">
+                    <button onclick="window.location='./sites/crosslord'">
+                        <img src="media/crosslord.png" class="siteThumbnail notSelectable" aria-label="Cross-Lord">
+                    </button>
+                    <p class="siteDescription">An interactive crossword site themed around my school (our mascot was Gaylord the Lion).</p>
+                </div>
+
+                <div class="siteContainer intervalFade">
+                    <button onclick="window.location='./sites/pirateGeography'">
+                        <img src="media/pirate.png" class="siteThumbnail notSelectable" aria-label="Pirate Geography">
+                    </button>
+                    <p class="siteDescription">A pirate-themed geography testing website made with <a href="https://www.netzgesta.de/mapper/" target="_blank">mapper.js</a>.</p>
+                </div>
+
+                <div class="siteContainer intervalFade">
+                    <button onclick="window.location='./sites/extension'">
+                        <img src="media/beartracks.png" class="siteThumbnail notSelectable" aria-label="Bear Tracks">
+                    </button>
+                    <p class="siteDescription">A browser extension to show RateMyProf scores when picking classes.</p>
+                </div>
+
+                <div class="siteContainer intervalFade">
+                    <button onclick="window.location='./sites/GalacticGainz'">
+                        <img src="media/gainz.png" class="siteThumbnail notSelectable" aria-label="Galactic Gainz">
+                    </button>
+                    <p class="siteDescription">My entry to the TWT Code Jam, topic: health.</p>
+                </div>
+
+                <div class="siteContainer intervalFade">
+                    <button onclick="window.location='./sites/scona-live-3'">
+                        <img src="media/sconaLive.png" class="siteThumbnail notSelectable" aria-label="Scona Live">
+                    </button>
+                    <p class="siteDescription">A site to display upcoming live school sport events using the Vimeo API.</p>
+                </div>
+
+                <div class="siteContainer intervalFade">
+                    <button onclick="window.location='./sites/kiddle'">
+                        <img src="media/kiddle.png" class="siteThumbnail notSelectable" aria-label="Kiddle">
+                    </button>
+                    <p class="siteDescription">An easier version of Wordle designed for primary school students.</p>
+                </div>
+
+                <div class="siteContainer intervalFade">
+                    <button onclick="window.location='./sites/progress'">
+                        <img src="media/progressBar.png" class="siteThumbnail notSelectable" aria-label="Progress Bar">
+                    </button>
+                    <p class="siteDescription">A small website to show how much of the year has past.</p>
+                </div> 
+
+                <div class="siteContainer intervalFade">
+                    <button onclick="window.location='./sites/5OClock'">
+                        <img src="media/five.png" class="siteThumbnail notSelectable" aria-label="Five O'Clock Somewhere">
+                    </button>
+                    <p class="siteDescription">A small website that displays where in the world it's currently 5 o'clock using timezone math.</p>
+                </div>
+
             </div>
         </div>
 
+        <canvas id="lowerCanvas"></canvas>
+
         <p id="copyText">Email Copied to Clipboard</p>
 
-        <div class="contactBackground">
+        <div class="sectionContainer">
             <div class="contactContainer">
                 <div class="contactInfo">
-                    <h2 class="fadeScroll title">Contact</h2>
+                    <h2 class="fadeScroll title scrambleScroll contactTitle">Contact</h2>
                     <div class="fadeScroll">
-                        <img class="notSelectable" style="display: inline-block; margin-bottom: -3px;" src="mail.png" width="30px" id="emailImage">
+                        <img class="notSelectable" style="display: inline-block; margin-bottom: -3px;" src="media/mail.png" width="30px" id="emailImage">
                         <p style="display: inline-block; font-family: monospace, 'Courier New', Courier;">Email</p>
                     </div>
                     <button onClick="copyEmail()" class="fadeScroll textHighlight">FinSoehn@gmail.com</button>
@@ -527,57 +157,59 @@
                 <form class="fadeScroll" id="emailForm" action="https://formspree.io/f/xrgrzdpk" method="POST">
                     <input placeholder="Your Email" type="email" name="email" />
                     <textarea placeholder="Enter Message" name="message" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
-                    <button id="form-button">Send<img id="plane" src="plane.png" width="25px"></button>
+                    <button id="form-button">Send<img id="plane" src="media/plane.png" width="25px"></button>
                     <p id="form-status" style="opacity: 0; transition: all 1s; color:#499E98;text-align: center;">&nbsp</p>
                 </form>
             </div>
         </div>
-
-        <footer>
-            <p>--- 2021 ---</p>
-            <p>Finlay Soehn</p>
+        
+        <footer class="sectionContainer greenText">
+            <p class="scrambleScroll">- All websites handmade by me -</p>
         </footer>
 
+        <script src="spaceInvadersDivider.js"></script>
         <script>
+            new SpaceInvaders(document.getElementById("upperCanvas"), "#0E2A35");
+            new SpaceInvaders(document.getElementById("lowerCanvas"), "#FFFFFF");
+
             const scrollIndicator = document.getElementById("scroll");
             const name = document.getElementById("name");
             const root = document.querySelector(":root");
+            const typeSpeed = 100;
             
             var fadeScroll = document.getElementsByClassName("fadeScroll");
             var intervalScroll = document.getElementsByClassName("intervalFade");
+            var scrambleScroll = document.getElementsByClassName("scrambleScroll");
             
             if(window.innerWidth < 600){
                 fadeScroll = [...fadeScroll, ...intervalScroll];
-                console.log(fadeScroll);
                 intervalScroll = [];
             }
 
-            var typeLoop;
-            var typeElement = name;
-            var typeString = "Finlay Soehn.";
-            var typeIndex = 0;
-
-            var nameText = "Finlay Soehn.";
-            var scrambleLoop;
-            var unscrambleLoop;
-            var stringLength = 0;
-            var solvedLetters = [];
+            var allScrambleEls = [];
 
             function init(){
-                fadeInScroll();
+                scrollEvents();
                 setTimeout(()=>{
-                    typeLoop = setInterval(typeLetter, 100);
-                    scrambleLoop = setInterval(scramble, 50);
+                    let loop;
+                    typeString(name, "Finlay Soehn.");
+                    startScramble(name, "Finlay Soehn.");
                 }, 500);
             }
 
-            window.addEventListener("scroll", fadeInScroll);
+            window.addEventListener("scroll", scrollEvents);
+            for(let i = 0; i < intervalScroll.length; ++i){
+                intervalScroll[i].addEventListener('mouseover', () => {
+                    let textHeight = intervalScroll[i].querySelector(".siteDescription").offsetHeight;
+                    intervalScroll[i].style.marginBottom = (50 + textHeight) + "px";
+                });
+                intervalScroll[i].addEventListener('mouseout', () => {
+                    intervalScroll[i].style.marginBottom = 50 + "px";
+                });
+            }
 
-            function fadeInScroll(){
+            function scrollEvents(){
                 var scroll = window.scrollY;
-
-                // if(scroll < 100) document.body.style = 'background: #0E2A35;';
-                // else if(document.body.style.backgroundColor != "white") document.body.style = 'background: white;';
                 
                 for(let el of fadeScroll){
                     if(el.opacity == 1) continue;
@@ -605,25 +237,57 @@
                     showMore(0);
                 }
 
-                
+                for(let el of scrambleScroll){
+                    if(el.getAttribute('doneScramble')) continue;
+
+                    let topOffset = el.offsetTop;
+                    let halfHeight = el.offsetHeight/2;
+
+                    if(scroll > (topOffset - window.innerHeight + halfHeight)){
+                        const text = el.textContent;
+                        el.setAttribute('doneScramble', true);
+
+                        typeString(el);
+                        startScramble(el, text);
+                        setTimeout(() => {
+                            stopScramble(el, 100);
+                            el.onmouseover = () => startScramble(el, text);
+                            el.onmouseleave = () => stopScramble(el, 100);
+                        }, typeSpeed * text.length)
+                    }
+                }
             }
 
-            function typeLetter(){
-                if(typeIndex == typeString.length){
-                    typeIndex = 0;
-                    clearInterval(typeLoop);
+            function typeString(typeEl, typeString = null){
+                if(!typeString){
+                    typeString = typeEl.textContent;
+                    typeEl.innerText = "";
+                }
 
-                    if(typeString === "Finlay Soehn."){ 
-                        clearInterval(typeLoop);
-                        unscrambleLoop = setInterval(unscramble, 75);
+                let typeObj = {
+                    target: typeEl,
+                    text: typeString,
+                    typeIndex: 0,
+                    loop: undefined,
+                }
+
+                typeObj.loop = setInterval(() => typeLetter(typeObj), typeSpeed);
+            }
+
+            function typeLetter(typeObj){
+                if(typeObj.typeIndex == typeObj.text.length){
+                    typeIndex = 0;
+                    clearInterval(typeObj.loop);
+
+                    if(typeObj.text === "Finlay Soehn."){ 
+                        stopScramble(name);
 
                         name.onmouseover = () => {
-                            stopScramble();
-                            scrambleLoop = setInterval(scramble, 50);
+                            startScramble(name, "Finlay Soehn.");
                         }  
 
                         name.onmouseleave = () => {
-                            unscrambleLoop = setInterval(unscramble, 75);
+                            stopScramble(name);
                         };
 
                         setTimeout(()=>{
@@ -631,72 +295,90 @@
                             scrollIndicator.style.opacity = 1;
                             scrollIndicator.style.visibility = "visible";
 
-                            typeString = "Full Stack Developer.";
                             root.style.setProperty('--cursorAnimation', "none");
-                            typeLoop = setInterval(typeLetter, 100);
-                            typeElement = document.getElementById("description");
+                            typeString(descriptionText, "Full Stack Developer.")
 
                             setTimeout(()=>{
                                 scrollIndicator.style.animation = "upDown 2s ease-in-out infinite";
                             }, 1000)
                         }, 1500);
-                    }else{
-                        clearInterval(typeLoop);
+                    }else if (typeObj.element === descriptionText) {
+                        clearInterval(typeObj.loop);
                         root.style.setProperty('--cursorAnimation', "blink 1s steps(2, start) infinite");
                     }
-
-                    
                 }else{
-                    typeElement.innerHTML += typeString[typeIndex];
-                    typeIndex++;
-
-                    if(typeElement == name) stringLength ++;
+                    typeObj.target.innerHTML += typeObj.text[typeObj.typeIndex];
+                    typeObj.typeIndex++;
                 }
             }
 
+            function startScramble(target, finalText){
+                allScrambleEls.forEach(obj => {
+                    if(target === obj.target) removeScramble(obj);
+                });
 
-            function scramble(){
+                let obj = {
+                    target: target,
+                    solvedLetters: [],
+                    text: finalText,
+                    scrambleLoop: undefined,
+                    unscrambleLoop: undefined,
+                }
+
+                allScrambleEls.push(obj);
+                obj.scrambleLoop = setInterval(() => scramble(obj), 50);
+            }
+
+            function stopScramble(target, speed = 75){
+                allScrambleEls.forEach((obj, i) => {
+                    if(obj.target === target){
+                        obj.unscrambleLoop = setInterval(() => unscramble(obj), speed);
+                    }
+                })
+            }
+
+            function scramble(obj){
                 const clearCharacters = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890~!@#$%^&*()`-_=+[]{}\\|:\;\"'?/>.<,";
 
-                for(var i = 0; i < stringLength; i++){
-                    let temp = name.textContent;
+                for(var i = 0; i < obj.target.textContent.length; i++){
+                    let temp = obj.target.textContent;
                     
-                    if(solvedLetters.includes(i) || temp[i] == " ") continue;
+                    if(obj.solvedLetters.includes(i) || temp[i] == " ") continue;
 
                     let random = Math.floor(Math.random() * (clearCharacters.length)); 
-                    name.innerText = temp.substring(0, i) + clearCharacters[random] + temp.substring(i + 1);
+                    obj.target.innerText = temp.substring(0, i) + clearCharacters[random] + temp.substring(i + 1);
                 }
             }
 
-            function unscramble(){        
-                if(solvedLetters.length == nameText.length){
-                    stopScramble();
-                    console.log("THHTHTHTH")
+            function unscramble(obj){ 
+                let textLength = obj.text.length;
 
+                if(obj.solvedLetters.length == textLength){
+                    removeScramble(obj);
                     return;
                 }
 
                 let numLettersSolved = Math.floor(Math.random() * 3);
-                if((nameText.length - solvedLetters.length) == 1) numLettersSolved = 1;
+                if((textLength - obj.solvedLetters.length) == 1) numLettersSolved = 1;
                 
                 for(var i = 0; i < numLettersSolved; i++){
-                    let charIndex = Math.floor(Math.random() * nameText.length);
+                    let charIndex = Math.floor(Math.random() * textLength);
 
-                    while(solvedLetters.includes(charIndex)){ 
-                        if(charIndex == nameText.length - 1) charIndex = 0;
+                    while(obj.solvedLetters.includes(charIndex)){ 
+                        if(charIndex == textLength - 1) charIndex = 0;
                         else charIndex++;
                     }
                     
-                    solvedLetters.push(charIndex);
+                    obj.solvedLetters.push(charIndex);
                     
-                    name.innerText = name.innerText.substring(0, charIndex) + nameText[charIndex] + name.innerText.substring(charIndex + 1);
+                    obj.target.innerText = obj.target.innerText.substring(0, charIndex) + obj.text[charIndex] + obj.target.innerText.substring(charIndex + 1);
                 }
             }
 
-            function stopScramble(){
-                clearInterval(unscrambleLoop);
-                clearInterval(scrambleLoop);
-                solvedLetters = [];
+            function removeScramble(obj){
+                clearInterval(obj.unscrambleLoop);
+                clearInterval(obj.scrambleLoop);
+                allScrambleEls.splice(allScrambleEls.indexOf(obj), 1)
             }
 
             document.getElementById("emailForm").onsubmit = (e) => {

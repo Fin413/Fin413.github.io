@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Mario Day</title>
+    <link rel="icon" type="image/x-icon" href="media/paperToad.png">
+    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&amp;display=swap" rel="stylesheet">
+</head>
+<body>
+    <img src="media/logo3.png" alt="paper mario logo" id="logo">
+    <div class="sectionDiv">
+        <h1 id="countdownHeading">Next Paper Mario Day in...</h1>
+        <div id="countdownContainer">
+            <div class="mobileCountdown">
+                <div class="countdownLabel">
+                    <h1 id="days">00</h1>
+                    <span class="counterSubtext">days</span>
+                </div>
+                <div class="countdownLabel">
+                    <h1 id="hours">00</h1>
+                    <span class="counterSubtext">hours</span>
+                </div>
+            </div>
+
+            <div class="mobileCountdown">
+                <div class="countdownLabel">
+                    <h1 id="minutes">00</h1>
+                    <span class="counterSubtext">minutes</span>
+                </div>
+                <div class="countdownLabel">
+                    <h1 id="seconds">00</h1>
+                    <span class="counterSubtext">seconds</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="row">
+        <img src="media/paperMario.png" alt="paper mario" class="marioImg right" width="50vw">
+        <img src="media/paperToad.png" alt="paper mario" class="marioImg right" width="50vw">
+        <img src="media/paperMario.png" alt="paper mario" class="marioImg right" width="50vw">
+    </div>
+    <div class="sectionDiv white">
+
+        <h1 class="heading">Chat Testimonials</h1>
+        <div class="reviewContainer">
+            <button class="arrowBtn" onclick="nextReview(1)"><img src="media/arrow.png" alt="left arrow icon" width="50"></button>
+            <div id="allReviews"></div>
+            <button class="arrowBtn" onclick="nextReview(-1)"><img src="media/arrow.png" alt="right arrow icon" width="50"></button>
+        </div>
+    </div>
+    <div class="row">
+        <img src="media/paperMario.png" alt="paper mario" class="marioImg left" width="50vw">
+        <img src="media/paperToad.png" alt="paper mario" class="marioImg left" width="50vw">
+        <img src="media/paperMario.png" alt="paper mario" class="marioImg left" width="50vw">
+    </div>
+    <div class="sectionDiv paddingDiv">
+        <div class="coffeeCowContainer">
+            <img src="media/atrioc.png" alt="atrioc the coffee cow ewing" class="brandon">
+            <img src="media/coffee.png" alt="coffee cup for a coffee cow" class="coffee">
+        </div>
+        <h1 class="heading">About the Event</h1>
+        <p class="paragraph">Paper Mario Day is an annual international holiday taking place on March 22nd. Every year on this day, twitch streamer Atrioc <span style="white-space: pre;">(<button class="linkBtn" onclick="showOverlay()">click here to see full name</button>)</span> plays the game Paper Mario on stream. Chatters come from far and wide to witness the spectacle of critical acclaim, often skipping work, school, or even funerals to be able to say "I was here." With riveting voice acting and non-stop action, it's easy to see why Paper Mario Day has gone down in history as the most illustrious day of the year.</p>
+    </div>
+
+    <div id="overlayContainer" onclick="hideOverlay(this)">
+        <div class="overlayContent">
+            <h2>Atrioc's Full Name</h2>
+            <p>Brandon "Glizzy Hands" "Atrioc" "Big A" "Brandon" "The Ghost" "Sarah" "Mustard Boy" "Ewing" "Grustler" "Master Glizzard" "Sir Glizzington" "Boomer" "Edward Scissorhands" "The Blev" "Dog Shampoo" "Loot Goblin" "G.H." "Remember the Greenout?" "Blurper" "Glizzy Gobbler" "Agent Sigma-19" "Macking Gummies" "Pizza Neck" "Coke Addict" "Paris" "small balls, big shaft" "Atroic" "Golden Grahampa" "Reality Shifter" "Btrioc" "Mustart Boy" "Sugma Male" "Basedtrioc" "trend setter" "glizzy hands" "Say it don't spray it" "Little do you know" "I don't have glizzy hands" "The Falco Slayer" "Glizzmaster69" "S3K Superfan" "Patrick Ewing's Nephew" "I don't have hot dog fingers" "Little Elf Boy" "Glizzlord" "Glizztopher" "Glizzy 47" "The Gliz" "Mr. Nvidia" "ASU Graduate" "Big Hog" "Weenie Fingies" "Hexflex Clear Primer" "Boots" "Little A" "Glizzyhands" "The Conductor" "Brandon Ewing" "Patrick Ewing's Nephew" "Atrio" "Glizzy hands" "atrioc" "Little Do You Know" "Trend Setter" "I Don't Have Glizzy Hands" "Small Balls, Big Shaft" "GH" "[REDACTED]" "Sharker" "only person capable of subbing to Twitch" "WELL" "Not Single and Will Not Mingle" "1000 SR McCree" "G.H" "E-wing" "I don't have glizzy hands" "Say it don't spray it" "Used To Work For Twitch But Got Fired For Being Too Sigma" "Troll Boy" "Ludwig Ahgren's Friend" "Edward Glizzyhands" "Little a" "I Don't Have Hot Dog Fingers" "Dharman Fam" "Challenger Fizz" "Hex Flex Clear Primer" "Pwner09's Less Talented Rival" "Back To Paris" "Say It, Don't Spray It." "Guy Evan Gao Hypes" "Pepsiman" "GlizzyHands" "GLIZZY HANDS" "crinkydink" "Golden Glizzy Hunter" "Sigma" "The Dark Wild" "Best leeches on twitch" "the ghost" "Remember The Greenout" "Lil A" "Castle in the Alps" "Enron 2" "Sigma Male" "Say It Don't Spray It" "BasedTrioc" "big A" "glizzyhands" "The Golden Glizzy" "The 'Atrioc' Ghost" "A" "bunch of nicknames" "ATRIOC" "ewing" "the conductor" "elf boy" "Bitch Boy" "The Clown" "only person capable of subbing to twitch" "AMD denier" "tries to be cool" "God Gamer" "the blev" "Glizzy Hnads" "Mustato Boi" "Edward Glizzorhands" "Smegma Snail" "Buzz Glizzington" "Golden Glizzy" "Sara" "sigma" "Glizzington" "The Troc" "suck at video games" "Puss Puss" "Yep Coke" "glitzy hands" "Franch" "88 Month Bezos Simp" "The Cave Watcher" "Where's The Water Boots?" "big a" "Dream" "mustard boy" "Patrick Ewing" "Atrioc Glizzy Hands" "little elf boy" "weenie fingies" "Nvidia" "frames win games" "The Glizz" "Patrick" "slugma" "Danger" "Cookie Champion" "The Grustler" "A-T-R-O-C" "Big Glizz" "King Glizzard" "YEP COKE" "Greenout" "grindset" "Trendsetter" "boots" "The ghost" "Atroik" "Not Glizzy Hands" "Glizzy Goblin" "Stop Calling me Glizzyhands" "Sir Glizz" "Marketing Master" "3090" "15 years ago, Ludwig's father died tragically of alcoholism" "Hitman Glizzy Hands" "Atrioc the Glizzy Gulper Sheesh McSheesherson" "Big "Brandon "The Blev" Ewing" A" "camera on chest" "Remember the greenout" "Master GLizzard" "GLizzlord" "Sir glizzington" "Glizzy Gobler" "i don't have glizzy hands" "Say it don't spary it" "Never gets old" "Always funny" "family" "Honey Pot, Glizzyhands" "ghost" "oldie but Goldie" "god gamer" "Atrioc "glizzy hands" Ewing" "Atrioc 'the Ghost'" "Blind Uzbeki who lives in a lamp" "big A grustle grind set" "Atrioc Big A Glizzyhands" "i re-stinkly remeber this" "Basically Eminem" "Big "Glizzy " The "sdfg" Ghost" Hands" A" "Glizzy-hands" "Remember The Greenout?" "Atrion" "James Atrioc" "slimes friends friend" "The Goat" "never misses" "Sartre" "Former Nvidia employee" "5'8 andy" "spend a mil to make a quarter" "Saw blade" "Brandon sleep deprived" "Brandon "Marketing God" Ewing" "Marketing Genius" "Senile Clown" "Sugma male" "Brandon Glizzy Wings" "The Glizzy Goblin" "Ludwin would have done it better" "Don't call me Glizzyhands I'd rather you call me Brandon" "Ok don't call me Brandon either that's even worse" "GLIIZY HANDS small balls BIG SHAFT" "The King" "Mr. Hitman" "Kill All The Frogs" "Joey Wheeler" "the marketer who streams on the side" "Glizzy Ewing Mustard" "quotations" "Targeting Tuesdays" "desert grabber" "Wife (dead)" "The Baby Destroyer" "shut the fuck up this joke isnt funny anymore" "Milky" "dessert" "pregnant wife stabber" "Thanks for the the early upload Kaage :)" "THE GLIZ" "Need For Speed" "Good Driver" "Drip lord 🥶" "its not me its them" "glizzy hands 🥶🥶" "the Glizzer 🥶🥶" "normal people" "The gliz" "Blev" "1 in 7 Trillion" "Mr. Glocal" "glizzy ewing" "grustler" "Based" "Ghost" "Epstien Enjoyer" "Dream's best friend" "DREAMS BEST FRIEND" "loot goblin" "glizzy gobbler" "Marketing Sigma" "Nvidia Soy" "Grustle and Grindset" "Glizzhand" "Atrioc Glizzy Gobbler" "ranked 13th in North America League of Legends servers" "big A, please dont take the car, glizzy hands" "Enron" "Big A, Little A, Bouncing B - Crass" "the "Atrioc" ghost" "patrick ewing" "ready like spaghetti" "Ninja Blev" "Don't call me" "Brandon Glizzy Atrioc Hands Ewing" "glizzy" "Glizzy 'Big "Atrioc" A' Hands" "Brandon""Glizzy Hands""Nvidia""Ewing's" "Grease Lightning" "The conductor" "Little Glizzy Hands Elf Boy" "G.H.E.B.S." "The Gobbler" "Agent 47" "Dumbass Looking Hair" "brandon" "brandon "weenie fingies" "little elf boy" "innovator of hitman strats" "sigma male" "The Conductor" ewing" "Sigma 47" "Elf Boy" "sarah glizzy elf boy" "I'm a little elf boy" "elf" "boy" "Killer Clown" "Sharkers" "Remember the Greenout?!" "Being a fan of connoreatspants its like being a fan of" "Sir Glizmeister" "Sheesh" "S3K" "Baby Monkey Goes Ooh Ooh Ahh Ahh" "YEP Coke" "Paris sure is nice this time of year" "Jimmy 'Atrioc' Buckets" "Jimmy 'atrioc' buckets" "drip lord 🥶" "slightly crooked hat" "MASTER GLIZZARD" "NVIDIA" "Don't call me "Glizzy Hands"" "Big A" "Atrioc" Ewing" "glizzy groper" "No Glizz Balls" "Master Baiter" "Daddy" "Glizzy Fingers" "Vietnamtrioc" "Slime's friend's friend" "Glizzy Arms" "Creator of Greenout" ""Ewing" "Stumpy" "Advicetrioc"" "ASSIST CHECK" "Remember the Greenout" "Small balls, big shaft" "sg" "gh" "Small Balls Big Shaft" "glizzomania" "Glizzy hand gunk" "GH GlizzyHands Mustard Boy YEP COKE Ninja Tyler Blevins 'The Blev' The Ghost The Clown Quilliam Ewing" "Grind Hustle" "blevins" "Master Baller" "former Eminem, ghost writer for drake" "S3K leech" "greenout" "grustle" "trillionaire grindset" "glizzard" "Patrick's Cousin" "Atrioc, Sir G.H" "HELP ME IM IN TROUBLE" "The Master Storyteller" "Olympic marketing" "Mr. Average Cock" "Glizzy Olympian" "Glizzard the Glizzy Hands" "Hitman Hero" "Hollow Knight King" "Centillionaire Grindset" "Gambling God" "Quack does all the work" "the Clown" "Ehwing" "Blicky Man" "NVIDIA Expert Marketer" "atrioc "atrioc "atrioc blevins" glizzy hands" ewing" "Subathon streamer" "Apple killer" "Tiny A" "Brandon "Brandon "Brandon "Brandon "Brandon "Brandon "Brandon Ewing" Ewing" Ewing" Ewing" Ewing" Ewing" Ewing" "The Cunductor" "Streamer" "Brandon 'Glizzy Hands' Ewing" "Don't call me Brandon" "Little Elf Boy Glizzy Hands The Ghost Clown 47 Nvidia Gaming Warlord Atrioc" "Little elf boy" "Golden Glizzy hands" "lots of funny nicknames" "the golden glizzard" "Golden Glizzy Hands" "golden glizzy grinder" "Dexerto" "Ex-Twitch Employee" "Sly Dream Roaster" "Twitch's Only Sub" "Ghost pulling up in the Ghost" "golden glizzard" "Big A "exploiting children for content" Glizzy Hands" "The babysitter" "Sea of These Nuts" "Glizzy gobbler" "Ruler of the Sigmas" "Bezoz" "Pirate King Extraordinaire" "a bunch of quotes" "Atrioc Glizzyhands Ghost Ewing" "Glizzy "Tyler "🥶" Blevins" Hands" "Ludwig" ""Glizzy '"Mustard "Big 'Atrioc' A" Boy"' Hands"" "Kurinji" "S3k" "The GOAT" "Big" "Little b" "Glizy hands" "Glizzy Ewing" "bullying a child" "Piano Fingers" "ŭ̸͎n̶͓͇͝ŏ̸̝̔͜ṟ̴̘̈́͝i̷̧̡͒͗g̶̟̝͂î̶̫̗n̶͔̍͝à̵͎̈́l̵̳͠ ̴̘̲̉j̴͈̖̄̕ő̷̤̈́͜k̶̦͖͊͊e̸̢̫̾ ̶͖̈́̔ ̴̾̈́̾͋́̋̕̕" "Nanny Nvidia" "glizzy hand" "lazy eye" "Never finished A Way Out" "Glizzy "Sarah" Hands" "audio desync" "sussy baka" "Amouranth" "Scared of the Dark" "Sausage Knuckles" "flush everything" "has some weenie fingies" "molerat" "Carlsen" "Fossil" "Linkus" "Creator of Marketing himself" "former twitch employee turned streamer atrioc" "Evan Gao wearing his face" "Glizzy Hands Brandon" "brandon glizzy-hands" "hands resemble the common American glizzy" "Twitch is the next TV" "Bill Gates and Epstiens friendship is heartwarming" "robbing jay z" "it's the meth talking" "Ludwig will never get more than 100 viewers" "X-wing" "I don't have hot dog fingers" "This is so True" "Dog" "Backer" "Mr. 100K" "Silver Play Button" "RPS God" "Monkeyball Maniac" "BRANDON EWING" "THE GHOST" "Glizzy Hands Fucking Sigma Grindset Atrioc" "Fucking Sigma Grindset" "Vienna Toes" "Trillionaire Mindset" "Glizzy Hands Sigma Grindset Remember The Greenout? Atrioc" "Smegma" "Big A'" "My sh*t tastes amazing" "weed gummy macker" "Golden Gram" "Glizzmaster" "the Ewing" "The Glizzy Gobbler" "sausage fingers" "mr marketing" "Flower Isn't In Cookies" "'Big A' 'Glizzy Hands' 'Sarah'" "ninja" "Big Blev" "Brandon 'Brandon 'glizzyands Atrioc' Ewing' Ewing" "channel" "Brandon GlizzyHands The Ghost" "Ewing hands" "What The Fuck Am I Dewing" "King Glizzard and the Glizzard Glizzard" "Activision Glizzard" "Bloody Saturday" "Jesus "Atrioc" Moment" "Glizzy Clown Hands" "Atrioc The Ghost" "philanthropist" "the White Larry Bird" "'Glizzy "Atrioc 'Yummers' Ewing" Hands'" "Brandon "Glizzy Hands" Erwing" "The Ghost 3090 God Gamer" "YOU'RE FIRED" "Sorry Jeff but I'm sigma and you can't touch me" "Amazon" "glizzy farts" "the glizzard" "Big A Glizzy Hands Tai Lopez" "Tai Lopez level" "Has Nvidia 6 figure job offers in his back pocket to give to aspiring marketers" "I don't lead a cult" "Ewing Sarcoma" "bad at platforming" "Hotdog Fingers" "old" "Crinky Chronchmas" "Magnus" "Dino" "Idk tbh" "4'3(guys like the old memes get it????)" "Baby Face" "Ninja" "Blevins" "PUSS PUSS MUSTARD BOY" "Puss Puss Mustard Boy" "French descent" "the Conductor" "paris" "Martin" "Martin Lawrence from Bad Boys 2" "Evan Gao's boss" "I run train every night/glizzyhands" "Holy Moly" "loser" "Grindset sigma male" "Dhar man's Sidekick" "4 foot 5" "RTX off" "dead hitman category runner" "World Record Holder" "muffin hands" "double 00 glizz" "Atrioc 'Glizzy Hands' Bilzarian" "Guantanamo" "SELLOUT GLIZZY HANDS" "DUMBO" "Stop Calling Me Glizzyhands" "Elder" "Don't call me GlizzyHands" "Mr. Glizzard" "glizzy hands sigma grindset sheesh draco malfoy patrick ewing" "mustrard boy" "Brandon "The Ghost" "Fizz God" "Challenger" "Ari's (soon to be) husband" "Sigma" Ewing" "2 AND 10" "thats a world record" "glizzatron" "super shifter" "the wing" "Grindster" "brandon ewing" "Pencil Hands" "Brandon The Ghost Glizzy Hands" "A-Troik" "Atrioc Glizzyhands Sigma Atroik" "brandon"" "A-troik" "Glitzy Hands" "G.H. Atroic" "ah-troyk" "Glizzy Hands The Clown The Ghost Atroic" "atroic" "atroic glizzy hands" "a-triock" "Clown Killer" "Earwig" "Brandon ""Brandon Ewing"" Ewing" "Don't call me Brandon "Brandon Ewing" Ewing" "Brandon "Brandon "Brandon "Brandon "Brandon Ewing" Ewing" Ewing" Ewing" Ewing" "Ludwigs father died tragically of alcoholism" "I've seen everything" "Atrioc Ewing" "Master Glizzlord" "the 'Atrioc' Ghost" "swag" "Stop calling me Glizzy I swear to god" "sigma grindset" "Glizzy-Hands" "Grind" "Agent 47 Years Old" "chapstick" "marketing glizzy hands" "Brandon "Big A" Ewing" "trillionare grindset" "Clownfarter" "McGrinder" "Atrioc Glizzyhands The Grind King" "The Grind King" "Clown Suit" "Hollow Knight God" "Trillionaire Grindset" "Legend of League" "Engaged to Ari" "Gen IV Master" "Terry Hater" "Market Madman" "champagne socialist" "Stanky" "brandon glizzy fingers ewing" "Ms. Glizz" Ewing</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <h4>Made by FinL4e in chat</h4>
+        <img src="media/cornerMario.png" alt="paper mario" class="cornerMario">
+    </div>
+
+
+    <img src="media/faketrioc2.png" alt="fake atrioc" class="faketrioc atriocImg">
+    <img src="media/baldtrioc2.png" alt="fake atrioc" class="baldtrioc atriocImg">
+
+
+    <script>
+        const testimonials = [
+            {
+                text: "IM LITERALLY CRYING RIGHT NOW THANK U ATRIOC THANK YOU",
+                author: "deliciouspopping",
+            },
+            {
+                text: "I'm so grateful that the Coffee Cow decided to play this", // 38.48
+                author: "darthelliekey",
+            },
+            {
+                text: "Hey Big A will you please do the Toad voice for your wedding vows?",
+                author: "kneecoz", //41.09
+            },
+            {
+                text: "THE VOICE ACTING IS SO GOOD LITERAL CHILLS",
+                author: "dirkdv", //41.57
+            },
+            {
+                text: "Finally the quality content I've been waiting for since i started subbing",
+                author: "TWick72",
+            },
+            {
+                text: "I cant believe this is real, this might be the best day of my life and I just graduated",
+                author: "gibrish_", //41.50
+            },
+            {
+                text: "I've been here for 3 minutes, I can't believe what I'm seeing. \"why does this guy only have 5.6k viewers\" is a distant memory of a thought. I can't tear my eyes away. every moment is beautiful. the paper, the mario, it's all glorious. whoever I was before, I can never know. I am pipibrick. he who watches Paper Mario. that is who I am, and that is who I will always be, that is who I have always been.",
+                author: "jay_kudva", //41.59
+            },
+            {
+                text: "@atrioc this game is boring af why are you playing it",
+                author: "fartcast", //42.09
+            },
+            {
+                text: "I am sitting in my car, parked in the driveway, eating Taco Bell and SOBBING. This is the greatest stream I have ever witnessed. I refuse to leave the vehicle in fear of the downtime brought by switching to wifi from cellular. THANK YOU FOR THIS NIGHT",
+                author: "echoRich",
+            },
+            {
+                text: "you have to have a very high IQ to understand Paper Mario. 🪠 The humour is extremely subtle 🔎, and without a solid grasp of theoretical physics 🧠 most of the jokes will go over a typical view's head",
+                author: "a_real_gecko",
+            },
+            {
+                text: "Every frame a masterpiece",
+                author: "rapid_relief",
+            },
+            {
+                text: "The profound relationship between Atrioc and Paper Mario is beautiful. The \"game\" only furthers in it's complexity, its beauty, its gloriousness. Atrioc, an avid enjoyer of the game, lets his enjoyment show through his praises. We hope he plays Paper Mario and nothing else.", //ends with crying pog emoji
+                author: "SnowsterYEP", // 48.52
+            },
+            {
+                text: "I am missing work for this adventure. The money I would get from 1000 years of work would pale in comparison to the full body experience of watching you play this masterpiece. Thank you sir for your service to humanity",
+                author: "Drew_Burger", //49.05
+            },
+            {
+                text: "this is literally the best birthday of my life. I am so blessed to have been born on paper mario day praise be to the coffee cow and his stream",
+                author: "Oager", //52.19
+            },
+            {
+                text: "IVE GOT FINALS IN 6 HOURS BUT THIS IS WORTH FAILING HISTORY",
+                author: "JENGOs25",
+            },
+            {
+                text: "its been a year, watching the category, waiting, waiting for someone to hear my cries, my wishes, finally after my year of trials i am free. take this prime sub, I hope this can give you a fraction of the satisfaction this play through gives me.",
+                author: "scorpian7103", //130.40
+            }
+        ]
+        var reviewText = document.getElementsByClassName("text");
+        var reviewAuthor = document.getElementsByClassName("author");
+        var colorCounter = 1;
+        var mouseOverContent = false;
+        var overlayContent = document.getElementsByClassName("overlayContent")[0];
+
+        overlayContent.onmouseover = () => {
+            mouseOverContent = true;
+        }
+
+        overlayContent.onmouseout = () => {
+            mouseOverContent = false;
+        }
+
+        testimonials.forEach(temp => {
+            let tempText = document.createElement("p");
+            let tempAuthor = document.createElement("p");
+            let tempContainer = document.createElement("p");
+
+            let tempTextContainer = document.createElement("div");
+
+            tempText.classList = "text";
+            tempText.innerText = temp.text;
+
+            if(colorCounter == 1) tempAuthor.classList = "author purple";
+            else if(colorCounter == 2) tempAuthor.classList = "author red";
+            else if(colorCounter == 3) tempAuthor.classList = "author blue";
+            else tempAuthor.classList = "author green";
+
+            colorCounter ++;
+            if(colorCounter == 5) colorCounter = 1;
+
+            tempAuthor.innerText = temp.author;
+            tempContainer.classList = "review";
+            tempTextContainer.appendChild(tempText);
+            tempTextContainer.appendChild(tempAuthor);
+            tempContainer.appendChild(tempTextContainer);
+            document.getElementById("allReviews").appendChild(tempContainer);
+        })
+
+        var reviewWidth = 60;
+        if(window.innerWidth < 700) reviewWidth = 70;
+
+        var reviewMargin = 15 + (-reviewWidth * (Math.floor(Math.random() * (testimonials.length - 4)) + 3));
+        document.getElementById("allReviews").style.marginLeft = reviewMargin + "vw";
+    
+        var numbers = document.getElementsByClassName("num");
+        var now = new Date();
+
+        var currentYear = now.getFullYear();
+        var currentMonth = now.getMonth();
+        var currentDay = now.getDate();
+
+        var countDownDate = new Date("May 22, " + (currentYear + 1)).getTime();
+        var x;
+
+        document.body.onload = () => {
+            if(currentMonth == 4 && currentDay == 22){
+                ITS_PAPER_MARIO_DAY();
+            }else{
+                for(let i = 0; i < numbers.length; i++){
+                    numbers[i].style.transform = "rotateY(360deg)";
+                }
+                setTimeout(() => {
+                    x = setInterval(updateTime, 1000);
+                    updateTime();
+                }, 350)
+            }
+        }
+
+        window.onresize = () => {
+            console.log(reviewMargin)
+            if(window.innerWidth <= 700 && reviewWidth == 60){
+                reviewWidth = 70;
+                reviewMargin = 15 + (-reviewWidth * ((Math.abs(reviewMargin) + 15) / 60));
+                console.log("to 70")
+            }else if(window.innerWidth > 700 && reviewWidth == 70){
+                reviewWidth = 60;
+                reviewMargin = 15 + (-reviewWidth * ((Math.abs(reviewMargin) + 15) / 70));
+                console.log("to 60")
+            }
+            document.getElementById("allReviews").style.marginLeft = (reviewMargin) + "vw";
+        }
+
+        function nextReview(direction){
+
+            if(reviewMargin == (15 - (reviewWidth * (testimonials.length - 2))) && direction < 0){
+                let tempElement = document.getElementsByClassName("review")[0];
+                tempElement.remove();
+
+                reviewMargin += reviewWidth;
+
+                document.getElementById("allReviews").style.transition = "none";
+                document.getElementById("allReviews").style.marginLeft = (reviewMargin) + "vw";
+
+                document.getElementById("allReviews").appendChild(tempElement);
+
+                setTimeout(() => {
+                    reviewMargin -= reviewWidth;
+                    document.getElementById("allReviews").style.transition = "margin 1s";
+                    document.getElementById("allReviews").style.marginLeft = (reviewMargin) + "vw";
+                }, 100);
+            }else if(reviewMargin == (15 - reviewWidth) && direction > 0){
+                let tempElement = document.getElementsByClassName("review")[testimonials.length - 1];
+                tempElement.remove();
+
+                reviewMargin -= reviewWidth; 
+
+                document.getElementById("allReviews").style.transition = "none";
+                document.getElementById("allReviews").style.marginLeft = (reviewMargin) + "vw";
+
+                document.getElementById("allReviews").insertBefore(tempElement, document.getElementsByClassName("review")[0]);
+
+                setTimeout(() => {
+                    reviewMargin += reviewWidth;
+                    document.getElementById("allReviews").style.transition = "margin 1s";
+                    document.getElementById("allReviews").style.marginLeft = (reviewMargin) + "vw";
+                }, 100);
+            }else{
+                reviewMargin += (reviewWidth * direction);
+                document.getElementById("allReviews").style.marginLeft = (reviewMargin) + "vw";
+            }
+
+            console.log(reviewMargin)
+        }
+
+        function ITS_PAPER_MARIO_DAY(){ // caps lock cause of how pog this day is
+            // shits myself in excitement
+            document.getElementById("countdownHeading").innerText = "IT'S PAPER MARIO DAY!!!";
+        }
+
+        function showOverlay(){
+            document.getElementById("overlayContainer").style.visibility = "visible";
+            document.getElementById("overlayContainer").style.opacity = 1;
+            document.body.style.overflowY = "hidden";
+            setTimeout(() => {
+                document.getElementsByClassName("overlayContent")[0].style.transform = "translateY(0)";
+            }, 500)
+        }
+
+        function hideOverlay(){
+            if(mouseOverContent) return;
+            document.body.style.overflowY = "scroll";
+            document.getElementById("overlayContainer").style.visibility = "hidden";
+            document.getElementById("overlayContainer").style.opacity = 0;
+            document.getElementsByClassName("overlayContent")[0].style.transform = "translateY(-200%)";
+        }
+
+        function updateTime(){
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if(days < 0){
+                clearInterval(x);
+                days = 0;
+                hours = 0;
+                minutes = 0;
+                seconds = 0;
+            }
+
+            if(days < 10) days = "0" + days;
+            if(hours < 10) hours = "0" + hours;
+            if(minutes < 10) minutes = "0" + minutes;
+            if(seconds < 10) seconds = "0" + seconds;
+
+            // let values = [days, hours, minutes, seconds];
+
+            // values.forEach((tempNum, i) => {
+            //     let newHtml = ';
+            //     tempNum = tempNum + "";
+
+            //     for(let j = 0; j < tempNum.length; j++){
+            //         newHtml += "<span class='num'>" + tempNum[j] + "</span>";
+            //     }
+
+            //     if(i == 0) days = newHtml;
+            //     else if(i == 1) hours = newHtml;
+            //     else if(i == 2) minutes = newHtml;
+            //     else seconds = newHtml;
+            // })
+
+
+            // numbers = document.getElementsByClassName("num");
+
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours;
+            document.getElementById("minutes").innerText = minutes;
+            document.getElementById("seconds").innerText = seconds;
+
+            // setTimeout(() => {
+            //     if(numbers[8].style.transform == "rotateY(360deg)"){
+            //         numbers[8].style.transform = "rotateY(0deg)";
+            //     }else{
+            //         numbers[8].style.transform = "rotateY(360deg)";
+            //     }
+            // }, 708);
+
+            if (distance <= 1000) {
+                clearInterval(x);
+                ITS_PAPER_MARIO_DAY();
+            }
+        }
+    </script>
+</body>
+</html>

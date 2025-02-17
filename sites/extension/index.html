@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate My Prof for Beartracks</title>
+    <link rel="icon" type="image/x-icon" href="bear.png">
+    <style>
+        .fadeIn, .intervalFade{
+            opacity: 0;
+            transition: opacity 1s, transform 1s;
+        }
+
+        .intervalFade{
+            transform: translateY(75px);
+        }
+
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #427D51;
+            overflow-x: hidden;
+            position: relative;
+            margin: 0;
+            padding: 6%;
+        }
+
+        h1{
+            margin-top: 13px;
+        }
+
+        #mainContent{
+            position: relative;
+            margin-bottom: 6%;
+            z-index: 100;
+            /* margin-bottom: 140px; */
+            background-color: white;
+            padding: 25px 50px;
+            border-radius: 5px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
+        .inlineImg{
+            display: inline-block;
+            width: 50px;
+            margin-bottom: -14px;
+            margin-left: 13px;
+        }
+
+
+        .exampleEl{
+            cursor: pointer;
+            display: inline-block;
+        }
+        .rateMyProfSpan{
+            padding: 1px 2px;
+            border-radius: 2px;
+        }
+
+
+        h2{
+            text-align: center;
+            color:white;
+            font-size: 1.8em;
+            letter-spacing: 2px;
+        }
+        #browserContainer {
+            display: flex;
+            justify-content: space-evenly;
+            position: relative;
+            z-index: 10;
+        }
+        .browserEl{
+            background-color: white;
+            padding: 13px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+            margin: 10px;
+            text-align: center;
+            z-index: 10;
+            transition: all 500ms;
+            cursor: pointer;
+            width: 200px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            border: 0px solid #FFDB06;
+        }
+        .browserEl::before {
+            background-color: #FFDB06;
+            content: "";
+            inset: 0;
+            top: 0;
+            left: 0;
+            position: absolute;
+            right: 100%;
+            transition: right 500ms;
+            z-index: -1;
+            border-radius: 5px;
+        }
+        .browserEl:hover::before {
+            right: 0;
+        }
+        a{
+            transition: all 500ms;
+            font-weight: 100;
+        }
+        .browserEl:hover > a {
+            color: #427D51;
+        }
+        .browserEl:hover > img {
+            transform: rotate(360deg)
+        }
+
+        .logo{
+            width: 35px;
+            margin-bottom: 10px;
+            transition: all 500ms;
+        }
+
+
+        #imgContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 11%;
+            margin-bottom: 7%;
+
+            z-index: 10;
+            position: relative;
+        }
+        .screenshotContainer{ /* added cuz had weird artifacts otherwise */
+            overflow: hidden;
+            z-index: 10;
+            max-width: 640px;
+            width: 35%;
+            border: 5px solid #FFDB06;
+            border-radius: 5px;
+            transition: transform 800ms;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            position: relative;
+        }
+        .screenshot{
+            cursor:pointer;
+            width: 100%;
+            margin-bottom: -10px;
+        }
+        .screenshotContainer:first-of-type{
+            transform: rotate(-10deg);
+        }
+        .screenshotContainer:last-of-type{
+            transform: rotate(10deg);
+        }
+        .cloneScreenshot{
+            max-width: 1050px;
+            position: fixed;
+            transition: all 1s;
+            z-index: 2000;
+            cursor: default;
+        }
+
+
+        .pawDiv{
+            z-index: 0;
+            position: absolute;
+            top: 0;
+            right: 0;
+            overflow: hidden;
+            width: 500px;
+            height: 500px;
+        }
+        .bottomPawDiv{
+            top: initial;
+            bottom: 0;
+            left: 0;
+            transform: scale(-1);
+        }
+        .paw{
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 225px;
+        }
+        .paw:first-of-type{
+            top: -40px;
+            right: 100px;
+            transform: rotate(-50deg);
+        }
+        .paw:last-of-type{
+            transform: scaleX(-1) rotate(70deg);
+            top: 250px;
+            right: -50px;
+        }
+
+
+        ul{
+            list-style-image: url(bullet.svg);
+            
+        }
+        li:before {
+            background-color: #FFDB06;
+            width: 2px; 
+            content: '';
+            position: absolute;
+            top: 10px;
+            bottom: -7px;
+            left: -15px;
+        }
+        li {
+            position: relative;
+            margin: 0;
+            padding-bottom: 1em;
+            padding-left: 20px;
+        }
+        li:last-of-type:before{
+            width: 0;
+        }
+
+        #overlay{
+            background-color: rgba(0,0,0,0.5);
+            position: fixed;
+            visibility: hidden;
+            opacity: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(6px);
+            transition: all 1s;
+        }
+
+
+        @media only screen and (max-width: 1000px) {
+            body{
+                overflow-x: hidden;
+            }
+            #mainContent{
+                margin-bottom: 75px;
+            }
+            #imgContainer {
+                flex-direction: column;
+                margin-top: 150px;
+                margin-bottom: 15%;
+            }
+            .screenshotContainer{
+                width: 60%;
+            }
+        }
+        @media only screen and (max-width: 700px) {
+            #mainContent{
+                padding: 5px 25px;
+            }
+            #browserContainer{
+                flex-direction: column;
+                align-items: center;
+            }
+            .browserEl{
+                margin-bottom: 50px;
+            }
+            #imgContainer {
+                margin-top: 100px;
+                margin-bottom: 150px;
+            }
+            .screenshotContainer{
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mainContent" class="fadeIn">
+        <h1>Rate my Professor for Beartracks <img src="bear.png" alt="bear logo" class="inlineImg"></h1>
+        <p>This web extension displays rate my professor ratings for University of Alberta professors while picking classes on <a href="">Beartracks</a>.</p>
+        <p>The <span class="exampleEl">professors name</span> will be <span class="exampleEl">highlighted</span> with a <span class="exampleEl">color</span> corresponding to their <span class="exampleEl">rating</span>. When <span class="exampleEl">hovered</span> over their the rating <span class="exampleEl">insights</span> appear as well as a <span class="exampleEl">link</span> to their full ratemyprofessor.com <span class="exampleEl">page</span>.</p>
+        <h3>Features:</h3>
+        <ul>
+            <li>Color coded professor names based off of ratings</li>
+            <li>Access a professors ratemyprof page with a single click</li>
+            <li>Ratings and number of reviews appear when hovering over a professors name</li>
+            <li>Easy install and go set up completely free!</li>
+        </ul>
+    </div>
+
+    <h2 class="fadeIn">Installations</h2>
+    <div id="browserContainer" class="fadeIn">
+        <div class="browserEl intervalFade" onclick="window.location.href='https:/\/chrome.google.com/webstore/detail/rate-my-professor-for-bea/kifijggjfblaffdmblofdpelncponijl'">
+            <img src="chrome.png" alt="chrome logo" class="logo">
+            <a href="https://chrome.google.com/webstore/detail/rate-my-professor-for-bea/kifijggjfblaffdmblofdpelncponijl">Install for Chrome</a>
+        </div>
+        <div class="browserEl intervalFade" onclick="window.location.href='https:/\/microsoftedge.microsoft.com/addons/detail/bkjcflhifajaginkebcbggieeodpbcgb'">
+            <img src="edge.png" alt="microsoft edge logo" class="logo">
+            <a href="https://microsoftedge.microsoft.com/addons/detail/bkjcflhifajaginkebcbggieeodpbcgb">Install for Microsoft Edge</a>
+        </div>
+        <div class="browserEl intervalFade" onclick="window.location.href='https:/\/addons.mozilla.org/en-CA/firefox/addon/rate-my-prof-for-beartracks/'">
+            <img src="firefox.png" alt="firefox logo" class="logo">
+            <a href="https://addons.mozilla.org/en-CA/firefox/addon/rate-my-prof-for-beartracks/">Install for Firefox</a>
+        </div>
+    </div>
+
+    <div id="imgContainer" class="fadeIn">
+        <div class="screenshotContainer">
+            <img src="screenshot2.png" alt="screenshot of extension" class="screenshot">
+        </div>
+        <div class="screenshotContainer">
+            <img src="screenshot1.png" alt="screenshot of extension" class="screenshot">
+        </div>
+    </div>
+
+    <div class="pawDiv">
+        <img src="paw.png" alt="bear paw icon" class="paw">
+        <img src="paw.png" alt="bear paw icon" class="paw">
+    </div>
+    <div class="bottomPawDiv pawDiv">
+        <img src="paw.png" alt="bear paw icon" class="paw">
+        <img src="paw.png" alt="bear paw icon" class="paw">
+    </div>
+
+    <div id="overlay"></div>
+
+
+
+    <script>
+        const overlay = document.getElementById("overlay");
+        const fadeScroll = document.getElementsByClassName("fadeIn");
+        const intervalScroll = document.getElementsByClassName("intervalFade");
+
+        var previousImgData;
+        var imgIsTransistioning = false;
+
+        Array.from(document.getElementsByClassName("exampleEl")).forEach((el) => {
+            addElement(el.innerText, el);
+        })
+
+        window.addEventListener("scroll", fadeInScroll);
+        window.addEventListener("load", fadeInScroll);
+
+        document.getElementById("overlay").addEventListener("click", () => {
+            if (imgIsTransistioning) return;
+            imgIsTransistioning = true;
+
+            let el = document.getElementsByClassName("cloneScreenshot")[0];
+            el.style.position = "absolute";
+            el.style.transition = "none";
+
+            let scrollTop = getScrollTop();
+            el.style.top = (window.innerHeight / 2) + scrollTop + "px";
+            
+            setTimeout(() => {
+                el.style.transition = "all 1s";
+                el.style.transform = "translate(0,0)"
+                let scrollTop = getScrollTop();
+
+                el.style.transform = `rotate(${previousImgData[2]})`;
+                el.style.top = previousImgData[0] + scrollTop + "px";
+                el.style.left = previousImgData[1] + "px";
+                el.style.width = previousImgData[3];
+            }, 100);
+
+            overlay.style.opacity = 0;
+            overlay.style.visibility = "hidden";
+
+            setTimeout(() => {
+                Array.from(document.getElementsByClassName("screenshotContainer")).forEach((tmp) => {
+                    tmp.style.visibility = "visible";
+                });
+                el.remove();
+                imgIsTransistioning = false;
+            }, 1100);
+        })
+
+        function getScrollTop() {
+            return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+        }
+
+
+        function fadeInScroll(){
+            var scroll = window.scrollY;
+
+            for(let el of fadeScroll){
+                if(el.opacity == 1) continue;
+
+                let topOffset = el.offsetTop;
+                let halfHeight = el.offsetHeight/2;
+
+                if(scroll > (topOffset - window.innerHeight + halfHeight)){
+                    el.style.opacity = 1;
+                    el.style.transform = "translateY(0)";
+                }
+            }
+
+            if(intervalScroll.length > 0 && intervalScroll[0].style.opacity != 1 && scroll > (intervalScroll[0].offsetTop - window.innerHeight + (intervalScroll[0].offsetHeight/2))){
+                const showMore = i => {
+                    intervalScroll[i].style.opacity = 1;
+                    intervalScroll[i].style.transform = "translateY(0)";
+                    if(i < intervalScroll.length - 1){
+                        setTimeout(() => {
+                            showMore(i + 1);
+                        }, 400);
+                    }
+                }
+
+                showMore(0);
+            }
+        }
+
+        Array.from(document.getElementsByClassName("screenshotContainer")).forEach((el, i) => {
+            el.addEventListener("click", () => {
+                if (imgIsTransistioning) return;
+
+                var clone = el.cloneNode(true);
+                clone.classList = "cloneScreenshot screenshotContainer";
+
+                let theight = parseFloat(getComputedStyle(el)["height"].slice(0, -2));
+                let twidth = parseFloat(getComputedStyle(el)["width"].slice(0, -2));
+                let x = (el.getBoundingClientRect().width - 10 - twidth) / 2; // - 10 for border
+                let y = (el.getBoundingClientRect().height - 10 - theight) / 2;
+                
+                let topDist = el.getBoundingClientRect().top + y;
+                let leftDist = el.getBoundingClientRect().left + x ;
+                let imgWidth = getComputedStyle(el)["width"]; 
+                let rotation;
+                if (i == 0) rotation = "-10deg";
+                else rotation = "10deg";
+
+                previousImgData = [topDist, leftDist, rotation, imgWidth];
+
+                clone.style.top = topDist + "px";
+                clone.style.left = leftDist + "px";
+                clone.style.width = imgWidth;
+                clone.style.transform = "rotate(" + getRotationDegrees(el) + "deg)";
+
+                document.body.appendChild(clone);
+
+                el.style.visibility = "hidden";
+                overlay.style.visibility = "visible";
+                overlay.style.opacity = 1;
+
+                setTimeout(() => {
+                    clone.style.top = "50%";
+                    clone.style.left = "50%"
+                    clone.style.transform = "translate(-50%, -50%)";
+                    let width = window.innerWidth;
+                    let height = window.innerHeight;
+
+                    if (width > height) {
+                        clone.style.width = "60%";
+                    } else {
+                        clone.style.width = "80%";
+                    }
+                }, 100)
+            })
+            el.addEventListener("mouseover", () => {
+                el.style.transform = "rotate(0deg)";
+            })
+            el.addEventListener("mouseout", () => {
+                if (i == 0) el.style.transform = "rotate(-10deg)";
+                else el.style.transform = "rotate(10deg)";
+            })
+        })
+
+        function getRotationDegrees(element) {
+            // https://stackoverflow.com/questions/3336101/css3-animation-on-transform-rotate-way-to-fetch-current-deg-of-the-rotating-el
+            var style = window.getComputedStyle(element);
+            var transformString = style['-webkit-transform']
+                            || style['-moz-transform']
+                            || style['transform'] ;
+            if (!transformString || transformString == 'none')
+                return 0;
+            var splits = transformString.split(',');
+            var parenLoc = splits[0].indexOf('(');
+            var a = parseFloat(splits[0].substr(parenLoc+1));
+            var b = parseFloat(splits[1]);
+            var rad = Math.atan2(b, a);
+            var deg = 180 * rad / Math.PI;
+            // if (deg < 0) deg += 360;
+            return deg;
+        }
+
+        function addElement(text, el){
+            let color;
+            let tooltip;
+
+            let rating = random(0,5);
+
+            tooltip = createTooltip(rating);
+            color = getColor(rating);
+            
+
+            let html = "<span class='rateMyProfSpan' style='background-color:" + color + ";'>" + text + tooltip + "</span>";
+            el.innerHTML = html;
+            let newElement = el.lastChild;
+            attachEvents(el);
+        }
+
+        function attachEvents(element) {
+            console.log(element)
+            element.addEventListener("mouseover", (e) => {
+                element.firstChild.lastChild.style.pointerEvents = "initial";
+                element.firstChild.lastChild.style.visibility = "visible";
+                element.firstChild.lastChild.style.opacity = 1;
+            });
+
+            element.addEventListener("mouseleave", (e) => {
+                element.firstChild.lastChild.style.pointerEvents = "none";
+                element.firstChild.lastChild.style.visibility = "hidden";
+                element.firstChild.lastChild.style.opacity = 0;
+            });
+        }
+
+        function createTooltip(rating){
+            let div = document.createElement("div");
+            div.style = "visibility: hidden; opacity: 0; position: absolute; transition: all 400ms; background-color: #3D3D3D; padding: 8px 13px; border-radius: 4px; color: white; z-index: 1000; width: max-content;";
+
+            let link = document.createElement("a");
+            link.style.color = "#5894d1";
+            link.style.textDecoration = "underline";
+            link.target = "_blank";
+
+            div.innerText = "Rating: " + rating + " / 5";
+            div.innerText += "\nNumber of Ratings: " + random(5, 150) + "\n";
+            link.innerText = "View page";
+            link.href = "https://www.ratemyprofessors.com/";
+            
+
+            div.appendChild(link);
+            return div.outerHTML;
+        }
+
+        function random(min, max) {
+            return Math.floor(Math.random() * (max - min) ) + min;
+        }
+
+        function getColor(rating){
+            if (rating >= 4){
+                return "#7FF6C3";
+            } else if (rating >= 3) {
+                return "#FFF170";
+            }
+            return "#FF9C9C";
+        }
+    </script>
+    
+</body>
+</html>

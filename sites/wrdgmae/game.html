@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WRd gaem</title>
+    <link rel="icon" type="image/x-icon" href="./media/favicon.png">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+    <style>
+        body{
+            background: url("media/background.png") repeat;
+            padding-bottom: 100px;
+            font-family: 'comic sans';
+        }
+        #code{
+            text-align: center;
+        }
+        .chatContainer{
+            width: 250px;
+            position: relative;
+            margin-left: 25px;
+            
+        }
+        .chat {
+            width: 100%;
+            min-height: 100px;
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            word-wrap: break-word;
+            background: url("media/chatBackground.png") repeat;
+            background-size: 50px;
+        }
+        .message, .adminText{
+            width: 100%;
+            background-color: rgba(255,255,255,0.8);
+            margin: 5px 0;
+            padding: 5px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            word-wrap: break-word;
+        }
+
+        .message p, .adminText p {
+            margin: 0 10px;
+        }
+        #startBtn{
+            margin: 20px;
+            font-family: 'comic sans';
+            background-color: aqua;
+            border: 3px solid yellow;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+        #startBtn:hover, .wordChoice:hover{
+            transform: scale(1.5);
+        }
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .playerDisp{
+            margin: 0 10px;
+        }
+
+        
+        #statusText{
+            margin-right: 25px;
+        }
+        #players{
+            flex-wrap: wrap;
+            margin: 0;
+        }
+        
+        .nameScoreContainer{
+            margin: 0;
+        }
+
+        .nameScoreContainer p, .nameScoreContainer h1{
+            margin: 0;
+            margin-left: 10px;
+        }
+
+        .nameScoreContainer h1{
+            color: magenta;
+        }
+
+        .guessContainer{
+            display: flex;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .guessContainer * {
+            flex: 1;
+        }
+
+        .guessContainer input[type=button]{
+            margin-left: 10px;
+            flex: 0.5;
+        }
+
+        input{
+            font-family: 'comic sans';
+        }
+
+        .colorBtn{
+            width: 25px;
+            height: 25px;
+            margin: 0 5px;
+            border: 2px inset yellow;
+            cursor: pointer;
+        }
+
+        .colorBtn:hover{
+            transform: scale(1.5);
+        }
+
+        .colorBtn:nth-child(1){
+            background-color: #000000;
+        }
+
+        .colorBtn:nth-child(2){
+            background-color: #FE01E4;
+        }
+
+        .colorBtn:nth-child(3){
+            background-color: #FF3C01;
+        }
+
+        .colorBtn:nth-child(4){
+            background-color: #0203e2;
+        }
+
+        .colorBtn:nth-child(5){
+            background-color: #8ffe09;
+        }
+
+        .colorBtn:nth-child(6){
+            background-color: #BCB502;
+        }
+
+        #timer{
+            margin-right: 50px;
+        }
+
+        #overlay{
+            width: 100%;
+            height: 100%;
+            height: 100vh;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: none;
+            z-index: 10;
+            background-color: rgba(0,0,0,0.5);
+            /* display: flex; */
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        #overlay p{
+            color: greenyellow;
+        }
+
+        #urDrawing{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10vw;
+            text-align: center;
+            margin: 0;
+            /* animation: spinGrow 1s infinite; */
+            transform-origin: left;
+            color: magenta;
+        }
+
+        @keyframes spinGrow{
+            0%{
+                transform: rotate(10deg) scale(1) translate(-50%, -50%);
+            }
+            50%{
+                transform: rotate(-10deg) scale(1.5) translate(-50%, -50%);
+            }
+            100%{
+                transform: rotate(10deg) scale(1) translate(-50%, -50%);
+            }
+        }
+
+        .overlayContent{
+            display: none;
+
+            text-align: center;
+        }
+
+        #answerDisp{
+            color: greenyellow;
+        }
+
+        .adminText{
+            background-color: rgba(0,255,0,0.7);
+        }
+
+        .wordChoice{
+            margin: 10px;
+            padding: 10px 25px;
+            border: 3px solid yellow;
+            border-radius: 50%;
+            background-color: cyan;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="overlay">
+        <div class="overlayContent">
+            <h1 id="urDrawing">
+                UR DRAWING!!!
+            </h1>
+            <p>Select a word</p>
+            <div class="row">
+                <button class="wordChoice" onclick="selectWord(this)"></button>
+                <button class="wordChoice" onclick="selectWord(this)"></button>
+                <button class="wordChoice" onclick="selectWord(this)"></button>
+            </div>
+        </div>
+        <div class="overlayContent">
+        </div>
+    </div>
+    <div class="row">
+        <p id="statusText"></p>
+        <p id="players" class="row"></p>
+    </div>
+
+    <div class="row">
+        <p id="code"></p>
+        <button id="startBtn" style="display: none" onclick="triggerStart()">Start Game</button>
+    </div>
+
+    <div class="row">
+        <div>
+            <div style="display: flex;">
+                <p id="timer">60</p>
+                <p id="word"></p>
+            </div>
+            <canvas id="drawingCanvas" width="500" height="500"></canvas>
+            <div class="optionsContainer row">
+                <div class="colors row" style="flex-wrap: wrap">
+                    <button class="colorBtn" onclick="changeColor(this)"></button>
+                    <button class="colorBtn" onclick="changeColor(this)"></button>
+                    <button class="colorBtn" onclick="changeColor(this)"></button>
+                    <button class="colorBtn" onclick="changeColor(this)"></button>
+                    <button class="colorBtn" onclick="changeColor(this)"></button>
+                    <button class="colorBtn" onclick="changeColor(this)"></button>
+                </div>
+                <button onclick="clearCanvas()">Clear Canvas</button>
+            </div>
+        </div>
+        <div class="chatContainer">
+            <div class="chat"></div>
+            <div class="guessContainer">
+                <input type="text" id="guess" placeholder="Enter guess">
+                <input type="button" value="send" onclick="guess()">
+            </div>
+        </div>
+    </div>
+    <script src="./words.js"></script>
+    <script>
+        const canvas = document.getElementById("drawingCanvas");
+        const context = canvas.getContext("2d");
+        var background = new Image();
+        var mouseCoords = [0,0];
+        var mousedown = false;
+        var points = [];
+        var color = "#000000";
+        var drawingWord;
+        var correct = false;
+
+        var drawing = false;
+        background.src = "media/canvasBackground.png";
+        resize();
+        background.onload = draw;
+
+        window.addEventListener("resize", resize);
+        window.onmousedown = (e) => { 
+           if(drawing){
+               points.push(null);
+               mousedown = true; 
+           }
+        }
+        window.onmouseup = () => { mousedown = false; }
+
+        canvas.onmousemove = (e) => {
+            if(drawing && mousedown){
+                let temp = canvas.getBoundingClientRect();
+                // mouseCoords = [(e.clientX - temp.left) / (canvas.width / 500), (e.clientY - temp.top) / (canvas.width / 500)];
+                points.push({
+                    x: (e.clientX - temp.left) / (canvas.width / 500),
+                    y: (e.clientY - temp.top) / (canvas.width / 500),
+                    color: color
+                });
+                send({coords: points});
+                draw();
+            }
+        }
+
+        function changeColor(el){
+            let temp = getComputedStyle(el).backgroundColor;
+            console.log(el, temp)
+            color = temp;
+        }
+
+        function clearCanvas(){
+            if(drawing){
+                points = [];
+                send({coords: points});
+                draw();
+            }
+        }
+    
+        
+        function draw(){
+            context.drawImage(background, 0, 0, 500, 500);
+            for(let i = 0; i < points.length - 1; i++){
+                context.beginPath();
+                context.lineWidth = 5;
+                context.lineCap = 'round';
+                if(points[i] != null){
+                    context.strokeStyle = points[i].color;
+                    context.moveTo(points[i].x, points[i].y);
+                }
+                if(points[i + 1] != null){
+                    context.lineTo(points[i + 1].x, points[i + 1].y);
+                }
+                context.stroke();
+            }
+        }
+
+        function resize(){
+            // resizes canvas along 4x3 aspect ratio when page is resized
+
+            let sizeIncrease = 1.5;
+            width = window.innerWidth / (sizeIncrease);
+            height = window.innerWidth / (sizeIncrease);
+
+            if(height > window.innerHeight - 300){
+                width = window.innerHeight / (sizeIncrease);
+                height = window.innerHeight / (sizeIncrease);
+            }
+            
+            canvas.height = height;
+            canvas.width = width;
+        
+            context.scale(canvas.width / 500, canvas.height / 500); // cuz OG size is 900 x 675
+            draw();
+        }
+
+
+    </script>
+    <script>
+        const confirmationMessage = "fibblei12489HDnsdjkd8329fkakadjiwfibbleio";
+
+        var peer;
+        var connections = [];
+        var players = [];
+        var answerOrder = [];
+        var answerIndex = 0;
+        var currentArtist;
+        var round = 0;
+        var timer;
+        var url = window.location.href;
+        var playerName = decodeURI(url.substring(url.indexOf("name=") + 5, url.indexOf("&tar=")));
+        var avatar = decodeURI(url.substring(url.indexOf("tar=") + 4));
+        var connCode =  (Math.floor(Math.random() * 9999) + 1000);
+        var isJoining = window.location.href.includes("?id=");
+        var startingIntervals = [];
+        var playerDrawingNum;
+        
+        var statusText = document.getElementById("statusText");
+        
+        const avatars = [
+            "mario",
+            "arah",
+            "ash",
+            "dor",
+            "dro",
+            "linguini",
+            "longe",
+            "wad",
+            "todd",
+            "der",
+            "snail",
+            "cool",
+            "raj"
+        ]
+        
+        addPlayer(playerName, avatar);
+
+        document.getElementById("guess").onkeydown = (e) => {
+            if(e.key == "Enter"){
+                guess();
+            }
+        }
+
+        if(isJoining){
+            statusText.innerText = "Connecting...";
+            peer = new Peer();
+        }else{
+            statusText.innerText = "Wating for players...";
+            document.getElementById("code").innerText = "Join Code: loading...";
+            document.getElementById("startBtn").style.display = "block";
+            peer = new Peer(confirmationMessage + connCode);
+        }
+
+        peer.on('open', function(id) {
+            console.log(id);
+
+            if(isJoining){
+                let id = window.location.href.substring(url.indexOf("?id=") + 4, url.indexOf("&name"));
+                connections.push(peer.connect(confirmationMessage + id));
+                initConnection(connections[0]);
+            }else{
+                document.getElementById("code").innerText = "Join Code: " + connCode;
+            }
+
+            peer.on('connection', function(c) {
+                connections.push(c);
+                if(!isJoining) send({newId: c.peer});
+                initConnection(c);
+            });
+        });
+
+        function initConnection(conn){
+            conn.on('data', function(data) {
+                console.log(data)
+                if(data.conMsg){
+                    statusText.innerText = (connections.length + 1) + " Players in Lobby!";
+
+                    for(let i = 0; i < players.length; i++){
+                        if(players[i].name == data.name){
+                            break;
+                        }else if(i == players.length - 1){
+                            addPlayer(data.name, data.avatar);
+                            break;
+                        }
+                    }
+                  
+                    if(data.code){
+                        document.getElementById("code").innerHTML = "Join Code: " + data.code + "<br>waitng for host to start game...";
+                    }
+                }else if(data.newId){
+                    for(let conn in connections){
+                        if(conn.peer == data.newId) return;
+                    }
+                    connections.push(peer.connect(data.newId));
+                    initConnection(connections[connections.length - 1]);
+                }else if(data == "START GAME"){
+                    startGame();
+                }else if(data.nextArtist){
+                    if(data.nextArtist == playerName){
+                        myTurn();
+                    }else{
+                        currentArtist = data.nextArtist;
+                        console.log(data.nextArtist, currentArtist);
+                        document.getElementById("code").innerText = "Waiting for " + data.nextArtist + " to choose a word...";
+                    }
+                }else if(data.startRound){
+                    startCountdown(data.startRound);
+                    document.getElementById("code").innerText = currentArtist + " is drawing";
+                    document.getElementById("word").innerHTML = "";
+                    document.getElementById("word").innerHTML = data.wordHint;
+                }else if(data.answer){
+                    document.getElementById("word").innerText = "Thw word was \"" + data.answer + "\"";
+                    drawingWord = data.answer;
+                    addToChat("WRD GAEM", "ThE word was " + data.answer);
+                }else if(data.coords){
+                    points = data.coords;
+                    console.log(points);
+                    draw();
+                }else if(data.correct){
+                    if(data.correct == playerName){
+                        correct = true;
+                    }else{
+                        removeMessage(data.correct);
+                    }
+                    addPoints(data.correct);
+                    addToChat("WRD GAME", data.correct + " guessed the word!");
+                }else{
+                    if(drawing && data.guess == drawingWord){
+                        send({correct: data.name, avatar: data.avatar});
+                        addPoints(data.name);
+                        addToChat("WRD GAEM", data.name + " guessed the word!");
+                    }else{
+                        addToChat(data.name, data.guess, data.avatar);
+                    }
+                }
+            });
+
+            if(isJoining){
+                startingIntervals.push(setInterval(() => { 
+                    conn.send({
+                        name: playerName, 
+                        avatar: avatar,
+                        conMsg: confirmationMessage
+                    })
+                    
+                }, 1000));
+
+            }else{
+                startingIntervals.push(setInterval(() => { 
+                    conn.send({
+                        name: playerName, 
+                        avatar: avatar,
+                        code: connCode,
+                        conMsg: confirmationMessage
+                    })
+                }, 1000));
+            }
+        }
+
+        function removeMessage(tempName){
+            let allMessages = document.getElementsByClassName("message");
+
+            for(let i = allMessages.length - 1; i >= 0; i--){
+                if(allMessages[i].innerHTML.includes(tempName + ":")){
+                    allMessages[i].remove();
+                    break;
+                }
+            }
+        }
+
+        function addPoints(tempName){
+            players.forEach((element, index, array) => {
+                if(element.name == tempName){
+                    switch(answerIndex){
+                        case 0:
+                            element.points += 450;
+                            break;
+                        case 1:
+                            element.points += 400;
+                            break;
+                        case 2:
+                            element.points += 350;
+                            break;
+                        default:
+                            element.points += 300;
+                    }
+
+                    answerOrder.push(element);
+                }
+            });
+
+            answerIndex++;
+        }
+
+        function send(data){
+            if(connections.length == 0) return;
+            for(let i = 0; i < connections.length; i++){
+                console.log("sent to", connections[i].peer);
+                connections[i].send(data);
+            }
+        }
+// curremt artist is undefined WHY MFER WHY still????
+        function showPoints(){
+            document.getElementById("overlay").style.display = "flex";
+            document.getElementsByClassName("overlayContent")[1].style.display = "block";
+            let titleText = document.createElement("h1");
+            titleText.innerText = "The word was \"" + drawingWord + "\"";
+            titleText.style.color = "greenyellow";
+            document.getElementsByClassName("overlayContent")[1].appendChild(titleText);
+
+            let allCorrectPlayers = []
+
+            answerOrder.forEach((element, index) => {
+                let tempPoints;
+                if(index == 0) tempPoints = 450;
+                else if(index == 1) tempPoints = 400;
+                else if(index == 2) tempPoints = 350;
+                else if(index > 2) tempPoints = 300;
+                addPlayerToScoreDisplay(element.name, element.avatar, tempPoints);
+                allCorrectPlayers.push(element.name);
+            });
+
+            players.forEach((element) => {
+                console.log(currentArtist)
+                if(currentArtist == element.name){
+                    let artistScore = Math.round(450 * (answerOrder.length / (players.length - 1)));
+                    console.log(artistScore, players.length, answerOrder.length)
+                    element.points += artistScore;
+                    addPlayerToScoreDisplay(element.name, element.avatar, artistScore);
+                }else if(!allCorrectPlayers.includes(element.name)){
+                    addPlayerToScoreDisplay(element.name, element.avatar, 0);
+                }
+            });
+
+            for(let i = 0; i < players.length; i ++){
+                document.getElementsByClassName("playerScore")[i].innerText = players[i].points;
+            }
+
+            setTimeout(() => {
+                answerOrder = [];
+                answerIndex = 0;
+                document.getElementById("overlay").style.display = "none";
+                document.getElementsByClassName("overlayContent")[1].style.display = "none";
+                document.getElementsByClassName("overlayContent")[1].innerHTML = "";
+
+                round++;
+                if(round > (players.length * 3)){
+                    let max = players[0];
+                    players.forEach((element, index, array) => {
+                        
+                        let tempTwo = document.createElement("div");
+                        tempTwo.classList = "playerDisp row";
+                        let img = document.createElement("img");
+                        img.src = "media/" + avatars[element.avatar] + ".png";
+                        img.width = "100";
+
+                        let textCont = document.createElement("div");
+                        textCont.classList = "nameScoreContainer";
+                        
+                        let tempName = document.createElement("h1");
+                        tempName.innerText = element.name;
+
+                        let tempScore = document.createElement("h1");
+                        tempScore.innerText = element.points;
+
+                        textCont.appendChild(tempName);
+                        textCont.appendChild(tempScore);
+
+                        tempTwo.appendChild(img);
+                        tempTwo.appendChild(textCont);
+
+                        document.getElementsByClassName("overlayContent")[1].appendChild(tempTwo);
+
+                        if(element.points > max.points) max = element;
+                    });
+                    document.getElementById("answerDisp").innerText = "GAME OVER! " + max.name + " WINS!";
+                }else if(!isJoining) incrementTurn();
+            }, 8000);
+        }
+
+        function addPlayerToScoreDisplay(name, num, score){
+                let temp = document.createElement("div");
+                temp.classList = "playerDisp row";
+                let img = document.createElement("img");
+                img.src = "media/" + avatars[num] + ".png";
+                img.width = "100";
+
+                let textCont = document.createElement("div");
+                textCont.classList = "nameScoreContainer";
+                
+                let tempName = document.createElement("h1");
+                tempName.innerText = name;
+
+                let tempScore = document.createElement("h1");
+                tempScore.innerText = "+" + score;
+
+                textCont.appendChild(tempName);
+                textCont.appendChild(tempScore);
+
+                temp.appendChild(img);
+                temp.appendChild(textCont);
+
+                document.getElementsByClassName("overlayContent")[1].appendChild(temp);
+        }
+
+        function myTurn(){
+            drawing = true;
+            correct = true;
+            currentArtist = playerName;
+
+            document.getElementsByClassName("overlayContent")[0].style.display = "block";
+            document.getElementById("code").innerHTML = "You are drawing";
+
+            let overlay = document.getElementById("overlay");
+            let urDrawing = document.getElementById("urDrawing");
+
+            overlay.style.display = "flex";
+            urDrawing.style.display = "block";
+            urDrawing.style.animation = "spinGrow 1s 3";
+
+            let wordOptions = [];
+            for(let i = 0; i < 3; i++){
+                let tempWord = words[Math.floor(Math.random() * words.length)];;
+                while(wordOptions.includes(tempWord)){
+                    tempWord = words[Math.floor(Math.random() * words.length)];
+                }
+                wordOptions[i] = tempWord;
+                document.getElementsByClassName("wordChoice")[i].innerText = wordOptions[i];
+            }
+            
+
+            setTimeout(() => {
+                // overlay.style.display = "none";
+                urDrawing.style.display = "none";
+                urDrawing.style.animation = 'none';
+                urDrawing.offsetHeight; /* trigger reflow */
+                urDrawing.style.animation = null;
+            }, 2000);
+        }
+
+        function selectWord(el){
+            drawingWord = el.innerText;
+            document.getElementById("overlay").style.display = "none";
+            document.getElementsByClassName("overlayContent")[0].style.display = "none";
+            document.getElementById("word").innerText = drawingWord;
+
+            let now = new Date().getTime()
+            startCountdown(now);
+
+            let tempHint = "";
+            for(let i = 0; i < drawingWord.length; i++){
+                if(drawingWord[i] == " ") tempHint += "&nbsp;&nbsp;";
+                else tempHint += "_&nbsp;"
+            }
+
+            send({startRound: now, wordHint: tempHint});
+
+            points = [];
+            send({coords: points});
+            draw();
+        }
+
+        function guess(){
+            let guess = document.getElementById("guess").value.trim();
+            if(guess == "" || correct) return;
+            document.getElementById("guess").value = "";
+            addToChat(playerName, guess, avatar);
+            send({
+                name: playerName,
+                avatar: avatar,
+                guess: guess
+            });
+        }
+
+        function addToChat(name, message, num){
+            let container = document.createElement("div");
+            if(num == undefined) container.classList = "adminText";
+            else container.classList = "message";
+            
+            let img = document.createElement("img");
+            img.src = "media/" + avatars[num] + ".png";
+            if(num == undefined){
+                img.src = "media/favicon.png";
+            }
+            img.width = "30";
+            container.appendChild(img);
+            
+            let temp = document.createElement("p");
+            temp.innerText += name + ": " + message;
+            container.appendChild(temp);
+
+
+            document.getElementsByClassName("chat")[0].appendChild(container);
+        }
+
+        function triggerStart(){
+            send("START GAME");
+            document.getElementById("startBtn").style.display = "none";
+            playerDrawingNum = Math.floor(Math.random() * players.length);
+            let startingPlayer = players[playerDrawingNum].name;
+            startGame();
+            startTurn(startingPlayer);
+            currentArtist = startingPlayer;
+            if(startingPlayer == playerName){
+                myTurn();
+            }else{
+                document.getElementById("code").innerHTML = "Waiting for " + startingPlayer + " to choose a word...";
+            }
+        }
+
+        function incrementTurn(){
+            console.log("INCREMENTING")
+
+            playerDrawingNum++;
+            if(playerDrawingNum == players.length){
+                playerDrawingNum = 0;
+            }
+
+            let nextPlayer = players[playerDrawingNum].name;
+            currentArtist = nextPlayer;
+            startTurn(nextPlayer);
+
+            if(nextPlayer == playerName){
+                myTurn();
+                document.getElementById("code").innerHTML = "";
+            }else{
+                document.getElementById("code").innerHTML = "Waiting for " + nextPlayer + " to choose a word...";
+            }
+        }
+
+        function startCountdown(startTime){
+            timer = setInterval(() => {
+                let now = new Date().getTime();
+                tempNum = 60 - Math.floor((now - startTime) / 1000);
+                if(tempNum <= 0){
+                    clearInterval(timer);
+                    if(drawing){
+                        send({answer: drawingWord});
+                    }
+
+                    if(!correct){
+
+                    }
+
+                    drawing = false;
+                    correct = false;
+                    
+                    setTimeout(() => {
+                        showPoints();
+                    }, 1000);
+                    // if(!isJoining){
+                    //     console.log("Fjdkjslkafjdlk")
+                    //     setTimeout(() => {
+                    //         incrementTurn();
+                    //     }, 5000);
+                    // }
+                }
+                document.getElementById("timer").innerText = tempNum;
+            }, 1000);
+        }
+
+        function startTurn(startingPlayer){
+            
+            send({nextArtist: startingPlayer});
+        }
+
+        function startGame(){
+            for(let i = 0; i < startingIntervals.length; i++){
+                clearInterval(startingIntervals[i]);
+            }
+        }
+
+        function addPlayer(name, num){
+            let temp = document.createElement("div");
+            temp.classList = "playerDisp row";
+            let img = document.createElement("img");
+            img.src = "media/" + avatars[num] + ".png";
+            img.width = "50";
+
+            let textCont = document.createElement("div");
+            textCont.classList = "nameScoreContainer";
+            
+            let tempName = document.createElement("p");
+            tempName.innerText = name;
+
+            let tempScore = document.createElement("p");
+            tempScore.innerText = "0";
+            tempScore.classList = "playerScore";
+
+            textCont.appendChild(tempName);
+            textCont.appendChild(tempScore);
+
+            temp.appendChild(img);
+            temp.appendChild(textCont);
+
+            document.getElementById("players").appendChild(temp);
+            players.push({name: name, avatar: num, points: 0});
+        }
+    </script>
+</body>
+</html>

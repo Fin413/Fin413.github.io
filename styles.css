@@ -1,0 +1,464 @@
+:root{
+    --cursorAnimation: blink 1s steps(2, start) infinite;
+}
+
+body, html{
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    background: #0E2A35;
+}
+
+/* Scrollbar */
+ ::-webkit-scrollbar {
+    width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #4B6269; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #091b22; 
+}
+
+
+/************** Misc Styles **************/
+
+.sectionContainer{
+    display: flex;
+    /* padding: 100px 0; */
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.notSelectable{
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.fadeScroll, .intervalFade{
+    opacity: 0;
+    transform: translateY(100px);
+    transition: opacity 1s, transform 1s;
+}
+
+.title{
+    font-size: 4em;
+    margin: 0;
+    cursor: pointer;
+}
+
+button{
+    background-color: transparent;
+    border: none;
+}
+
+footer{
+    /* margin: 25px 0; */
+    text-align: center;
+    padding: 25px 0;
+    /* background-color: white; */
+    /* clip-path: polygon(0% 0%, 11% 8%, 21% 4%, 31% 8%, 34% 5%, 50% 9%, 70% 5%, 68% 9%, 86% 5%, 92% 10%, 100% 0%, 100% 100%, 0% 100%); */
+}
+
+
+/************** Name Section **************/
+
+.nameContainer{
+    height: 100svh;
+}
+
+#name{
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 8rem;
+    margin: 0;
+    color: #4B6269;
+    text-align: center;
+}
+
+#description{
+    color: #6B9528;
+    text-align: left;
+    word-break: break-all;
+    font-weight: normal;
+    font-size: 20px;
+    margin-bottom: 75px;
+}
+
+#description::after{
+    content: "_";
+    animation: var(--cursorAnimation);
+}
+
+@media only screen and (max-width: 600px) {
+    #name{
+        font-size: 20vw;
+    }
+
+    .nameContainer{
+        padding: 0 25px 0 25px;
+    }
+}
+
+#scroll{
+    position: absolute;
+    visibility: hidden;
+    bottom: -100px;
+    opacity: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    margin: auto auto 0 0;
+    text-align: center;
+    color: #4B6269;
+    transition: bottom 1s, visibility 1s, opacity 1s;
+}
+
+#scroll p {
+    margin-bottom: -5px;
+    font-size: 20px;
+}
+
+.downArrow{
+    border: solid #4B6269;
+    border-width: 0 3px 3px 0;
+    border-radius: 2px;
+    display: inline-block;
+    padding: 5px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+
+/************** Portfolio Section **************/
+
+.portfolioContainer {
+    background-color: white;
+    color: #0E2A35;
+    padding: 75px 50px 75px 50px;
+}
+
+@media only screen and (max-width: 520px) {
+    .portfolioContainer {
+        padding: 75px 0px 75px 0px;
+    }
+}
+
+.portfolioGrid{
+    margin-top: 25px;
+    background-color: white;
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.siteContainer{
+    width: 300px;
+    position: relative;
+    margin: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+    z-index: 1;
+
+    /* https://css-tip.com/corner-only-border-image/ */
+    --b: 2px;   /* thickness of the border */
+    --c: #0E2A35;   /* color of the border */
+    --w: 0px;  /* width of border */
+    border: var(--b) solid #0000;
+    --_g: #0000 90deg,var(--c) 0;
+    --_p: var(--w) var(--w) border-box no-repeat;
+    background:
+        conic-gradient(from 90deg  at top    var(--b) left  var(--b),var(--_g)) 0    0    / var(--_p),
+        conic-gradient(from 180deg at top    var(--b) right var(--b),var(--_g)) 100% 0    / var(--_p),
+        conic-gradient(from 0deg   at bottom var(--b) left  var(--b),var(--_g)) 0    100% / var(--_p),
+        conic-gradient(from -90deg at bottom var(--b) right var(--b),var(--_g)) 100% 100% / var(--_p);
+    transition: background 400ms, opacity 1s, transform 1s, margin 400ms 0s;
+}
+
+.siteContainer:hover{
+    --w: 20px;
+    --_p: var(--w) var(--w) border-box no-repeat;
+    background:
+        conic-gradient(from 90deg  at top    var(--b) left  var(--b),var(--_g)) 0    0    / var(--_p),
+        conic-gradient(from 180deg at top    var(--b) right var(--b),var(--_g)) 100% 0    / var(--_p),
+        conic-gradient(from 0deg   at bottom var(--b) left  var(--b),var(--_g)) 0    100% / var(--_p),
+        conic-gradient(from -90deg at bottom var(--b) right var(--b),var(--_g)) 100% 100% / var(--_p);
+    transition: background 400ms, opacity 1s, transform 1s, margin 400ms 0.15s;
+}
+
+.siteContainer button {
+    background-color: white;
+    padding: 0;
+    z-index: 1;
+}
+
+.siteThumbnail{
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    transition: opacity 200ms;
+}
+
+.siteContainer:hover button:hover > .siteThumbnail{               
+    opacity: 0.5;
+}
+
+.siteDescription{
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    margin-top: 0;
+    padding-top: 5px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;/*300px;*/
+    transition: bottom 1s;
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: 400ms ease-out 0s;
+    cursor:auto;
+}
+
+.siteContainer:hover > .siteDescription,    
+.siteContainer button:focus ~ .siteDescription {
+    transform: translateY(0);
+    opacity: 1;
+    transition-delay: 0.15s;
+}
+
+
+/************** Contact Section **************/
+
+.contactContainer{
+    padding: 100px 0;
+    height: fit-content;
+    margin-top:auto;
+    margin-bottom: auto;
+    display: flex;
+    flex-direction: row;
+
+    transition: ;
+}
+
+.contactTitle{
+    width: 269px; /* type effect shifts layout, this prevents that */
+}
+
+.contactInfo{
+    text-align: right;
+    color: #6B9528;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    margin-right: 100px;
+}
+
+form{
+    margin-top: 20px;
+    width: 375px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+input[type="email"]{
+    border-radius: 0;
+    /* width: 200px; */
+    border: 1px solid #4B6269;
+    color: white;
+    font-size: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    outline: none;
+    background-color: #0E2A35;
+    margin-bottom: 25px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 8px;
+}
+
+textarea{
+    border-radius: 0;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #0E2A35;
+    border: 1px solid #4B6269;
+    color: white;
+    font-size: 15px;
+    margin-bottom: 40px;
+    resize: none;
+    height: 150px;
+    max-height: 150px;
+    outline: none;
+    padding: 10px;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #4B6269;
+    opacity: 1; /* Firefox */
+    font-family: monospace, 'Courier New', Courier;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #4B6269;
+    font-family: monospace, 'Courier New', Courier;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #4B6269;
+    font-family: monospace, 'Courier New', Courier;
+}
+
+form button{
+    cursor: pointer;
+    background-color: #4B6269;
+    border: none;
+    color: black;
+    padding: 5px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 20px;
+    transition: all 500ms;
+    position: relative;
+}
+
+form button:hover{
+    background-color: #6B9528;                
+}
+
+#plane{
+    margin-bottom: -5px;
+    margin-left: 5px;
+    transition: all 1s;
+}
+
+@media only screen and (max-width: 450px) {
+    form{
+        width: 85vw;
+    }
+}
+
+.textHighlight{
+    cursor: pointer;
+    background-color: #091b22;
+    color: #6B9528;
+    font-family: monospace,'Courier New', Courier;
+    font-size: 15px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+    transition: color 500ms, background-color 500ms, transform 1s, opacity 1s;
+
+}
+
+.textHighlight:hover{
+    background-color: white;
+    color: black;
+}
+
+.greenText{
+    color: #6B9528;
+}
+
+@media only screen and (max-width: 900px) {
+    /* .sectionContainer{
+        padding-top: 50px;
+        padding-bottom: 50px;
+    } */
+
+    .contactContainer{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .contactInfo{
+        margin-top: 0;
+        width: fit-content;
+        margin-right: 0px;
+        margin-bottom: 35px;
+        align-items: center;
+    }
+
+    form{
+        margin-top: 0;
+    }
+}
+
+#copyText{
+    position: fixed;
+    background-color: #0E2A35; /*#4B6269;*/
+    padding: 10px 20px;
+    color: #6B9528;
+    text-align: center;
+    font-size: 20px;
+    top: -150px;
+    left: 50%;
+    z-index: 10;
+    /* font-weight: bold; */
+    transform: translateX(-50%);
+    border-radius: 3px;
+    transition: opacity 750ms, top 750ms;
+
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+
+/************** Divider Styles **************/
+
+canvas {
+    background-color: white;
+    display: block;
+}
+
+#lowerCanvas {
+    background-color:#0E2A35;
+}
+
+
+/************** Animations **************/
+
+@keyframes blink {
+    to{ visibility: hidden; }
+}
+
+@keyframes upDown {
+    0%{bottom: 25px}
+    50%{bottom: 10px;}
+    100%{bottom: 25px}
+}
+
+@keyframes fly {
+    0%{
+        right: 145px;
+        top: 3px;
+    }
+    75%{
+        right: -1000px;
+        top: -1000px;
+    }
+    80%{
+        opacity: 0;
+    }
+    85%{
+        right: 145px;
+        top: 3px;
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}

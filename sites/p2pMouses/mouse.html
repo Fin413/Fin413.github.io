@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+    <style>
+        body{
+            margin: 0;
+        }
+        #canvas, #drawCanvas{
+            position: absolute;
+            top: 0;
+            left: 0;
+            touch-action: none;
+        }
+        .info{
+            position: absolute;
+            top: 0;
+            left: 10px;
+            z-index: 5;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <p id="statusText"></p>
+        <p id="id"></p>
+
+    </div>
+    <canvas id="mouseCanvas"></canvas>
+    <canvas id="drawCanvas"></canvas>
+    <script>
+        const confirmationMessage = "pisspeepeepisspoop";
+        let connCode =  (Math.floor(Math.random() * 9999) + 1000);
+        var peer = new Peer(confirmationMessage + connCode);
+        var statusText = document.getElementById("statusText");
+        var conn;
+        
+        const canvas = document.getElementById("mouseCanvas");
+        const drawCanvas = document.getElementById("drawCanvas");
+        const ctx = canvas.getContext("2d");
+        const drawCtx = drawCanvas.getContext("2d");
+        
+        canvas.width = drawCanvas.width = window.innerWidth;
+        canvas.height = drawCanvas.height = window.innerHeight;
+
+        var connMouseCrds = [0, 0];
+        var mouseCrds = [0, 0];
+        var mouseDown = false;
+        var connMouseDown = false;
+
+        window.onpointerdown = () => { mouseDown = true };
+        window.onpointerup = () => { mouseDown = false };
+
+        function draw(){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.beginPath();
+            ctx.arc(connMouseCrds[0], connMouseCrds[1], 10, 0, 2 * Math.PI);
+            ctx.fillStyle = "green";
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(mouseCrds[0], mouseCrds[1], 10, 0, 2 * Math.PI);
+            ctx.fillStyle = "blue";
+            ctx.fill();
+
+            if(mouseDown){
+                drawCtx.beginPath();
+                drawCtx.arc(mouseCrds[0], mouseCrds[1], 10, 0, 2 * Math.PI);
+                drawCtx.fillStyle = "blue";
+                drawCtx.fill();
+            }
+
+            if(connMouseDown){
+                drawCtx.beginPath();
+                drawCtx.arc(connMouseCrds[0], connMouseCrds[1], 10, 0, 2 * Math.PI);
+                drawCtx.fillStyle = "green";
+                drawCtx.fill();
+            }
+            
+            requestAnimationFrame(draw);
+        }
+
+        if(window.location.href.includes("?id=")){
+            statusText.innerText = "Connecting...";
+        }else{
+            statusText.innerText = "Wating for connection...";
+        }
+
+        peer.on('open', function(id) {
+            let url = window.location.href;
+
+            if(url.includes("?id=")){
+                let id = window.location.href.substring(url.indexOf("?id=") + 4);
+                conn = peer.connect(confirmationMessage + id);
+                init();
+            }else{
+                document.getElementById("id").innerText = "Connection Code: " + connCode;
+            }
+        });
+
+        peer.on('connection', function(c) {
+            conn = c;
+            init();
+        });
+
+        function init(){
+            conn.on('data', function(data) {
+                if(data == confirmationMessage){
+                    statusText.innerText = "Connected!";
+                    draw();
+                }else{
+                    connMouseCrds = [data.x, data.y];
+                    connMouseDown = data.mouseDown;
+                }
+            });
+
+            document.getElementById("id").innerText = "";
+            setInterval(() => { conn.send(confirmationMessage); }, 1000);
+        }
+
+        window.addEventListener("pointermove", moveHandler);
+
+        function moveHandler(e){
+            mouseCrds = [e.clientX, e.clientY];
+            if(conn != undefined){
+                conn.send({
+                    x: e.clientX,
+                    y: e.clientY,
+                    mouseDown: mouseDown
+                });
+            }
+        }
+    </script>
+</body>
+</html>
