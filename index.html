@@ -331,6 +331,8 @@
 
             function stopScramble(target, speed = 75){
                 allScrambleEls.forEach((obj, i) => {
+                    console.log(obj.target === target)
+                    console.log(target, obj.target)
                     if(obj.target === target){
                         obj.unscrambleLoop = setInterval(() => unscramble(obj), speed);
                     }
