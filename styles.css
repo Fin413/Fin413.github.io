@@ -265,6 +265,10 @@ footer{
     margin-right: 100px;
 }
 
+.contactInfo p {
+    display: inline-block; 
+}
+
 form{
     margin-top: 20px;
     width: 375px;
@@ -337,10 +341,24 @@ form button:hover{
     background-color: #6B9528;                
 }
 
+#formStatus{
+    opacity: 0; 
+    transition: all 1s; 
+    color:#499E98;
+    text-align: center;
+}
+
+#emailImage{
+    display: inline-block;
+    margin-bottom: -3px;
+    width: 30px;
+}
+
 #plane{
     margin-bottom: -5px;
     margin-left: 5px;
     transition: all 1s;
+    width: 25px;
 }
 
 @media only screen and (max-width: 450px) {

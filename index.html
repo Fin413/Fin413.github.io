@@ -148,17 +148,17 @@
                 <div class="contactInfo">
                     <h2 class="fadeScroll title scrambleScroll contactTitle">Contact</h2>
                     <div class="fadeScroll">
-                        <img class="notSelectable" style="display: inline-block; margin-bottom: -3px;" src="media/mail.png" width="30px" id="emailImage" aria-label="email icon">
-                        <p style="display: inline-block; font-family: monospace, 'Courier New', Courier;">Email</p>
+                        <img class="notSelectable" src="media/mail.png" id="emailImage" aria-label="email icon">
+                        <p>Email</p>
                     </div>
                     <button onClick="copyEmail()" class="fadeScroll textHighlight">FinSoehn@gmail.com</button>
                 </div>
 
                 <form class="fadeScroll" id="emailForm" action="https://formspree.io/f/xrgrzdpk" method="POST">
                     <input placeholder="Your Email" type="email" name="email" />
-                    <textarea placeholder="Enter Message" name="message" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
-                    <button id="form-button">Send<img id="plane" src="media/plane.png" width="25px" aria-label="paper plane icon"></button>
-                    <p id="form-status" style="opacity: 0; transition: all 1s; color:#499E98;text-align: center;">&nbsp</p>
+                    <textarea placeholder="Enter Message" name="message"></textarea>
+                    <button>Send<img id="plane" src="media/plane.png" aria-label="paper plane icon"></button>
+                    <p id="formStatus">&nbsp</p>
                 </form>
             </div>
         </div>
@@ -381,7 +381,11 @@
                 clearInterval(obj.unscrambleLoop);
                 clearInterval(obj.scrambleLoop);
                 console.log(allScrambleEls.indexOf(obj))
-                allScrambleEls.splice(allScrambleEls.indexOf(obj), 1);
+
+                let objIndex = allScrambleEls.indexOf(obj);
+                if(objIndex == -1) return;
+
+                allScrambleEls.splice(objIndex, 1);
             }
 
             document.getElementById("emailForm").onsubmit = (e) => {
@@ -390,7 +394,7 @@
                 var form = document.getElementById("emailForm");
                 var email = document.getElementsByName("email")[0].value;
                 var message = document.getElementsByName("message")[0].value;
-                var status = document.getElementById("form-status");
+                var status = document.getElementById("formStatus");
 
                 if(message == "" || email == ""){
                     status.innerText = "Please fill out all fields.";
