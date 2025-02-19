@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Home</title>
-        <meta charset="UTF-8"/>
+        <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="icon" href="media/favicon.svg">
         <link rel="stylesheet" href="styles.css">
@@ -14,7 +14,7 @@
 
     <body onload="init()">
         <div class="sectionContainer nameContainer">
-            <h1 id="name" class="notSelectable" aria-lable="Finlay Soehn"></h1>
+            <h1 id="name" class="notSelectable" aria-label="Finlay Soehn"></h1>
             <h2 id="description">
                 <span aria-hidden="true">
                     C:\WINDOWS\system32\>&nbsp;
@@ -68,7 +68,7 @@
 
                 <div class="siteContainer intervalFade">
                     <button onclick="window.location='https://itch.io/jam/gmtk-2023/rate/2159594'">
-                        <img src="media/bnb.png" class="siteThumbnail notSelectable" aria-label="">
+                        <img src="media/bnb.png" class="siteThumbnail notSelectable" aria-label="Skeleton Bed and Breakfast">
                     </button>
                     <p class="siteDescription">My team's entry to the 2023 GMTK Game Jam.</p>
                 </div>
@@ -148,7 +148,7 @@
                 <div class="contactInfo">
                     <h2 class="fadeScroll title scrambleScroll contactTitle">Contact</h2>
                     <div class="fadeScroll">
-                        <img class="notSelectable" style="display: inline-block; margin-bottom: -3px;" src="media/mail.png" width="30px" id="emailImage">
+                        <img class="notSelectable" style="display: inline-block; margin-bottom: -3px;" src="media/mail.png" width="30px" id="emailImage" aria-label="email icon">
                         <p style="display: inline-block; font-family: monospace, 'Courier New', Courier;">Email</p>
                     </div>
                     <button onClick="copyEmail()" class="fadeScroll textHighlight">FinSoehn@gmail.com</button>
@@ -157,7 +157,7 @@
                 <form class="fadeScroll" id="emailForm" action="https://formspree.io/f/xrgrzdpk" method="POST">
                     <input placeholder="Your Email" type="email" name="email" />
                     <textarea placeholder="Enter Message" name="message" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
-                    <button id="form-button">Send<img id="plane" src="media/plane.png" width="25px"></button>
+                    <button id="form-button">Send<img id="plane" src="media/plane.png" width="25px" aria-label="paper plane icon"></button>
                     <p id="form-status" style="opacity: 0; transition: all 1s; color:#499E98;text-align: center;">&nbsp</p>
                 </form>
             </div>
@@ -380,7 +380,8 @@
             function removeScramble(obj){
                 clearInterval(obj.unscrambleLoop);
                 clearInterval(obj.scrambleLoop);
-                allScrambleEls.splice(allScrambleEls.indexOf(obj), 1)
+                console.log(allScrambleEls.indexOf(obj))
+                allScrambleEls.splice(allScrambleEls.indexOf(obj), 1);
             }
 
             document.getElementById("emailForm").onsubmit = (e) => {
