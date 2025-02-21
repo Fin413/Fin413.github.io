@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wizard</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <style>
+        @font-face {
+            font-family: lightning;
+            src: url(Electrical-mJKm.ttf);
+        }
+
+        body{
+            background-color: black;
+            /* background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(69,255,0,1) 100%); */
+            /* background: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(69,255,0,1) 100%); */
+            background-image: url('space.gif');
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .lightningText{
+            font-family: "lightning";
+            color: rgb(0, 191, 255);
+            font-size: 7vw;
+            text-align: center;
+            margin: 0 10px;
+            text-shadow:
+                0 0 7px #fff,
+                0 0 10px #fff,
+                0 0 21px #fff,
+                0 0 42px #0fa,
+                0 0 82px #0fa,
+                0 0 92px #0fa,
+                0 0 102px #0fa,
+                0 0 151px #0fa;
+            width: 100%;
+            position: absolute;
+            top: 5%;
+            font-weight: normal;
+
+            /* animation: flicker 1.5s infinite alternate; */
+        }
+
+        .lightningText:last-of-type{
+            top: 95%;
+            transform: translateY(-100%);
+            z-index: 100;
+        }
+
+        #blinkingText{
+            color: rgb(0,255,0);
+            text-shadow: 2px 2px #00ff00;
+            font-size: 20px;
+            margin-left: 20px;
+            position: absolute;
+            font-family: 'Courier New', Courier, monospace;
+            top: 0;
+            word-break: break-all;
+        }
+
+        #blinkingText::after{
+            content:"_";
+            animation: blinking 1s infinite;
+        }
+
+        @keyframes blinking {
+            0%{
+                opacity: 1;
+            }
+            49%{
+                opacity: 1;
+            }
+            50%{
+                opacity: 0;
+            }
+            99%{
+                opacity: 0;
+            }
+            100%{
+                opacity: 1;
+            }
+        }
+
+        canvas{
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        #battery{
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            z-index: 100;
+            width: 150px;
+            animation: blinking 1s infinite;
+        }
+
+        @keyframes flicker {   
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        
+                text-shadow:
+                0 0 4px #fff,
+                0 0 11px #fff,
+                0 0 19px #fff,
+                0 0 40px #0fa,
+                0 0 80px #0fa,
+                0 0 90px #0fa,
+                0 0 100px #0fa,
+                0 0 150px #0fa;
+            
+            }
+            
+            20%, 24%, 55% {        
+                text-shadow: none;
+            }    
+        }
+
+        .fire{
+            position: absolute;
+            top: 50%;
+            left: 16%;
+            transform: translateY(-50%);
+        }
+
+        .fire:last-of-type{
+            left: 84%;
+            transform: translate(-100%, -50%);
+        }
+
+        #btnContainer {
+            z-index: 200;
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        button, #rangeContainer {
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            color: rgb(0, 89, 255);
+            text-shadow:
+                0 0 7px #fff,
+                0 0 10px #fff,
+                0 0 21px #fff,
+                0 0 42px #0fa,
+                0 0 82px #0fa,
+                0 0 92px #0fa,
+                0 0 102px #0fa,
+                0 0 151px #0fa;
+        }
+
+        button{
+            padding: 5px 10px;
+            /* border-radius: 5px; */
+            font-family: 'lightning';
+            /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
+            /* background-color: white; */
+            /* border: 1px solid black; */
+            margin: 0 10px;
+            /* background: linear-gradient(90deg, rgba(0,255,255,1) 0%, rgba(150,0,255,1) 100%); */
+            cursor: pointer;
+
+            
+           
+        }
+
+        button, #rangeContainer {
+            display: grid;
+            place-content: center;
+            --border-angle: 0turn;
+            --main-bg: conic-gradient(
+                from var(--border-angle),
+                rgba(0,255,255,1),
+                rgba(0,255,255,1) 95%
+                );
+            border: solid 3px transparent;
+            border-radius: 5px;
+            --gradient-border: conic-gradient(from var(--border-angle), transparent 25%, rgba(0,255,255,1), rgba(150,0,255,1) 99%, transparent);
+            background: 
+                var(--main-bg) padding-box,
+                var(--gradient-border) border-box, 
+                var(--main-bg) border-box;
+            background-position: center center;
+            animation: bg-spin 3s linear infinite;
+        }
+
+        @keyframes bg-spin {
+            to {
+            --border-angle: 1turn;
+            }
+        }
+
+        @property --border-angle {
+            syntax: "<angle>";
+            inherits: true;
+            initial-value: 0turn;
+        }
+
+        #rangeContainer{
+            display: flex;
+            align-items: center;
+            font-family: 'lightning';
+            font-size: 12px;
+            background-color: white;
+            /* border: 1px solid black; */
+            /* border-radius: 5px; */
+            padding: 5px 10px;
+            display: none;
+            /* background: linear-gradient(90deg, rgba(0,255,255,1) 0%, rgba(150,0,255,1) 100%);    */
+        }
+
+        #overlay{
+            width: 100svw;
+            height: 100svh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10000;
+            clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%, 0 100%, 100% 100%, 100% 50%, 0 50%);
+            transition: clip-path 1.5s;
+        }
+
+        #overlay p{
+            font-family: 'Courier New', Courier, monospace;
+            color: #0F0;
+            margin: 5px;
+
+            text-shadow: 2px 2px #00ff00;
+            font-size: 20px;
+
+        }
+    </style>
+    <script>
+        
+    </script>
+</head>
+<body>
+    <div id="overlay">
+        <p id="loading">Summoning Wizard...</p>
+        <p>Volume Warning</p>
+    </div>
+    <div id="btnContainer">
+        <button id="audioBtn">ENABLE MAGIC AUDIO</button>
+        <div id="rangeContainer">
+            <label for="detailRange">Wave Detail</label>
+            <input type="range" name="detailRange" id="detailRange" value="35" min="1" max="40">
+        </div>
+        <button id="lagBtn">MAGICAL LAG MODE</button>
+    </div>
+
+    <p id="blinkingText"></p>
+
+    <img src="battery.png" alt="battery" id="battery">
+    
+    <canvas id="grid"></canvas>
+    
+    <h1 class="lightningText">REAL BADASS</h1>
+    <h1 class="lightningText">WIZARD SHIT</h1>
+
+    <img src="giphy.gif" alt="fire ball" class="fire">
+    <img src="giphy.gif" alt="fire ball" class="fire">
+
+    <audio src="InTheFaceOfEvil.mp3" loop="true" id="audio"></audio>
+
+    <script src="3d.js" type="module"></script>
+    <script>
+        var dnaOneLoaded = false;
+        var dnaTwoLoaded = false;
+        var wizLoaded = false;
+
+        const load = document.getElementById('loading');
+        var loadLoop = setInterval(() => {
+            let text = load.innerHTML;
+            if (text.includes('...')) {
+                load.innerText = 'Summoning Wizard';
+            } else if (text.includes('..')) {
+                load.innerText = 'Summoning Wizard...';
+            } else if(text.includes('.')) {
+                load.innerText = 'Summoning Wizard..';
+            } else {
+                load.innerText = 'Summoning Wizard.';
+            }
+        }, 500);
+
+        function onModelLoad(){
+            if(dnaOneLoaded && dnaTwoLoaded && wizLoaded){
+                init();
+                const overlay = document.getElementById('overlay');
+                setTimeout(() => {
+                    overlay.style.clipPath = "polygon(0 0, 100% 0, 100% 0%, 0 0%, 0 100%, 100% 100%, 100% 100%, 0 100%)";
+                    setTimeout(() => {
+                        clearInterval(loadLoop);
+                        overlay.style.display = 'none';
+                    }, 1500)
+                }, 500)
+            }
+        }
+
+
+
+
+        var musicPlaying = false;
+        var data;
+        var analyser;
+        var bufferLength;
+        var beatInterval;
+
+        const blinkingText = document.getElementById("blinkingText");
+        const text = ["Linux Version:  Ubuntu 18.04.6 LTS", "Software edition 5.3.12", "Loading Datasets", "Initiating Scripts", "Processing data", "Allocating memory", "Starting drivers", "Checking for prerequisites", "All prerequisites found", "Control Panel Ready", "CRITICAL ERRORFRR"]
+        
+        function init(){
+            let letterIndex = 0;
+            let index = 0;
+            loop = () => {
+                blinkingText.innerText += text[index][letterIndex];
+                letterIndex++;
+
+                if(letterIndex != text[index].length){
+                    requestAnimationFrame(loop);
+                }else if(index != text.length){
+                    blinkingText.innerHTML += "<br>";
+                    letterIndex = 0;
+                    index++;
+
+                    let time = new Date().toLocaleTimeString();
+                    if(index > 1) text[index] = "[" + time + "]     " + text[index];
+                    
+                    let wait = Math.floor(Math.random() * 600) + 500;
+                    setTimeout(loop, wait);
+                }
+            }
+
+            loop(); // types text
+            draw(); // draws grid
+             // animates models
+        }
+
+        document.querySelector('#lagBtn').addEventListener('click', toggleAnimation);
+        document.querySelector('#audioBtn').addEventListener('click', toggleAudio);
+
+        function toggleAnimation() {
+            const btn = document.querySelector('#lagBtn');
+            const text = document.querySelectorAll('.lightningText');
+
+            if (btn.innerText == 'MAGICAL LAG MODE') {
+                text[0].style.animation = text[1].style.animation = 'flicker 1.5s infinite alternate';
+                btn.innerText = 'DISABLE LAG';
+            } else {
+                text[0].style.animation = text[1].style.animation = '';
+                btn.innerText = 'MAGICAL LAG MODE';
+            }
+
+        }
+
+        function toggleAudio(){
+            const audio = document.getElementById('audio');
+            const btn = document.querySelector('#audioBtn');
+            
+            if(analyser === undefined){
+                var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                analyser.smoothingTimeConstant = 0.85;
+
+                var source = audioContext.createMediaElementSource(audio);
+    
+                var gainNode = audioContext.createGain();
+                gainNode.gain.value = -1;
+    
+                source.connect(gainNode);
+                gainNode.connect(analyser);
+                analyser.connect(audioContext.destination);
+    
+                analyser.fftSize = 2048;
+                bufferLength = analyser.fftSize;
+                data = new Uint8Array(bufferLength);
+            }
+
+            if(btn.innerText === 'STOP AUDIO'){
+                btn.innerText = 'ENABLE MAGIC AUDIO';
+                audio.pause();
+                musicPlaying = false;
+                document.getElementById('rangeContainer').style.display = 'none';
+
+                clearInterval(beatInterval);
+            }else{
+                btn.innerText = 'STOP AUDIO';
+                audio.play();
+                musicPlaying = true;
+                document.getElementById('rangeContainer').style.display = 'flex';
+
+                let isBig = false;
+                const text = document.querySelectorAll('.lightningText');
+                beatInterval = setInterval(() => {
+                    // if(isBig){
+                    //     text[0].style.fontSize = '7vw';
+                    //     text[1].style.fontSize = '7vw';
+                    // } else {
+                    //     text[0].style.fontSize = '8vw';
+                    //     text[1].style.fontSize = '8vw';
+                    // }
+                    // isBig = !isBig;
+                }, 144)
+            }
+        }
+
+        // var canvas = document.getElementById("canvas");
+        // var ctx = canvas.getContext("2d");
+        // canvas.width = window.innerWidth;
+        // canvas.height = window.innerHeight;
+        // ctx.strokeStyle = "#00ff00";
+        // ctx.shadowColor = 'rgba(255,255,255,0.15)';
+        // ctx.shadowBlur = 5;
+
+
+        // let numLines = 20;
+        // let spacing = canvas.width / numLines;
+
+        // for(let i = 0; i < numLines; i ++){
+        //     ctx.moveTo(i*spacing + (spacing / 2), 0);
+        //     ctx.lineTo(i*spacing + (spacing / 2), window.innerHeight);
+        //     ctx.stroke();
+        // }
+
+        // for(let i = 0; i < numLines; i ++){
+        //     let spacing = canvas.width / numLines
+        //     ctx.moveTo(0, i*spacing + (spacing / 2));
+        //     ctx.lineTo(window.innerWidth, i*spacing + (spacing / 2));
+        //     ctx.stroke();
+        // }
+    </script>
+    <script src="grid.js"></script>
+</body>
+</html>
