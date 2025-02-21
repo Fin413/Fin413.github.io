@@ -171,7 +171,7 @@
            
         }
 
-        button, #rangeContainer {
+        button, .coolBackground, #rangeContainer {
             display: grid;
             place-content: center;
             --border-angle: 0turn;
@@ -203,12 +203,19 @@
             initial-value: 0turn;
         }
 
+        .coolBackground{
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            /* background-color: white; */
+            padding: 5px 10px;
+        }
+
         #rangeContainer{
             display: flex;
             align-items: center;
             font-family: 'lightning';
             font-size: 12px;
-            background-color: white;
             /* border: 1px solid black; */
             /* border-radius: 5px; */
             padding: 5px 10px;
@@ -250,15 +257,19 @@
     <div id="overlay">
         <p id="loading">Summoning Wizard...</p>
         <p>Volume Warning</p>
-    </div>
-    <div id="btnContainer">
-        <button id="audioBtn">ENABLE MAGIC AUDIO</button>
-        <div id="rangeContainer">
-            <label for="detailRange">Wave Detail</label>
-            <input type="range" name="detailRange" id="detailRange" value="35" min="1" max="40">
         </div>
-        <button id="lagBtn">MAGICAL LAG MODE</button>
-    </div>
+        <div id="btnContainer">
+            <button id="audioBtn">ENABLE MAGIC AUDIO</button>
+            <div id="rangeContainer">
+                <label for="detailRange">Wave Detail</label>
+                <input type="range" name="detailRange" id="detailRange" value="35" min="1" max="40">
+            </div>
+            <button id="lagBtn">MAGICAL LAG MODE</button>
+            <div id="wizring" class="coolBackground">
+                <script type="text/javascript" src="https://scrungle.online/wizring/onionring-variables.js"></script>
+                <script type="text/javascript" src="https://scrungle.online/wizring/onionring-widget.js"></script>
+            </div>
+        </div>
 
     <p id="blinkingText"></p>
 
