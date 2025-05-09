@@ -160,7 +160,7 @@ var dialog = [
         type: "event",
         eventType: "play",
         src: "./media/audio/kanye.mp3",
-        text: "The renowned bard Kanye of Westington preformed this a fortnight ago at a minstrel's revel in town square, it was life changing.",
+        text: "The renowned bard Kanye of Westington (I made this before he did all that :/) preformed this a fortnight ago at a minstrel's revel in town square, it was life changing.",
     },
     {
         type: "throwAway",
