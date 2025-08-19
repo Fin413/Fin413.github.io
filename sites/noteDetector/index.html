@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Tuner</title>
+</head>
+<body>
+    <canvas></canvas>
+    <button id="start">Start Tuner</button>
+    <script>
+
+        var audioCtx;
+        var analyser;
+        
+        var bufferLength;
+        var dataArray;
+
+        const startBtn = document.getElementById('start');
+        startBtn.addEventListener('click', (e) => {
+            navigator.mediaDevices
+                .getUserMedia({ audio: true })
+                .then((stream) => {
+                    audioCtx = new AudioContext();
+
+                    analyser = audioCtx.createAnalyser();
+                    analyser.smoothingTimeConstant = 0.85;
+                    analyser.fftSize = 2048; 
+
+                    bufferLength = analyser.frequencyBinCount;
+                    dataArray = new Uint8Array(bufferLength);
+
+                    // const gainNode = audioCtx.createGain();
+                    // gainNode.gain.value = 1;
+
+                    const source = audioCtx.createMediaStreamSource(stream);
+                    source.connect(analyser);
+                    analyser.connect(audioCtx.destination);
+                    
+                    loop();
+                }).catch(function (err) {
+                    console.error("Audio setup error: " + err);
+                });
+        });
+
+        function loop() {
+            // console.log(audioCtx, analyser, dataArray)
+            analyser.getByteFrequencyData(dataArray);
+            // for (let i = 0; i < bufferLength; i++) {
+            //     if (dataArray[i] != 0) console.log(dataArray[i])
+            // }
+            dataArray.forEach(data => {
+                console.log('data: ', data)
+                let freq = data * (audioCtx.sampleRate / 2) / bufferLength;
+                if(freq != 0) console.log(freq)
+            })
+            // requestAnimationFrame(loop);
+            setTimeout(loop, 1000)
+        }
+    </script>
+</body>
+</html>
