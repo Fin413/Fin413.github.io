@@ -6,11 +6,20 @@
     <title>Online Tuner</title>
     <style>
         body {
-            background-color: rgb(82, 82, 82);
+            margin: 0;
+        }
+
+        #tunerContainer {
+            position: relative;
         }
 
         #displayContainer {
-            position: relative;
+            text-align: center;
+            width: 100px;
+            position: absolute;
+            left: 49.5%;
+            top: 43%;
+            transform: translate(-50%, -50%);
         }
 
         #octaveDisp {
@@ -18,27 +27,49 @@
             font-size: 0.6em;
             bottom: 0;
         }
+
+        #needle {
+            position: absolute;
+            width: 100px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.5s;
+        }
+
+        canvas {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <h1 id="displayContainer">
-        <span id="noteDisp">F</span>
-        <span id="octaveDisp">1</span>
-    </h1>
+    <div id="tunerContainer">
+        <img id="needle" src="https://png.pngtree.com/png-vector/20230603/ourmid/pngtree-compass-needle-red-white-vector-png-image_7118194.png">
+        <h1 id="displayContainer">
+            <span id="noteDisp">F</span>
+            <span id="octaveDisp">1</span>
+        </h1>
+        <canvas></canvas>
+    </div>
 
-    <canvas></canvas>
     <button id="start">Start Tuner</button>
     <script>
         var audioCtx;
         var analyser;
         
         var bufferLength;
-        var dataArray;
+        var floatTimeData;
+        var byteTimeData = new Uint8Array(2048);
 
         const allNotes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
         const noteDisplay = document.querySelector('span#noteDisp');
         const octaveDisplay = document.querySelector('span#octaveDisp');
+
+        const canvas = document.querySelector('canvas');
+        const canvasCtx = canvas.getContext('2d');
+
+        var needleAngle = 0;
 
         const startBtn = document.getElementById('start');
         startBtn.addEventListener('click', (e) => {
@@ -52,7 +83,7 @@
                     analyser.fftSize = 2048; 
 
                     bufferLength = analyser.frequencyBinCount;
-                    dataArray = new Float32Array(bufferLength);
+                    floatTimeData = new Float32Array(bufferLength);
 
                     const source = audioCtx.createMediaStreamSource(stream);
                     source.connect(analyser);
@@ -62,14 +93,51 @@
         });
 
         function loop() {
-            analyser.getFloatTimeDomainData(dataArray);
-            let pitch = autoCorrelate(dataArray, audioCtx.sampleRate);
+            analyser.getFloatTimeDomainData(floatTimeData);
+            analyser.getByteTimeDomainData(byteTimeData);
 
+            // pitch handling
+            let note;
+            let pitch = autoCorrelate(floatTimeData, audioCtx.sampleRate);
             if (pitch != -1) {
-                let note = getNoteInfo(pitch);
+                note = getNoteInfo(pitch);
                 noteDisplay.innerText = note.name;
                 octaveDisplay.textContent = note.octave;
             }
+
+            // waveform handling
+            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+            canvasCtx.lineWidth = 1;
+            canvasCtx.strokeStyle = 'black';
+            canvasCtx.beginPath();
+
+            var x = 0;
+            var sliceWidth = canvas.width * 1.0 / bufferLength;
+            for (var i = 0; i < bufferLength; i++) {
+                var v = byteTimeData[i] / 128.0;
+                var y = v * canvas.height / 2;
+
+                if (i === 0) canvasCtx.moveTo(x, y);
+                else canvasCtx.lineTo(x, y);
+
+                x += sliceWidth;
+            }
+
+            canvasCtx.lineTo(canvas.width, canvas.height / 2);
+            canvasCtx.stroke();
+
+            // needle
+            if (note) needleAngle = (note.centsOff / 50) * 90;
+            console.log('needle angle; ', needleAngle)
+            document.getElementById('needle').style.transform = `translate(-50%, -50%) rotate(${needleAngle}deg)`
+
+            // circle
+            canvasCtx.fillStyle = 'white';
+            canvasCtx.beginPath();
+            canvasCtx.arc(canvas.width / 2, canvas.height / 2, 40, 0, 2 * Math.PI);
+            canvasCtx.fill();
+            canvasCtx.stroke();
 
             requestAnimationFrame(loop);
         }
@@ -137,6 +205,13 @@
             if (a) T0 = T0 - b/(2*a);
 
             return sampleRate/T0;
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        function resizeCanvas(){
+            canvas.height = 300;
+            canvas.width = document.body.clientWidth;
         }
     </script>
 </body>
