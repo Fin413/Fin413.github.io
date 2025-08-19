@@ -4,58 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Tuner</title>
+    <style>
+        body {
+            background-color: rgb(82, 82, 82);
+        }
+
+        #displayContainer {
+            position: relative;
+        }
+
+        #octaveDisp {
+            position: absolute;
+            font-size: 0.6em;
+            bottom: 0;
+        }
+    </style>
 </head>
 <body>
+    <h1 id="displayContainer">
+        <span id="noteDisp">F</span>
+        <span id="octaveDisp">1</span>
+    </h1>
+
     <canvas></canvas>
     <button id="start">Start Tuner</button>
     <script>
-
         var audioCtx;
         var analyser;
         
         var bufferLength;
         var dataArray;
 
+        const allNotes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+
+        const noteDisplay = document.querySelector('span#noteDisp');
+        const octaveDisplay = document.querySelector('span#octaveDisp');
+
         const startBtn = document.getElementById('start');
         startBtn.addEventListener('click', (e) => {
             navigator.mediaDevices
                 .getUserMedia({ audio: true })
                 .then((stream) => {
-                    audioCtx = new AudioContext();
+                    audioCtx = new AudioContext(); // audio context must be created within user event
 
                     analyser = audioCtx.createAnalyser();
                     analyser.smoothingTimeConstant = 0.85;
                     analyser.fftSize = 2048; 
 
                     bufferLength = analyser.frequencyBinCount;
-                    dataArray = new Uint8Array(bufferLength);
-
-                    // const gainNode = audioCtx.createGain();
-                    // gainNode.gain.value = 1;
+                    dataArray = new Float32Array(bufferLength);
 
                     const source = audioCtx.createMediaStreamSource(stream);
                     source.connect(analyser);
-                    analyser.connect(audioCtx.destination);
                     
                     loop();
-                }).catch(function (err) {
-                    console.error("Audio setup error: " + err);
                 });
         });
 
         function loop() {
-            // console.log(audioCtx, analyser, dataArray)
-            analyser.getByteFrequencyData(dataArray);
-            // for (let i = 0; i < bufferLength; i++) {
-            //     if (dataArray[i] != 0) console.log(dataArray[i])
-            // }
-            dataArray.forEach(data => {
-                console.log('data: ', data)
-                let freq = data * (audioCtx.sampleRate / 2) / bufferLength;
-                if(freq != 0) console.log(freq)
-            })
-            // requestAnimationFrame(loop);
-            setTimeout(loop, 1000)
+            analyser.getFloatTimeDomainData(dataArray);
+            let pitch = autoCorrelate(dataArray, audioCtx.sampleRate);
+
+            if (pitch != -1) {
+                let note = getNoteInfo(pitch);
+                noteDisplay.innerText = note.name;
+                octaveDisplay.textContent = note.octave;
+            }
+
+            requestAnimationFrame(loop);
+        }
+
+        function getNoteInfo(frequency) {
+            // 440 = A4, A4 is midi number 69
+            let midiNum = Math.round(12 * Math.log2(frequency /  440)) + 69; 
+
+            let name = allNotes[midiNum % 12]
+            let octave = Math.trunc(midiNum / 12) - 1;
+
+            let perfectPitch = 440 * Math.pow(2, (midiNum - 69) / 12);
+            let centsOff = Math.floor(1200 * Math.log2(frequency / perfectPitch)); // 1200 = (12 notes * 100 cents)
+            console.log(centsOff)
+
+            return {
+                name: name, 
+                octave: octave,
+                centsOff: centsOff,
+            };
+        }
+
+        function autoCorrelate( buf, sampleRate ) {
+            // github @cwilso
+            // Implements the ACF2+ algorithm
+            
+            var SIZE = buf.length;
+            var rms = 0;
+
+            for (var i=0;i<SIZE;i++) {
+                var val = buf[i];
+                rms += val*val;
+            }
+            rms = Math.sqrt(rms/SIZE);
+            if (rms<0.01) // not enough signal
+                return -1;
+
+            var r1=0, r2=SIZE-1, thres=0.2;
+            for (var i=0; i<SIZE/2; i++)
+                if (Math.abs(buf[i])<thres) { r1=i; break; }
+            for (var i=1; i<SIZE/2; i++)
+                if (Math.abs(buf[SIZE-i])<thres) { r2=SIZE-i; break; }
+
+            buf = buf.slice(r1,r2);
+            SIZE = buf.length;
+
+            var c = new Array(SIZE).fill(0);
+            for (var i=0; i<SIZE; i++)
+                for (var j=0; j<SIZE-i; j++)
+                    c[i] = c[i] + buf[j]*buf[j+i];
+
+            var d=0; while (c[d]>c[d+1]) d++;
+            var maxval=-1, maxpos=-1;
+            for (var i=d; i<SIZE; i++) {
+                if (c[i] > maxval) {
+                    maxval = c[i];
+                    maxpos = i;
+                }
+            }
+            var T0 = maxpos;
+
+            var x1=c[T0-1], x2=c[T0], x3=c[T0+1];
+            a = (x1 + x3 - 2*x2)/2;
+            b = (x3 - x1)/2;
+            if (a) T0 = T0 - b/(2*a);
+
+            return sampleRate/T0;
         }
     </script>
 </body>
