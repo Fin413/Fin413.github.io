@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Tuner</title>
     <style>
+        :root {
+            --compass-radius: 100px;
+        }
+
         body {
             margin: 0;
         }
@@ -14,23 +18,33 @@
         }
 
         #displayContainer {
-            text-align: center;
-            width: 100px;
+            display: flex;
             position: absolute;
-            left: 49.5%;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+
+            width: 190px;
+            left: 50%;
             top: 43%;
+
             transform: translate(-50%, -50%);
+        }
+
+        .adjacentNote {
+            font-size: 0.75em;
         }
 
         #octaveDisp {
             position: absolute;
             font-size: 0.6em;
             bottom: 0;
+            left: 50%;
         }
 
         #needle {
             position: absolute;
-            width: 100px;
+            width: 200px;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
@@ -40,20 +54,188 @@
         canvas {
             display: block;
         }
+
+        /* .letterWheel {
+            font-size: 30px;
+            width: 1.5em;
+            height: 1.1em;
+            /* width: 100px;
+            height: 100px; 
+
+            overflow: hidden;
+
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+
+        .rotationContainer {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            
+            transition: transform 1s;
+            transform-origin: 50% var(--compass-radius);
+            background-color:bisque;
+
+            width: calc(var(--compass-radius) * 2);
+            height: calc(var(--compass-radius) * 2);
+        }
+
+        .rotationLetter {
+            width: 100px;
+            text-align: center;
+            position: absolute;
+            transform-origin: 50% var(--compass-radius);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .rotationContainer > .rotationLetter:first-child{
+            transform: translateX(-50%) rotate(-30deg);
+        }
+
+        .rotationContainer > .rotationLetter:last-child{
+            transform: translateX(-50%) rotate(30deg);
+        } */
+
+
+        /* letter wheel styling */
+
+        .letterWheel {
+            width: 60px;
+            height: 50px;
+            overflow: hidden;
+            position: absolute;
+            left: 45%;
+        }
+
+        .letterWheel::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            box-shadow: inset 0 0 8px black;
+        }
+
+        .rotationContainer {
+            position: absolute;
+            left: 50%;
+            top: -27px;
+            transform: translateX(-50%);
+            transition: transform 1s;
+        }
+
+        .wheelImg {
+            width: 350px;
+        }
+
+
+        /* number scroll styling */
+
+        .numberScroll {
+            width: 1.1em;
+            height: 1.6em;
+            overflow: hidden;
+            position: absolute;
+            left: 52%;
+            top: 11%;
+            box-shadow: inset 0 0 5px black;
+            background-color: #E2C8A5;
+        }
+
+        .numbersContainer {
+            position: absolute;
+            left: 50%;
+            top: -182px;
+            transform: translateX(-50%);
+            transition: top 0.75s;
+        }
     </style>
 </head>
 <body>
     <div id="tunerContainer">
         <img id="needle" src="https://png.pngtree.com/png-vector/20230603/ourmid/pngtree-compass-needle-red-white-vector-png-image_7118194.png">
-        <h1 id="displayContainer">
-            <span id="noteDisp">F</span>
-            <span id="octaveDisp">1</span>
-        </h1>
+        
+        <!-- <div class="letterWheel mainNote">
+            <div class="rotationContainer">
+                <span class="rotationLetter flat">E</span>
+                <span class="rotationLetter">F</span>
+                <span class="rotationLetter sharp">F#</span>
+            </div>
+        </div> -->
+
+        <div class="shadowContainer">
+            <div class="letterWheel mainNote">
+                <div class="rotationContainer">
+                    <img src="Untitled.png" class="wheelImg">
+                </div>
+            </div>
+        </div>
+
+        <div class="numberScroll">
+            <div class="numbersContainer">
+                <p>9</p>
+                <p>8</p>
+                <p>7</p>
+                <p>6</p>
+                <p>5</p>
+                <p>4</p>
+                <p>3</p>
+                <p>2</p>
+                <p>1</p>
+                <p>0</p>
+            </div>
+        </div>
+
+        <div id="displayContainer">
+            <h1 id="flatNote" class="adjacentNote">E</h1>
+
+            <h1 id="noteDisp">F</h1>
+            <h1 id="octaveDisp">1</h1>
+
+            
+
+            <h1 id="sharpNote" class="adjacentNote">F#</h1>
+        </div>
+
         <canvas></canvas>
     </div>
 
     <button id="start">Start Tuner</button>
     <script>
+        var wheelAngle = 0;
+
+        var currentScrollNum = 9;
+
+        const numberScroll = document.querySelector('.numberScroll');
+
+        function updateWheel(wheelEl, targetNote) {
+            const rotationContainer = wheelEl.querySelector('.rotationContainer');
+
+            let currentIndex = allNotes.indexOf(currentNote);
+            let targetIndex = allNotes.indexOf(targetNote);
+
+            let normal = currentIndex - targetIndex;
+            let rightWrap = 12 - currentIndex + targetIndex;
+            let leftWrap = currentIndex + (12 - targetIndex);
+
+            let angle = normal * 30;
+
+            if (rightWrap < Math.abs(normal)) angle = -rightWrap * 30;
+            else if (leftWrap < Math.abs(normal)) angle = leftWrap * 30;
+
+            wheelAngle += angle;
+
+            rotationContainer.style.transform = `translateX(-50%) rotate(${wheelAngle}deg)`;
+            currentNote = targetNote;
+        }
+
+        function updateNumberScroll(targetNum) {
+            const letterSpacing = 34;
+            document.querySelector('.numbersContainer').style.top = -12 - (9 - targetNum) * letterSpacing + "px";
+        }
+
         var audioCtx;
         var analyser;
         
@@ -62,9 +244,13 @@
         var byteTimeData = new Uint8Array(2048);
 
         const allNotes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+        var previousNote
+        var currentNote = "A"
 
-        const noteDisplay = document.querySelector('span#noteDisp');
-        const octaveDisplay = document.querySelector('span#octaveDisp');
+        const noteDisplay = document.querySelector('#noteDisp');
+        const octaveDisplay = document.querySelector('#octaveDisp');
+        const flatNote = document.querySelector('#flatNote');
+        const sharpNote = document.querySelector('#sharpNote');
 
         const canvas = document.querySelector('canvas');
         const canvasCtx = canvas.getContext('2d');
@@ -101,8 +287,21 @@
             let pitch = autoCorrelate(floatTimeData, audioCtx.sampleRate);
             if (pitch != -1) {
                 note = getNoteInfo(pitch);
-                noteDisplay.innerText = note.name;
-                octaveDisplay.textContent = note.octave;
+
+                // only change note if it is returned twice in a row
+                if (previousNote == note.name) {
+                    noteDisplay.innerText = note.name;
+                    octaveDisplay.textContent = note.octave;
+                    sharpNote.innerText = note.sharpNote;
+                    flatNote.innerText = note.flatNote;
+
+                    updateWheel(document.querySelector('.mainNote'), note.name);
+                    updateNumberScroll(note.octave);
+                    
+
+                } else {
+                    previousNote = note.name;
+                }
             }
 
             // waveform handling
@@ -129,13 +328,12 @@
 
             // needle
             if (note) needleAngle = (note.centsOff / 50) * 90;
-            console.log('needle angle; ', needleAngle)
             document.getElementById('needle').style.transform = `translate(-50%, -50%) rotate(${needleAngle}deg)`
 
             // circle
             canvasCtx.fillStyle = 'white';
             canvasCtx.beginPath();
-            canvasCtx.arc(canvas.width / 2, canvas.height / 2, 40, 0, 2 * Math.PI);
+            canvasCtx.arc(canvas.width / 2, canvas.height / 2, 100, 0, 2 * Math.PI);
             canvasCtx.fill();
             canvasCtx.stroke();
 
@@ -151,12 +349,19 @@
 
             let perfectPitch = 440 * Math.pow(2, (midiNum - 69) / 12);
             let centsOff = Math.floor(1200 * Math.log2(frequency / perfectPitch)); // 1200 = (12 notes * 100 cents)
-            console.log(centsOff)
+            
+            let flatNote = "B";
+            if (name != "C") flatNote = allNotes[(midiNum % 12) - 1];
+
+            let sharpNote = "C";
+            if (name != "B") sharpNote = allNotes[(midiNum % 12) + 1];
 
             return {
                 name: name, 
                 octave: octave,
                 centsOff: centsOff,
+                flatNote: flatNote,
+                sharpNote: sharpNote,
             };
         }
 
@@ -212,6 +417,59 @@
         function resizeCanvas(){
             canvas.height = 300;
             canvas.width = document.body.clientWidth;
+        }
+
+        
+        function updateRotationDisplay(rotationEl, note) {
+            const rotationContainer = rotationEl.querySelector('.rotationContainer');
+            const letters = rotationEl.querySelectorAll('.rotationLetter');
+
+            let currentIndex = allNotes.indexOf(letters[1].innerText);
+            let targetIndex = allNotes.indexOf(note);
+
+            let direction = 1;
+            if (currentIndex > targetIndex) direction = -1;
+
+            var speed = ((Math.abs(currentIndex - targetIndex) / 12) * 2000) / Math.abs(currentIndex - targetIndex);
+            console.log(speed)
+
+            
+            var animationLoop;
+            animationLoop = () => {
+                console.log(currentIndex, targetIndex, direction);
+                if (currentIndex == targetIndex) return;
+
+                console.log(currentIndex)
+
+                rotationContainer.style.transition = "none";
+                rotationContainer.style.transform = 'translateX(-50%)';
+
+                let upcomingIndex = currentIndex + direction;
+                if(currentIndex < 0) currentIndex = allNotes.length - 1;
+                else if(currentIndex > 11) currentIndex = 0;
+
+                console.log('upcoming: ', upcomingIndex)
+
+                letters[1].innerText = allNotes[currentIndex];
+
+                currentIndex += direction;
+
+                setTimeout(() => {
+                    rotationContainer.style.transition = `transform ${speed}ms linear`;
+                    setTimeout(() => {    
+                        if(direction < 0){
+                            letters[0].innerText = allNotes[upcomingIndex]
+                            rotationContainer.style.transform = 'translateX(-50%) rotate(30deg)';
+                        } else {
+                            letters[2].innerText = allNotes[upcomingIndex]
+                            rotationContainer.style.transform = 'translateX(-50%) rotate(-30deg)';
+                        }
+    
+                        setTimeout(animationLoop, speed - 35);
+                    }, 10);
+                }, 25);
+            };
+            animationLoop();
         }
     </script>
 </body>
