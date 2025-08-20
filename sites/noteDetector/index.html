@@ -6,7 +6,7 @@
     <title>Online Tuner</title>
     <style>
         :root {
-            --compass-radius: 100px;
+            --compass-radius: 200px;
         }
 
         body {
@@ -58,11 +58,11 @@
         /* letter wheel styling */
 
         .letterWheel {
-            width: 60px;
+            width: 50px;
             height: 50px;
             overflow: hidden;
             position: absolute;
-            left: 45%;
+            /* left: 45%; */
         }
 
         .letterWheel::after {
@@ -85,6 +85,24 @@
             display: block;
         }
 
+        .mainNote {
+            left: 50%;
+            top: 15%;
+            transform: translate(-50%, -50%)
+        }
+
+        .sharpNote {
+            right: 50%;
+            top: 50%;
+            transform: translate(calc(var(--compass-radius) - 10px), -50%) rotate(90deg);
+        }
+
+        .flatNote {
+            left: 50%;
+            top: 50%;
+            transform: translate(calc(-1 * (var(--compass-radius) - 10px)), -50%) rotate(-90deg);
+        }
+
 
         /* number scroll styling */
 
@@ -93,8 +111,8 @@
             height: 1.6em;
             overflow: hidden;
             position: absolute;
-            left: 52%;
-            top: 11%;
+            left: 54%;
+            top: 18%;
             box-shadow: inset 0 0 5px black;
             background-color: #E2C8A5;
         }
@@ -102,9 +120,33 @@
         .numbersContainer {
             position: absolute;
             left: 50%;
-            top: -182px;
+            top: 3px;
             transform: translateX(-50%);
             transition: top 0.75s;
+            transition-timing-function: cubic-bezier(0.64, 0.57, 0.67, 1.20);
+
+            text-align: center;
+        }
+
+        .numbersContainer > p {
+            height: 50px;
+            margin: 0;
+        }
+
+        .detuneDisplay {
+            left: 0;
+            width: 1.5em;
+        }
+
+        .border-black {
+            background: linear-gradient(45deg, #000, #000) padding-box,
+                        linear-gradient(45deg, 
+                            #E7E7E7,
+                            #A1A19F,
+                            #706F6B,
+                            #2D2C29,
+                            #63625D,
+                            #76756E) border-box;
         }
     </style>
 </head>
@@ -118,7 +160,7 @@
             </div>
         </div>
 
-        <div class="numberScroll">
+        <div class="octaveDisplay numberScroll">
             <div class="numbersContainer">
                 <p>9</p>
                 <p>8</p>
@@ -133,13 +175,21 @@
             </div>
         </div>
 
-        <div id="displayContainer">
-            <h1 id="flatNote" class="adjacentNote">E</h1>
+        <div class="letterWheel flatNote border-black">
+            <div class="rotationContainer border-black">
+                <img src="Untitled.png" class="wheelImg">
+            </div>
+        </div>
 
-            <h1 id="noteDisp">F</h1>
-            <h1 id="octaveDisp">1</h1>
+        <div class="letterWheel sharpNote">
+            <div class="rotationContainer">
+                <img src="Untitled.png" class="wheelImg">
+            </div>
+        </div>
 
-            <h1 id="sharpNote" class="adjacentNote">F#</h1>
+        <div class="detuneDisplay numberScroll">
+            <div class="numbersContainer">
+            </div>
         </div>
 
         <canvas></canvas>
@@ -148,30 +198,59 @@
     <button id="start">Start Tuner</button>
 
     <script>
+        setTimeout(() => {
+            updateWheel(document.querySelector('.mainNote'), "A");
+            updateNumberScroll(octaveDisplay, 4);
+            updateNumberScroll(detuneDisplay, 30);
+            updateWheel(document.querySelector('.flatNote'), "G#");
+            updateWheel(document.querySelector('.sharpNote'), "A#");
+        }, 500)
+
         var audioCtx;
         var analyser;
         
         var bufferLength;
         var floatTimeData;
         var byteTimeData = new Uint8Array(2048);
+        var sinewaveOffset = 0;
 
         var needleAngle = 0;
-        var wheelAngle = 0;
+
+        var noteWheelInfo = {
+            mainNote: {
+                currentNote: "A",
+                angle: 0,
+            },
+            flatNote: {
+                currentNote: "A",
+                angle: 0,
+            },
+            sharpNote: {
+                currentNote: "A",
+                angle: 0,
+            }
+        };
         
         var previousNote;
         var currentNote = "A";
         var currentScrollNum = 9;
 
+        const compassRadius = 200;
         const allNotes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         
         const numberScroll = document.querySelector('.numberScroll');
-        const noteDisplay = document.querySelector('#noteDisp');
-        const octaveDisplay = document.querySelector('#octaveDisp');
-        const flatNote = document.querySelector('#flatNote');
-        const sharpNote = document.querySelector('#sharpNote');
 
         const canvas = document.querySelector('canvas');
         const canvasCtx = canvas.getContext('2d');
+
+
+        const detuneDisplay = document.querySelector('.detuneDisplay');
+        const octaveDisplay = document.querySelector('.octaveDisplay');
+        for (let i = 50; i > -1; --i) {
+            let p = document.createElement('p');
+            p.innerText = i;
+            detuneDisplay.querySelector('.numbersContainer').appendChild(p);
+        }
 
         const startBtn = document.getElementById('start');
         startBtn.addEventListener('click', (e) => {
@@ -194,6 +273,52 @@
                 });
         });
 
+        var dir = -1;
+        var amp = 50;
+
+        idleLoop();
+        function idleLoop() {
+            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // sine wave
+            canvasCtx.beginPath();
+            canvasCtx.lineWidth = 2;
+            canvasCtx.strokeStyle = "rgb(0,0,0)";
+
+            var x = 0;
+            var y = 0;
+            // amp = 50;
+            var freq = 25;
+            var points = [0, 0]
+            
+            while(x <= canvas.width){
+                y = canvas.height / 2 + amp * Math.sin((x + sinewaveOffset) / freq);
+                canvasCtx.lineTo(x, y);
+
+                if(x == canvas.width / 2) points[0] = y;
+                x++;
+            }
+
+            if(sinewaveOffset > 100000) sinewaveOffset = 0; // fix this shit
+            sinewaveOffset += 1;
+            amp += dir;
+            if (amp == -50) dir = 1;
+            else if (amp == 50) dir = -1;
+
+            canvasCtx.stroke();
+
+            // circle
+            canvasCtx.translate(0.5, 0.5);
+            canvasCtx.fillStyle = 'white';
+            canvasCtx.beginPath();
+            canvasCtx.arc(canvas.width / 2, canvas.height / 2, compassRadius, 0, 2 * Math.PI);
+            canvasCtx.fill();
+            canvasCtx.stroke();
+            canvasCtx.translate(-0.5, -0.5);
+
+            if (!audioCtx) requestAnimationFrame(idleLoop);
+        }
+
         function loop() {
             analyser.getFloatTimeDomainData(floatTimeData);
             analyser.getByteTimeDomainData(byteTimeData);
@@ -206,15 +331,15 @@
 
                 // only change note if it is returned twice in a row
                 if (previousNote == note.name) {
-                    noteDisplay.innerText = note.name;
-                    octaveDisplay.textContent = note.octave;
-                    sharpNote.innerText = note.sharpNote;
-                    flatNote.innerText = note.flatNote;
-
                     updateWheel(document.querySelector('.mainNote'), note.name);
-                    updateNumberScroll(note.octave);
-                    
+                    updateNumberScroll(octaveDisplay, note.octave);
 
+                    updateWheel(document.querySelector('.flatNote'), note.flatNote);
+                    updateWheel(document.querySelector('.sharpNote'), note.sharpNote);
+
+                    updateNumberScroll(detuneDisplay, note.centsOff);
+
+                    console.log(note.flatNote, note.name, note.sharpNote, note.octave);
                 } else {
                     previousNote = note.name;
                 }
@@ -247,11 +372,13 @@
             document.getElementById('needle').style.transform = `translate(-50%, -50%) rotate(${needleAngle}deg)`;
 
             // circle
+            canvasCtx.translate(0.5, 0.5);
             canvasCtx.fillStyle = 'white';
             canvasCtx.beginPath();
-            canvasCtx.arc(canvas.width / 2, canvas.height / 2, 100, 0, 2 * Math.PI);
+            canvasCtx.arc(canvas.width / 2, canvas.height / 2, compassRadius, 0, 2 * Math.PI);
             canvasCtx.fill();
             canvasCtx.stroke();
+            canvasCtx.translate(-0.5, -0.5);
 
             requestAnimationFrame(loop);
         }
@@ -310,7 +437,7 @@
 
         window.addEventListener('resize', resizeCanvas);
         function resizeCanvas(){
-            canvas.height = 300;
+            canvas.height = 450;
             canvas.width = document.body.clientWidth;
         }
         resizeCanvas();
@@ -343,7 +470,10 @@
         function updateWheel(wheelEl, targetNote) {
             const rotationContainer = wheelEl.querySelector('.rotationContainer');
 
-            let currentIndex = allNotes.indexOf(currentNote);
+            let wheelName = wheelEl.classList[1];
+            let wheelData = noteWheelInfo[wheelName];
+
+            let currentIndex = allNotes.indexOf(wheelData.currentNote);
             let targetIndex = allNotes.indexOf(targetNote);
 
             let normal = currentIndex - targetIndex;
@@ -355,15 +485,18 @@
             if (rightWrap < Math.abs(normal)) angle = -rightWrap * 30;
             else if (leftWrap < Math.abs(normal)) angle = leftWrap * 30;
 
-            wheelAngle += angle;
+            wheelData.angle += angle;
+            wheelData.currentNote = targetNote;
 
-            rotationContainer.style.transform = `translateX(-50%) rotate(${wheelAngle}deg)`;
-            currentNote = targetNote;
+            rotationContainer.style.transform = `translateX(-50%) rotate(${wheelData.angle}deg)`;
         }
 
-        function updateNumberScroll(targetNum) {
-            const letterSpacing = 34;
-            document.querySelector('.numbersContainer').style.top = `${-12 - ((9 - targetNum) * letterSpacing)}px`;
+        function updateNumberScroll(numberEl, targetNum) {
+            const letterSpacing = 50;
+            const topOffset = 3;
+            let maxNum = numberEl.querySelector('.numbersContainer').children.length - 1;
+            console.log(maxNum)
+            numberEl.querySelector('.numbersContainer').style.top = `${-1 * (-topOffset + (maxNum - targetNum) * letterSpacing)}px`;
         }
     </script>
 </body>
