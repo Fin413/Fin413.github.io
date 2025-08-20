@@ -160,7 +160,7 @@
         
         var previousNote;
         var currentNote = "A";
-        var currentScrollNum = 4;
+        var currentScrollNum = 9;
 
         const allNotes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         
@@ -363,7 +363,7 @@
 
         function updateNumberScroll(targetNum) {
             const letterSpacing = 34;
-            document.querySelector('.numbersContainer').style.top = `${(-12 - (9 - targetNum)) * letterSpacing}px`;
+            document.querySelector('.numbersContainer').style.top = `${-12 - ((9 - targetNum) * letterSpacing)}px`;
         }
     </script>
 </body>
