@@ -48,7 +48,7 @@
 
         #needle {
             position: absolute;
-            width: 200px;
+            width: 250px;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
@@ -88,19 +88,31 @@
         .mainNote {
             left: 50%;
             top: 15%;
-            transform: translate(-50%, -50%)
+            transform: translate(-50%, -50%);
+
+            /* border-image: linear-gradient(to right, #c5d1d1 0%, #7a7b83 100%) 1;
+            border-width: 4px;
+            border-style: solid; */
         }
 
         .sharpNote {
             right: 50%;
             top: 50%;
             transform: translate(calc(var(--compass-radius) - 10px), -50%) rotate(90deg);
+
+            /* border-image: linear-gradient(to top, #c5d1d1 0%, #7a7b83 100%) 1;
+            border-width: 4px;
+            border-style: solid; */
         }
 
         .flatNote {
             left: 50%;
             top: 50%;
             transform: translate(calc(-1 * (var(--compass-radius) - 10px)), -50%) rotate(-90deg);
+
+            /* border-image: linear-gradient(to bottom, #c5d1d1 0%, #7a7b83 100%) 1;
+            border-width: 4px;
+            border-style: solid; */
         }
 
 
@@ -111,10 +123,15 @@
             height: 1.6em;
             overflow: hidden;
             position: absolute;
-            left: 54%;
-            top: 18%;
-            box-shadow: inset 0 0 5px black;
+            box-shadow: inset 0 0 8px black;
+            /* box-shadow: 
+                inset 0px 11px 5px -10px #000,
+                inset 0px -11px 5px -10px #000;  */
             background-color: #E2C8A5;
+/* 
+            border-image: linear-gradient(to right, #c5d1d1 0%, #7a7b83 100%) 1;
+            border-width: 2px;
+            border-style: solid; */
         }
 
         .numbersContainer {
@@ -122,10 +139,12 @@
             left: 50%;
             top: 3px;
             transform: translateX(-50%);
+
             transition: top 0.75s;
             transition-timing-function: cubic-bezier(0.64, 0.57, 0.67, 1.20);
 
             text-align: center;
+            font-weight: bold;
         }
 
         .numbersContainer > p {
@@ -133,20 +152,27 @@
             margin: 0;
         }
 
-        .detuneDisplay {
-            left: 0;
-            width: 1.5em;
+        .octaveDisplay {
+            left: 50%;
+            top: 18%;
+            transform: translateX(35px);
         }
 
-        .border-black {
-            background: linear-gradient(45deg, #000, #000) padding-box,
-                        linear-gradient(45deg, 
-                            #E7E7E7,
-                            #A1A19F,
-                            #706F6B,
-                            #2D2C29,
-                            #63625D,
-                            #76756E) border-box;
+        .detuneDisplay {
+            width: 1.5em;
+            position: relative;
+        }
+
+        .centsContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100px;
+            position: absolute;
+
+            bottom: 65px;
+            left: 50%;
+            transform: translate(-50%, 0);
         }
     </style>
 </head>
@@ -187,9 +213,12 @@
             </div>
         </div>
 
-        <div class="detuneDisplay numberScroll">
-            <div class="numbersContainer">
+        <div class="centsContainer">
+            <div class="detuneDisplay numberScroll">
+                <div class="numbersContainer">
+                </div>
             </div>
+            <p>cents <span class="accidentalText">flat</span></p>
         </div>
 
         <canvas></canvas>
@@ -201,7 +230,7 @@
         setTimeout(() => {
             updateWheel(document.querySelector('.mainNote'), "A");
             updateNumberScroll(octaveDisplay, 4);
-            updateNumberScroll(detuneDisplay, 30);
+            updateNumberScroll(detuneDisplay, 45);
             updateWheel(document.querySelector('.flatNote'), "G#");
             updateWheel(document.querySelector('.sharpNote'), "A#");
         }, 500)
@@ -243,6 +272,10 @@
         const canvas = document.querySelector('canvas');
         const canvasCtx = canvas.getContext('2d');
 
+        const noteDisplay = document.querySelector('.mainNote');
+        const flatDisplay = document.querySelector('.flatNote');
+        const sharpDisplay = document.querySelector('.sharpNote');
+        const accidentalText = document.querySelector('.accidentalText');
 
         const detuneDisplay = document.querySelector('.detuneDisplay');
         const octaveDisplay = document.querySelector('.octaveDisplay');
@@ -331,15 +364,18 @@
 
                 // only change note if it is returned twice in a row
                 if (previousNote == note.name) {
-                    updateWheel(document.querySelector('.mainNote'), note.name);
+                    updateWheel(noteDisplay, note.name);
                     updateNumberScroll(octaveDisplay, note.octave);
 
-                    updateWheel(document.querySelector('.flatNote'), note.flatNote);
-                    updateWheel(document.querySelector('.sharpNote'), note.sharpNote);
+                    updateWheel(flatDisplay, note.flatNote);
+                    updateWheel(sharpDisplay, note.sharpNote);
 
-                    updateNumberScroll(detuneDisplay, note.centsOff);
+                    updateNumberScroll(detuneDisplay, Math.abs(note.centsOff));
 
-                    console.log(note.flatNote, note.name, note.sharpNote, note.octave);
+                    if(note.centsOff < 0) accidentalText.innerText = "flat";
+                    else accidentalText.innerText = "sharp";
+
+                    console.log(note.flatNote, note.name, note.sharpNote, note.octave, note.centsOff);
                 } else {
                     previousNote = note.name;
                 }
