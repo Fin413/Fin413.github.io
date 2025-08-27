@@ -179,11 +179,46 @@
             width: 60px;
             position: relative;
         }
+
+        .needleCentre {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: greenyellow;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            transition: opacity 1s;
+            opacity: 0;
+        }
+
+        .compassRim {
+            width: calc(var(--compass-radius) * 2 + 20px);
+            height: calc(var(--compass-radius) * 2 + 20px);
+            /* background-color: red; */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            
+            /* border: double 1em transparent;
+            border-radius: 50%;
+            background-size: 450px;
+            background-image: url('./Untitled.png'), 
+                                linear-gradient(to right, rgb(188, 188, 188), rgb(108, 108, 108));
+            background-origin: border-box;
+            background-clip: content-box, border-box; */
+        }
     </style>
 </head>
 <body>
     <div id="tunerContainer">
+        <div class="compassRim"></div>
+
         <img id="needle" src="https://png.pngtree.com/png-vector/20230603/ourmid/pngtree-compass-needle-red-white-vector-png-image_7118194.png">
+        <div class="needleCentre"></div>
 
         <div class="letterWheel mainNote">
             <div class="rotationContainer">
@@ -374,10 +409,11 @@
             if (pitch != -1) {
                 note = getNoteInfo(pitch);
 
+
                 // only change note if it is returned twice in a row
+
                 if (previousNote == note.name) {
 
-                    console.log(pitch);
                     updateWheel(noteDisplay, note.name);
                     updateNumberScroll(octaveDisplay, note.octave);
 
@@ -388,6 +424,12 @@
 
                     if(note.centsOff < 0) updateNumberScroll(accidentalText, 0);
                     else updateNumberScroll(accidentalText, 1);
+
+                    if(Math.abs(note.centsOff) < 5) {
+                        document.querySelector('.needleCentre').style.opacity = 1;
+                    } else {
+                        document.querySelector('.needleCentre').style.opacity = 0;
+                    }
 
                     console.log(note.flatNote, note.name, note.sharpNote, note.octave, note.centsOff);
                 } else {
@@ -542,11 +584,12 @@
         }
 
         function updateNumberScroll(numberEl, targetNum) {
-            const letterSpacing = 50;
             const topOffset = 3;
+            const letterSpacing = 50;
             let maxNum = numberEl.querySelector('.numbersContainer').children.length - 1;
-            console.log(maxNum)
-            numberEl.querySelector('.numbersContainer').style.top = `${-1 * (-topOffset + (maxNum - targetNum) * letterSpacing)}px`;
+
+            let newOffset = -1 * (-topOffset + (maxNum - targetNum) * letterSpacing);
+            numberEl.querySelector('.numbersContainer').style.top = `${newOffset}px`;
         }
     </script>
 </body>
