@@ -52,7 +52,11 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            transition: transform 0.5s;
+            transition: transform 0.5s, filter 500ms;
+
+            -webkit-filter: drop-shadow(-5px -5px 5px #222222);
+            filter: drop-shadow(-5px -5px 5px #222222);
+            /* transition: filter 500ms; */
         }
 
         /* letter wheel styling */
@@ -87,7 +91,7 @@
 
         .mainNote {
             left: 50%;
-            top: 15%;
+            top: 14%;
             transform: translate(-50%, -50%);
 
             /* border-image: linear-gradient(to right, #c5d1d1 0%, #7a7b83 100%) 1;
@@ -98,7 +102,7 @@
         .sharpNote {
             right: 50%;
             top: 50%;
-            transform: translate(calc(var(--compass-radius) - 10px), -50%) rotate(90deg);
+            transform: translate(calc(var(--compass-radius) - 15px), -50%) rotate(90deg);
 
             /* border-image: linear-gradient(to top, #c5d1d1 0%, #7a7b83 100%) 1;
             border-width: 4px;
@@ -108,7 +112,7 @@
         .flatNote {
             left: 50%;
             top: 50%;
-            transform: translate(calc(-1 * (var(--compass-radius) - 10px)), -50%) rotate(-90deg);
+            transform: translate(calc(-1 * (var(--compass-radius) - 15px)), -50%) rotate(-90deg);
 
             /* border-image: linear-gradient(to bottom, #c5d1d1 0%, #7a7b83 100%) 1;
             border-width: 4px;
@@ -170,7 +174,7 @@
             width: 135px;
             position: absolute;
 
-            bottom: 65px;
+            bottom: 50px;
             left: 50%;
             transform: translate(-50%, 0);
         }
@@ -202,27 +206,38 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+
+            background-image: url('./tickMarks(3).png');
+            background-size: 90%;
+            background-position: center;
+            background-repeat: no-repeat;
+
             
             /* border: double 1em transparent;
             border-radius: 50%;
-            background-size: 450px;
-            background-image: url('./Untitled.png'), 
+            background-size: 90%;
+            background-position: center;
+            background-image: url('./tickMarks.png'), 
                                 linear-gradient(to right, rgb(188, 188, 188), rgb(108, 108, 108));
             background-origin: border-box;
             background-clip: content-box, border-box; */
+        }
+
+        #start {
+            padding: 5px 10px;
         }
     </style>
 </head>
 <body>
     <div id="tunerContainer">
         <div class="compassRim"></div>
-
+        
         <img id="needle" src="https://png.pngtree.com/png-vector/20230603/ourmid/pngtree-compass-needle-red-white-vector-png-image_7118194.png">
         <div class="needleCentre"></div>
 
         <div class="letterWheel mainNote">
             <div class="rotationContainer">
-                <img src="Untitled.png" class="wheelImg">
+                <img src="noteRing.png" class="wheelImg">
             </div>
         </div>
 
@@ -243,13 +258,13 @@
 
         <div class="letterWheel flatNote border-black">
             <div class="rotationContainer border-black">
-                <img src="Untitled.png" class="wheelImg">
+                <img src="noteRing.png" class="wheelImg">
             </div>
         </div>
 
         <div class="letterWheel sharpNote">
             <div class="rotationContainer">
-                <img src="Untitled.png" class="wheelImg">
+                <img src="noteRing.png" class="wheelImg">
             </div>
         </div>
 
@@ -266,6 +281,10 @@
                 </div>
             </div>
         </div>
+
+        <div class="compass">
+        </div>
+
 
         <canvas></canvas>
     </div>
@@ -319,6 +338,7 @@
         const canvasCtx = canvas.getContext('2d');
 
         const noteDisplay = document.querySelector('.mainNote');
+        const needle  = document.getElementById('needle');
         const flatDisplay = document.querySelector('.flatNote');
         const sharpDisplay = document.querySelector('.sharpNote');
         const accidentalText = document.querySelector('.accidentalText');
@@ -414,24 +434,36 @@
 
                 if (previousNote == note.name) {
 
+                    // main note and octave display
                     updateWheel(noteDisplay, note.name);
                     updateNumberScroll(octaveDisplay, note.octave);
 
+                    // next notes displays
                     updateWheel(flatDisplay, note.flatNote);
                     updateWheel(sharpDisplay, note.sharpNote);
 
+                    // cents off display
                     updateNumberScroll(detuneDisplay, Math.abs(note.centsOff));
 
+                    // sharp/flat display
                     if(note.centsOff < 0) updateNumberScroll(accidentalText, 0);
                     else updateNumberScroll(accidentalText, 1);
 
+                    // green in-tune indicator
                     if(Math.abs(note.centsOff) < 5) {
                         document.querySelector('.needleCentre').style.opacity = 1;
                     } else {
                         document.querySelector('.needleCentre').style.opacity = 0;
                     }
 
-                    console.log(note.flatNote, note.name, note.sharpNote, note.octave, note.centsOff);
+                    // needle
+                    needleAngle = (note.centsOff / 50) * 90;
+                    updateNeedleShadow(needleAngle);
+                    needle.style.transform = `translate(-50%, -50%) rotate(${needleAngle}deg)`;
+
+                    console.log(needleAngle)
+
+                    // console.log(note.flatNote, note.name, note.sharpNote, note.octave, note.centsOff);
                 } else {
                     previousNote = note.name;
                 }
@@ -458,10 +490,6 @@
 
             canvasCtx.lineTo(canvas.width, canvas.height / 2);
             canvasCtx.stroke();
-
-            // needle
-            if (note) needleAngle = (note.centsOff / 50) * 90;
-            document.getElementById('needle').style.transform = `translate(-50%, -50%) rotate(${needleAngle}deg)`;
 
             // circle
             canvasCtx.translate(0.5, 0.5);
@@ -590,6 +618,24 @@
 
             let newOffset = -1 * (-topOffset + (maxNum - targetNum) * letterSpacing);
             numberEl.querySelector('.numbersContainer').style.top = `${newOffset}px`;
+        }
+
+        function updateNeedleShadow(angle) {
+            // assuming shadow position top right
+            //  0deg  = (-5, +5) (pointing up)
+            //  90deg = (-5, -5) (pointing right)
+            // -90deg = (+5, +5) (pointing left)
+
+            const maxShadowLength = 5;
+
+            let ratio = angle / 90;
+            let horizontal = -maxShadowLength;
+            let vertical = maxShadowLength;
+
+            if(ratio < 0) vertical -= Math.abs(ratio) * (maxShadowLength * 2);
+            else horizontal += Math.abs(ratio) * (maxShadowLength * 2);
+
+            needle.style.filter = `drop-shadow(${horizontal}px ${vertical}px 5px #222222)`;
         }
     </script>
 </body>
