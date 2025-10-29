@@ -1,4 +1,5 @@
 const btn = document.getElementById("btn");
+const saveBtn = document.getElementById("saveBtn");
 const dataTxt = document.getElementById("data");
 var data = [];
 
@@ -24,16 +25,33 @@ function testDownload(callback) {
     img.src = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png";
 }
 
+function saveData() {
+    let tempData = JSON.parse(window.localStorage.getItem("data"));
+    console.log(tempData, !tempData)
+    if(tempData == null) tempData = data;
+    else tempData.concat(data);
+
+    console.log(tempData)
+    window.localStorage.setItem("data", JSON.stringify(tempData));
+
+    saveBtn.innerText = "Saved! :)";
+    setTimeout(() => {
+        saveBtn.innerText = "Save logs";
+    }, 1000);
+}
+
 function startLogging() {
-    btn.innerText = "Copy Data";
+    btn.innerText = "Copy data";
     btn.style.animation = "none";
     btn.onclick = () => {
-        navigator.clipboard.writeText(dataTxt.innerText);
+        navigator.clipboard.writeText(window.localStorage.getItem("data"));
         btn.innerText = "Copied! :)";
         setTimeout(() => {
-            btn.innerText = "Copy Data";
+            btn.innerText = "Copy data";
         }, 1000);
     }
+
+    saveBtn.style.display = "block";
 
 
     if ("geolocation" in navigator) {
@@ -63,3 +81,4 @@ function startLogging() {
 }
 
 btn.onclick = startLogging;
+saveBtn.onclick = saveData;
