@@ -3,7 +3,7 @@ const saveBtn = document.getElementById("saveBtn");
 const dataTxt = document.getElementById("data");
 var data = [];
 
-function testDownload(position) {
+function getDownloadData(position) {
     const imageSize = 11063620;
     const startTime = new Date().getTime();
 
@@ -26,14 +26,14 @@ function testDownload(position) {
             timestamp: now.getTime(),
             location: position,
             speed: {
-                mbps: speed, // mbps
+                mbps: speedMbps, // mbps
                 duration: duration, // seconds
             },
         }
 
         data.push(temp)
         let timestamp = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-        let string = "<br>" + timestamp + ": " + JSON.stringify(json) + ",";
+        let string = "<br>" + timestamp + ": " + JSON.stringify(temp) + ",";
         dataTxt.innerHTML += string;
     }
     img.src = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png";
