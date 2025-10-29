@@ -108,3 +108,4 @@ function startLogging() {
 
 btn.onclick = startLogging;
 saveBtn.onclick = saveData;
+
