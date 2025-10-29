@@ -22,27 +22,32 @@ function testDownload(callback) {
     img.src = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png";
 }
 
-if ("geolocation" in navigator) {
-    navigator.geolocation.watchPosition((position) => {
-        const callback = (speed, duration) => {
-            temp = {
-                timestamp: new Date().getTime(),
-                location: position,
-                speed: {
-                    mbps: speed, // mbps
-                    duration: duration, // seconds
-                },
+function startLogging() {
+    document.getElementById("start").remove();
+    if ("geolocation" in navigator) {
+        navigator.geolocation.watchPosition((position) => {
+            const callback = (speed, duration) => {
+                temp = {
+                    timestamp: new Date().getTime(),
+                    location: position,
+                    speed: {
+                        mbps: speed, // mbps
+                        duration: duration, // seconds
+                    },
+                }
+
+                data.push(temp)
+
+                data.forEach((json) => {
+                    let string = "<br>" + JSON.stringify(json) + ",";
+                    document.getElementById("data").innerHTML += string;
+                })
             }
-
-            data.push(temp)
-
-            data.forEach((json) => {
-                let string = "<br>" + JSON.stringify(json) + ",";
-                document.getElementById("data").innerHTML += string;
-            })
-        }
-        testDownload(callback);
-    });
-} else {
-    alert("Geolocation not available :(");
+            testDownload(callback);
+        });
+    } else {
+        alert("Geolocation not available :(");
+    }
 }
+
+document.getElementById("start").addEventListener("click", startLogging);
