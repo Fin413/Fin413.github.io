@@ -3,7 +3,7 @@ const saveBtn = document.getElementById("saveBtn");
 const dataTxt = document.getElementById("data");
 var data = [];
 
-function testDownload(callback) {
+function testDownload(position) {
     const imageSize = 11063620;
     const startTime = new Date().getTime();
 
@@ -20,18 +20,31 @@ function testDownload(callback) {
         console.log(endTime, startTime, duration, bitsLoaded)
         console.log(`Download speed: ${speedMbps} mbps`);
 
-        callback(speedMbps, duration);
+        let now = new Date();
+
+        let temp = {
+            timestamp: now.getTime(),
+            location: position,
+            speed: {
+                mbps: speed, // mbps
+                duration: duration, // seconds
+            },
+        }
+
+        data.push(temp)
+        let timestamp = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        let string = "<br>" + timestamp + ": " + JSON.stringify(json) + ",";
+        dataTxt.innerHTML += string;
     }
     img.src = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png";
 }
 
 function saveData() {
     let tempData = JSON.parse(window.localStorage.getItem("data"));
-    console.log(tempData, !tempData)
-    if(tempData == null) tempData = data;
-    else tempData.concat(data);
 
-    console.log(tempData)
+    if(tempData == null) tempData = data;
+    else tempData = tempData.concat(data);
+
     window.localStorage.setItem("data", JSON.stringify(tempData));
 
     saveBtn.innerText = "Saved! :)";
@@ -53,27 +66,9 @@ function startLogging() {
 
     saveBtn.style.display = "block";
 
-
     if ("geolocation" in navigator) {
         navigator.geolocation.watchPosition((position) => {
-            const callback = (speed, duration) => {
-                temp = {
-                    timestamp: new Date().getTime(),
-                    location: position,
-                    speed: {
-                        mbps: speed, // mbps
-                        duration: duration, // seconds
-                    },
-                }
-
-                data.push(temp)
-
-                data.forEach((json) => {
-                    let string = "<br>" + JSON.stringify(json) + ",";
-                    dataTxt.innerHTML += string;
-                })
-            }
-            testDownload(callback);
+            getDownloadData(position);
         });
     } else {
         alert("Geolocation not available :(");
