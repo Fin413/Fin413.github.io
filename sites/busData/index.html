@@ -24,10 +24,12 @@
             border: none;
             color: black;
             background-color: white;
-            animation: blink 1.5s step-start 0s infinite;
+            
             transform: scale(1);
             font-family: monospace;
             margin-top: 25px;
+            margin-left: 10px;
+            margin-right: 10px;
         }
 
 
@@ -86,6 +88,18 @@
             white-space: pre;
         }
 
+        #btn {
+            animation: blink 1.5s step-start 0s infinite;
+        }
+
+        #saveBtn{
+            display: none;
+        }
+
+        #btnContainer {
+            display: flex;
+        }
+
         @media screen and (max-width: 500px) {
             h1{
                 font-size: 13px;
@@ -109,7 +123,10 @@
                              |___/|___/                        
             </h1>
             <p class="divider">.......------------------------------------------------.......</p>
-            <button id="btn">Start logging</button>
+            <div id="btnContainer">
+                <button id="btn">Start logging</button>
+                <button id="saveBtn">Save logs</button>
+            </div>
         </div>
         <p id="data"></p>
     </div>
