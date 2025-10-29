@@ -4,10 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-smooth: never;
+            -webkit-font-smoothing : none;
+            /* padding: 10px; */
+            margin: 0;
+            font-family: monospace;
+        }
+
+        button {
+            padding: 4px 8px;
+            box-shadow:   -2px 0 0 0 white,
+                            2px 0 0 0 white,
+                            0 -2px 0 0 white,
+                            0 2px 0 0 white ;
+            border: none;
+            color: black;
+            background-color: white;
+            animation: blink 1.5s step-start 0s infinite;
+            transform: scale(1);
+            font-family:Arial, Helvetica, sans-serif;
+            margin-top: 25px;
+        }
+
+
+        @keyframes blink {
+            50% {
+                transform: scale(1.05);
+            }
+        }  
+
+        h1{
+            white-space: pre;
+            font-family: monospace;
+            margin-top: -20px;
+            margin-bottom: -15px;
+            width: 425px;
+            font-size: 15px;
+            font-weight: normal;
+        }
+
+        #container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #data {
+            width: 100%;
+            font-family: monospace;
+            word-break: break-all;
+        }
+
+        .scanlines-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;            /* overflow: hidden; */
+        }
+
+        .scanlines-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(
+                rgba(117, 117, 117, 0.2) 1px, /* Darker line */
+                transparent 1px /* Transparent line */
+            );
+            background-size: 100% 3px; /* Controls the height of each scanline pair (dark + transparent) */
+            pointer-events: none; /* Allows interaction with elements beneath the overlay */
+        }
+    </style>
 </head>
-<body>
-    <p>Logged Data:</p>
-    <button id="start">Start logging</button>
+<body class="scanlines-container">
+    <div id="container">
+        <p>---------------====================---------------</p>
+        <h1>
+ ___       _          _                        
+|   \ __ _| |_ __ _  | |___  __ _ __ _ ___ _ _ 
+| |) / _` |  _/ _` | | / _ \/ _` / _` / -_) '_|
+|___/\__,_|\__\__,_| |_\___/\__, \__, \___|_|  
+                             |___/|___/                        
+        </h1>
+        <p>.......------------------------------------------------.......</p>
+        <button id="btn">Start logging</button>
+    </div>
     <p id="data"></p>
     <script src="script.js"></script>
 </body>
