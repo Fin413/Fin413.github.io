@@ -1,3 +1,5 @@
+const btn = document.getElementById("btn");
+const dataTxt = document.getElementById("data");
 var data = [];
 
 function testDownload(callback) {
@@ -23,7 +25,17 @@ function testDownload(callback) {
 }
 
 function startLogging() {
-    document.getElementById("start").remove();
+    btn.innerText = "Copy Data";
+    btn.style.animation = "none";
+    btn.onclick = () => {
+        navigator.clipboard.writeText(dataTxt.innerText);
+        btn.innerText = "Copied! :)";
+        setTimeout(() => {
+            btn.innerText = "Copy Data";
+        }, 1000);
+    }
+
+
     if ("geolocation" in navigator) {
         navigator.geolocation.watchPosition((position) => {
             const callback = (speed, duration) => {
@@ -40,7 +52,7 @@ function startLogging() {
 
                 data.forEach((json) => {
                     let string = "<br>" + JSON.stringify(json) + ",";
-                    document.getElementById("data").innerHTML += string;
+                    dataTxt.innerHTML += string;
                 })
             }
             testDownload(callback);
@@ -50,4 +62,4 @@ function startLogging() {
     }
 }
 
-document.getElementById("start").addEventListener("click", startLogging);
+btn.onclick = startLogging;
