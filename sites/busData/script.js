@@ -3,7 +3,12 @@ const saveBtn = document.getElementById("saveBtn");
 const dataTxt = document.getElementById("data");
 var data = [];
 
-function getDownloadData(position) {
+// enable navigation prompt
+window.onbeforeunload = function() {
+    return true;
+};
+
+function logDownloadData(position) {
     const imageSize = 11063620;
     const startTime = new Date().getTime();
 
@@ -20,10 +25,7 @@ function getDownloadData(position) {
         console.log(endTime, startTime, duration, bitsLoaded)
         console.log(`Download speed: ${speedMbps} mbps`);
 
-        let now = new Date();
-
         let temp = {
-            timestamp: now.getTime(),
             location: position,
             speed: {
                 mbps: speedMbps, // mbps
@@ -32,7 +34,7 @@ function getDownloadData(position) {
         }
 
         data.push(temp)
-        let timestamp = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+        let timestamp = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
         let string = "<br>" + timestamp + ": " + JSON.stringify(temp) + ",";
         dataTxt.innerHTML += string;
     }
@@ -53,6 +55,12 @@ function saveData() {
     }, 1000);
 }
 
+function logError(errorText){
+    let timestamp = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    let string = "<br><span class='error'>" + timestamp + ": " + errorText + "</span>";
+    dataTxt.innerHTML += string;
+}
+
 function startLogging() {
     btn.innerText = "Copy data";
     btn.style.animation = "none";
@@ -67,11 +75,34 @@ function startLogging() {
     saveBtn.style.display = "block";
 
     if ("geolocation" in navigator) {
-        navigator.geolocation.watchPosition((position) => {
-            getDownloadData(position);
-        });
+        navigator.geolocation.watchPosition(
+            (position) => {
+                logDownloadData(position);
+            },
+            (error) => {
+                switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    logError("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    logError("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    logError("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    logError("An unknown error occurred.");
+                    break;
+                }
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0,
+            }
+        );
     } else {
-        alert("Geolocation not available :(");
+        logError("Geolocation not available :(");
     }
 }
 
