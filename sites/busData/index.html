@@ -10,7 +10,6 @@
             color: white;
             font-smooth: never;
             -webkit-font-smoothing : none;
-            /* padding: 10px; */
             margin: 0;
             font-family: monospace;
             width: 100%;
@@ -27,7 +26,7 @@
             background-color: white;
             animation: blink 1.5s step-start 0s infinite;
             transform: scale(1);
-            font-family:Arial, Helvetica, sans-serif;
+            font-family: monospace;
             margin-top: 25px;
         }
 
@@ -81,6 +80,10 @@
             );
             background-size: 100% 3px; /* Controls the height of each scanline pair (dark + transparent) */
             pointer-events: none; /* Allows interaction with elements beneath the overlay */
+        }
+
+        .divider {
+            white-space: pre;
         }
 
         @media screen and (max-width: 500px) {
