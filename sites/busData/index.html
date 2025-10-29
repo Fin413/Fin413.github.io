@@ -13,6 +13,7 @@
             /* padding: 10px; */
             margin: 0;
             font-family: monospace;
+            width: 100%;
         }
 
         button {
@@ -47,7 +48,7 @@
             font-weight: normal;
         }
 
-        #container {
+        #heading {
             width: 100%;
             display: flex;
             align-items: center;
@@ -69,7 +70,7 @@
 
         .scanlines-container::after {
             content: '';
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -85,7 +86,7 @@
         @media screen and (max-width: 500px) {
             h1{
                 font-size: 13px;
-                width: 370px;
+                width: 367px;
             }
             .divider {
                 font-size: 10px;
@@ -93,20 +94,22 @@
         }
     </style>
 </head>
-<body class="scanlines-container">
-    <div id="container">
-        <p class="divider">---------------====================---------------</p>
-        <h1>
+<body>
+    <div class="scanlines-container">
+        <div id="heading">
+            <p class="divider">---------------====================---------------</p>
+            <h1>
  ___       _          _                        
 |   \ __ _| |_ __ _  | |___  __ _ __ _ ___ _ _ 
 | |) / _` |  _/ _` | | / _ \/ _` / _` / -_) '_|
 |___/\__,_|\__\__,_| |_\___/\__, \__, \___|_|  
                              |___/|___/                        
-        </h1>
-        <p class="divider">.......------------------------------------------------.......</p>
-        <button id="btn">Start logging</button>
+            </h1>
+            <p class="divider">.......------------------------------------------------.......</p>
+            <button id="btn">Start logging</button>
+        </div>
+        <p id="data"></p>
     </div>
-    <p id="data"></p>
     <script src="script.js"></script>
 </body>
 </html>
