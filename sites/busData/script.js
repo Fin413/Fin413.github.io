@@ -17,23 +17,29 @@ function logDownloadData(position) {
         const endTime = new Date().getTime();
         const duration = (endTime - startTime) / 1000;
         const bitsLoaded = imageSize * 8;
-
+        
         let speedMbps;
         if(endTime == startTime) speedMbps = 0;
         else speedMbps = (bitsLoaded / duration) / 1000000;
-
-        console.log(endTime, startTime, duration, bitsLoaded)
+        
         console.log(`Download speed: ${speedMbps} mbps`);
-
+        
         let temp = {
-            location: position,
-            speed: {
+            timestamp: position.timestamp,
+            location: {
+                accuracy: position.coords.accuracy,
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                speed: position.coords.speed,
+            },
+            download: {
                 mbps: speedMbps, // mbps
                 duration: duration, // seconds
             },
-        }
+        };
+        console.log(temp);
 
-        data.push(temp)
+        data.push(temp);
         let timestamp = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
         let string = "<br>" + timestamp + ": " + JSON.stringify(temp) + ",";
         dataTxt.innerHTML += string;
@@ -57,7 +63,7 @@ function saveData() {
 
 function logError(errorText){
     let timestamp = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-    let string = "<br><span class='error'>" + timestamp + ": " + errorText + "</span>";
+    let string = "<br><span class='error'>" + timestamp + " ERROR: " + errorText + "</span>";
     dataTxt.innerHTML += string;
 }
 
@@ -108,4 +114,3 @@ function startLogging() {
 
 btn.onclick = startLogging;
 saveBtn.onclick = saveData;
-
