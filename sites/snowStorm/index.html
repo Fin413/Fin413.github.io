@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="media/streetlamp.png">
+    <title>Snow Storm</title>
+    <style>
+        body{
+            margin: 0;
+            background-color: #0E1327;
+            overflow: hidden;
+        }
+
+        #canvas {
+            display: block;
+            background-color: #0E1327;
+            background-image: url("media/background.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .hidden {
+            pointer-events: none;
+            visibility: hidden;
+            position: absolute;
+            height: 50%;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
+
+        #mouse {
+            position: absolute;
+            left: 1.5vw;
+            top: 1.5vw;
+
+            width: 200px;
+            height: auto;
+            opacity: 0.25;
+            transition: opacity 400ms;
+        }
+
+        #mouse:hover {
+            opacity: 1;
+        }
+
+        #mouse:active {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <img src="media/unlit.png" id="unlit" class="hidden">
+    <img src="media/streetlamp.png" id="lamp" class="hidden" alt="street lamp">
+
+    <img src="media/frames/pixil-frame-0.png" id="0" class="hidden">
+    <img src="media/frames/pixil-frame-1.png" id="1" class="hidden">
+    <img src="media/frames/pixil-frame-2.png" id="2" class="hidden">
+    <img src="media/frames/pixil-frame-3.png" id="3" class="hidden">
+    <img src="media/frames/pixil-frame-4.png" id="4" class="hidden">
+    <img src="media/frames/pixil-frame-5.png" id="5" class="hidden">
+    <img src="media/frames/pixil-frame-6.png" id="6" class="hidden">
+    <img src="media/frames/pixil-frame-7.png" id="7" class="hidden">
+    <img src="media/frames/pixil-frame-8.png" id="8" class="hidden">
+    <img src="media/frames/pixil-frame-9.png" id="9" class="hidden">
+    <img src="media/frames/pixil-frame-10.png" id="10" class="hidden">
+    <img src="media/frames/pixil-frame-11.png" id="11" class="hidden">
+
+    <canvas id="canvas"></canvas>
+
+    <img src="media/mouseIcon.png" id="mouse">
+    <script src="snow.js"></script>
+</body>
+</html>
