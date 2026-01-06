@@ -259,7 +259,7 @@ function spawnFlake(x, y){
         floatX: x,
         floatY: y,
         size: 3,
-        speed: randFloat(1.75, 3),//randFloat(0.25, 0.75),
+        speed: randFloat(0.75, 1.75),//randFloat(0.25, 0.75),
         weight: randFloat(0.5, 1),
     };
     fallingSnow.push(tempFlake);
@@ -316,13 +316,13 @@ function init() {
 // listeners
 window.addEventListener("load", init);
 window.addEventListener("resize", resize);
-window.addEventListener("mouseup", () => mouseDown = false);
-window.addEventListener("mousedown", (e) => {
+window.addEventListener("pointerup", () => mouseDown = false);
+window.addEventListener("pointerdown", (e) => {
     mousePos.x = e.offsetX;
     mousePos.y = e.offsetY;
     mouseDown = true;
 });
-window.addEventListener("mousemove", (e) => {
+window.addEventListener("pointermove", (e) => {
     if (mouseDown) {
         mousePos.x = e.offsetX;
         mousePos.y = e.offsetY;
