@@ -8,17 +8,23 @@
     <style>
         body{
             margin: 0;
-            background-color: #0E1327;
+            /* background-color: #0E1327; */
             overflow: hidden;
         }
 
         #canvas {
             display: block;
+            z-index: 10;
+            background-color: red;
             background-color: #0E1327;
             background-image: url("media/background.png");
             background-size: auto 100%;
             background-position: center;
             background-repeat: no-repeat;
+        }
+
+        img {
+            z-index: 1;
         }
 
         .hidden {
@@ -50,6 +56,17 @@
         #mouse:active {
             pointer-events: none;
         }
+
+        .vignett {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            pointer-events: none;
+        }
+
+        .right {
+            right: 0;
+        }
     </style>
 </head>
 <body>
@@ -69,9 +86,10 @@
     <img src="media/frames/pixil-frame-10.png" id="10" class="hidden">
     <img src="media/frames/pixil-frame-11.png" id="11" class="hidden">
 
+    <img src="media/mouseIcon.png" id="mouse">
+
     <canvas id="canvas"></canvas>
 
-    <img src="media/mouseIcon.png" id="mouse">
     <script src="snow.js"></script>
 </body>
 </html>

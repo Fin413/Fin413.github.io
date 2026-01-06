@@ -22,7 +22,7 @@ const lightAngle = 30 * (Math.PI / 180);
 var lightOn = true;
 var xLightBoundary;
 
-var lampPos;
+var lightPos;
 var lampDimensions;
 
 var windDir = 0;
@@ -39,17 +39,21 @@ function resize() {
     gridWidth = Math.ceil(window.innerWidth / pixelSize);
     floor = Math.round(window.innerHeight / pixelSize);
 
-    let yLightOffset = -35; // light beam's offset from top of streetlamp image
-    let imgHeight = document.querySelector("img").getBoundingClientRect().height;
-    lampPos = {x: window.innerWidth / 2, y: window.innerHeight - imgHeight + yLightOffset};
-    xLightBoundary = Math.tan(lightAngle) * (imgHeight - yLightOffset);
-
     let imgRect = streetlamp.getBoundingClientRect();
     lampDimensions = {
         width: imgRect.width, 
         height: imgRect.height, 
-        x: (window.innerWidth / 2) - (imgRect.width / 2)
+        x: (window.innerWidth / 2) - (imgRect.width / 2),
+        y: imgRect.y,
     };
+
+    let yLightOffset = -35; // light beam's offset from top of streetlamp image
+    let imgHeight = document.querySelector("img").getBoundingClientRect().height;
+    lightPos = {x: window.innerWidth / 2, y: window.innerHeight - imgHeight + yLightOffset};
+    xLightBoundary = Math.tan(lightAngle) * (imgHeight - yLightOffset);
+
+    
+    console.log(lampDimensions.height)
 }
 
 function loop() {
@@ -89,8 +93,8 @@ function drawStreetLight() {
         ctx.moveTo(x1, window.innerHeight);
         ctx.lineTo(x2, window.innerHeight);
         // flat top
-        ctx.lineTo(window.innerWidth / 2 + 20, lampPos.y + 50);
-        ctx.lineTo(window.innerWidth / 2 - 20, lampPos.y + 50);
+        ctx.lineTo(window.innerWidth / 2 + 20, lightPos.y + 50);
+        ctx.lineTo(window.innerWidth / 2 - 20, lightPos.y + 50);
         ctx.fill();
     
         ctx.restore();
@@ -205,9 +209,9 @@ function drawFallingFlakes() {
 function hitCollisionObject(x, y) {
     // lamp
     let width = lampDimensions.width / 6;
-    let lampX = x > lampPos.x - width && x < lampPos.x + width;
+    let lampX = x > lightPos.x - width && x < lightPos.x + width;
     let height = 2;
-    let yPos = lampPos.y + 60;//(window.innerHeight / 15);
+    let yPos = lampDimensions.y + (lampDimensions.height / 18);
     let lampY = y > yPos - height && y < yPos + height;
     if(lampX && lampY) return true;
 
@@ -232,12 +236,12 @@ function drawLandedFlakes(){
 }
 
 function getColor(x, y) {
-    let dy = y - lampPos.y;
+    let dy = y - lightPos.y;
 
-    let lampTopOffset = 60; 
+    let lampTopOffset = window.innerHeight / 15; 
     if (dy <= 0 || dy < lampTopOffset || !lightOn) return "#FFF"; // only shine down
 
-    let dx = x - lampPos.x;
+    let dx = x - lightPos.x;
     let angle = Math.abs(Math.atan2(dx, dy));
 
     if(angle < lightAngle){        
