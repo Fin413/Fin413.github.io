@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Tuner</title>
+    <link rel="shortcut icon" href="./needle.png" type="image/x-icon">
     <style>
         @font-face {
             font-family: nature;
-            src: url(./nora-fields-font/NoraFields-G30XG.ttf);
+            src: url(./NoraFields-G30XG.ttf);
         }
 
         :root {
@@ -61,7 +62,8 @@
         }
 
         .compassRim {
-            width: 510px;
+            width: calc(var(--compass-radius) * 2 + 110px);
+            /* 510px; */
             position: absolute;
             top: 50%;
             left: 50%;
@@ -306,6 +308,69 @@
             width: 90%;
             margin: 0 5%;
         }
+
+        @media screen and (max-width: 830px) {
+
+            :root {
+                --compass-radius: 150px;
+            }
+
+            .compassRim {
+                width: calc(var(--compass-radius) * 2 + 75px);
+            }
+
+            .compassBackground {
+                width: calc(var(--compass-radius) * 2 + 10px);
+                height: calc(var(--compass-radius) * 2 + 10px);
+            }
+
+            .letterWheel {
+                width: 30px;
+                height: 30px;
+            }
+
+            .rotationContainer {
+                top: -19px;
+            }
+
+            .wheelImg {
+                width: 250px;
+            }
+
+            .mainNote {
+                top: 23%;
+            }
+
+            .octaveDisplay {
+                top: 25%;
+                transform: translateX(25px);
+            }
+
+            #needle {
+                width: 200px;
+            }
+
+            .centsContainer {
+                bottom: 90px;
+            }
+            
+            h1 {
+                display: none;
+            }
+
+            .header {
+                flex-direction: column;
+                margin-top: 5%;
+            }
+
+            .tuningsContainer {
+                text-align: center;
+                p, h2 {
+                    margin-left: 0px;
+                }
+            }
+
+        }
     </style>
 </head>
 <body>
@@ -353,7 +418,7 @@
             <img class="compassRim" src="./metalRing.png"></img>
             <div class="compassBackground"></div>
             
-            <img id="needle" src="https://png.pngtree.com/png-vector/20230603/ourmid/pngtree-compass-needle-red-white-vector-png-image_7118194.png">
+            <img id="needle" src="needle.png">
             <div class="needleCentre"></div>
     
             <div class="letterWheel mainNote">
@@ -377,8 +442,8 @@
                 </div>
             </div>
     
-            <div class="letterWheel flatNote border-black">
-                <div class="rotationContainer border-black">
+            <div class="letterWheel flatNote">
+                <div class="rotationContainer">
                     <img src="noteRing.png" class="wheelImg">
                 </div>
             </div>
@@ -452,7 +517,7 @@
         var currentNote = "A";
         var currentScrollNum = 9;
 
-        const compassRadius = 200;
+        var compassRadius = 200;
         const allNotes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         
         const numberScroll = document.querySelector('.numberScroll');
@@ -680,6 +745,10 @@
         function resizeCanvas(){
             canvas.height = 450;
             canvas.width = document.body.clientWidth;
+
+            const computedStyles = window.getComputedStyle(document.documentElement);
+            console.log(computedStyles.getPropertyValue('--compass-radius').slice(0, -2))
+            compassRadius = computedStyles.getPropertyValue('--compass-radius').slice(0, -2);
         }
         resizeCanvas();
 
