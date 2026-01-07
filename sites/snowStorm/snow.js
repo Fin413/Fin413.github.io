@@ -47,7 +47,8 @@ function resize() {
         y: imgRect.y,
     };
 
-    let yLightOffset = -35; // light beam's offset from top of streetlamp image
+    let yLightOffset = -(lampDimensions.y / 14);//-35; // light beam's offset from top of streetlamp image
+    console.log(yLightOffset)
     let imgHeight = document.querySelector("img").getBoundingClientRect().height;
     lightPos = {x: window.innerWidth / 2, y: window.innerHeight - imgHeight + yLightOffset};
     xLightBoundary = Math.tan(lightAngle) * (imgHeight - yLightOffset);
