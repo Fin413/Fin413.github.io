@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: black;
+            color: white;
+        }
+
+        canvas {
+            display: block;
+            background-color: black;
+        }
+
+        
+
+        @keyframes hover {
+            0% {
+                transform: translateY(-5%);
+            }
+
+            50% {
+                transform: translateY(5%);
+            }
+
+            100% {
+                transform: translateY(-5%);
+            }
+        }
+
+        .center {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu {
+
+        }
+
+        .onlineMenu {
+            opacity: 0;
+            height: 0;
+            transition: all 500ms;
+            pointer-events:none;
+        }
+
+        .gameContainer {
+            display: none;
+        }
+
+        .gameOver {
+            display: none;
+        }
+
+        .onlineUI {
+            display: none;
+        }
+
+        #gameOverText{
+            opacity: 0;
+            white-space: pre;
+            font-family: monospace;
+            animation: hover 1.5s steps(3) infinite;
+        }
+
+        .flexRow{
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu center">
+        <h1>1v1 SNAKE</h1>
+        <p>Select Gamemode</p>
+        <button id="twoOnlineBtn">Two Player Online</button>
+        <div class="onlineMenu">
+            <button id="createGameBtn">Create Game</button>
+            
+            <div class="flexRow">
+                <input type="text" placeholder="Enter code" id="gameCode">
+                <button id="joinGameBtn">Join Game</button>
+            </div>
+        </div>
+        <button id="twoLocalBtn">Two Player Local</button>
+        <button id="singleBtn">Single Player</button>
+    </div>
+
+    <div class="gameContainer">
+
+        <div class="gameOver center">
+            <h1 id="gameOverText">
+ ▗▄▄▖ ▗▄▖ ▗▖  ▗▖▗▄▄▄▖     ▗▄▖ ▗▖  ▗▖▗▄▄▄▖▗▄▄▖ 
+▐▌   ▐▌ ▐▌▐▛▚▞▜▌▐▌       ▐▌ ▐▌▐▌  ▐▌▐▌   ▐▌ ▐▌
+▐▌▝▜▌▐▛▀▜▌▐▌  ▐▌▐▛▀▀▘    ▐▌ ▐▌▐▌  ▐▌▐▛▀▀▘▐▛▀▚▖
+▝▚▄▞▘▐▌ ▐▌▐▌  ▐▌▐▙▄▄▖    ▝▚▄▞▘ ▝▚▞▘ ▐▙▄▄▖▐▌ ▐▌
+            </h1>
+            <p id="loseText">Player 1 Loses</p>
+        </div>
+
+        <div class="onlineUI center">
+            <p id="statusText">Waiting for player to join...</p>
+            <p id="joinCodeText">Generating join code...</p>
+        </div>
+    
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <script src="peerjs.min.js"></script>
+    <script src="snake.js"></script>
+    <script src="explosion.js"></script>
+    <script>
+        // start screen no clear canvsa moving randomly
+
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const pixelSize = 10;
+        const speed = 1;
+
+        var allSnakes = [];
+        var allExplosions = [];
+        var apples = []
+
+        var deadSnake;
+
+        var runGame = false;
+
+        const GAME_MODES = Object.freeze({
+            TWO_ONLINE: 0,
+            TWO_LOCAL: 1,
+            SINGLE: 2,
+        });
+        var gameMode = GAME_MODES.SINGLE;
+
+        var peer;
+        var selfID;
+        var enemyID;
+        var conn;
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener("resize", resize);
+
+        function loop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            allSnakes.forEach((snake, i) => {
+                snake.drawSnake();
+
+                let hitEnemy = false;
+                if(gameMode == GAME_MODES.TWO_LOCAL || gameMode == GAME_MODES.TWO_ONLINE){
+                    if(i == 0) hitEnemy = snake.enemyCollision(allSnakes[1].snakeSegments);
+                    else hitEnemy = snake.enemyCollision(allSnakes[0].snakeSegments);
+                }
+
+                if(snake.hitBoundary() || snake.hitSelf || hitEnemy) {
+                    deadSnake = snake;
+                    die();
+                }
+            });
+
+            drawApples();
+
+            allExplosions.forEach((explosion, i) => {
+                if(explosion.allParticles.length == 0) allExplosions.splice(i, 1);
+                else explosion.update();
+            });
+
+            if(runGame) requestAnimationFrame(loop);
+        }
+
+        function drawApples() {
+            for (let i = 0; i < apples.length; ++i) {
+                let apple = apples[i];
+
+                ctx.fillStyle = "#F00";
+                ctx.beginPath();
+                ctx.rect(apple.x, apple.y, pixelSize, pixelSize);
+                ctx.fill();
+
+                // detect collisions
+                allSnakes.forEach(snake => {
+                    let head = snake.snakeSegments[0]; 
+    
+                    if(Math.abs(head.x - apple.x) < pixelSize && Math.abs(head.y - apple.y) < pixelSize){
+                        apples.splice(i, 1);
+                        allExplosions.push(new Explosion(apple.x, apple.y, ctx, "#F00"));
+                        allExplosions.push(new Explosion(apple.x, apple.y, ctx, "#F00"));
+                        snake.addLength(5);
+                        spawnApple(2);
+                    }
+                })
+            }
+        }
+
+        function spawnApple(num) {
+            for(let i = 0; i < num; ++i){
+                apples.push({
+                    x: randFloat(pixelSize, window.innerWidth - pixelSize),
+                    y: randFloat(pixelSize, window.innerHeight - pixelSize)
+                });
+            }
+        }
+
+        function die() {
+            document.querySelector(".gameOver").style.display = "block";
+
+            let deathText = document.getElementById("gameOverText");
+            deathText.style.display = "block";
+
+            allSnakes.forEach(snake => snake.speed = 0);
+
+            var head = deadSnake.snakeSegments[0];
+            allExplosions.push(new Explosion(head.x, head.y, ctx, deadSnake.color));
+
+            setTimeout(() => {
+                runGame = false;
+                let opacity = 0;
+                const updateOpacity = () => {
+                    opacity += 0.2;
+                    deathText.style.opacity = opacity;
+                    if(opacity != 1) setTimeout(updateOpacity, 500);
+                }
+                updateOpacity();    
+            }, 500)
+        }
+
+        function randFloat (min, max) {
+            return Math.random() * (max - min) + min;
+        };
+
+        function init() {
+            allSnakes.push(new Snake(10, 10, {x: 1, y: 0}, "#0F0", ctx));
+
+            if (gameMode == GAME_MODES.TWO_LOCAL) {
+                allSnakes.push(new Snake(500, 50, {x: -1, y: 0}, "#00F", ctx));
+            }
+
+            deadSnake = allSnakes[0];
+            
+            spawnApple(1);
+            resize();
+            loop();
+        }
+
+        function hideMenu() {
+            const menu = document.querySelector(".menu");
+            menu.style.display = "none";
+
+            const game = document.querySelector(".gameContainer");
+            game.style.display = "block";
+        }
+
+        const validKeys = ["w", "a", "s", "d"];
+        const twoPlayerKeys = ["arrowup", "arrowdown", "arrowleft", "arrowright"];
+        window.addEventListener("keydown", e => {
+
+            if(!runGame) return;
+
+            let key = e.key.toLowerCase();
+            console.log(key)
+
+            if(validKeys.includes(key)){
+                let snake = allSnakes[0];
+                let head = snake.snakeSegments[0];
+    
+                if(key == "d" && head.dir.x != -1) {
+                    head.dir.x = 1;
+                    head.dir.y = 0;
+                } else if(key == "a" && head.dir.x != 1){
+                    head.dir.x = -1;
+                    head.dir.y = 0;
+                } 
+    
+                if(key == "w" && head.dir.y != 1) {
+                    head.dir.y = -1;
+                    head.dir.x = 0;
+                } else if (key == "s" && head.dir.y != -1) {
+                    head.dir.y = 1;
+                    head.dir.x = 0;
+                }
+    
+                snake.dirChanges.push({
+                    x: head.x, 
+                    y: head.y,
+                    dirX: head.dir.x,
+                    dirY: head.dir.y,
+                });
+            }
+
+            if (gameMode == GAME_MODES.TWO_LOCAL && twoPlayerKeys.includes(key)){
+                let snake = allSnakes[1];
+                let head = snake.snakeSegments[0];
+    
+                if(key == "arrowright" && head.dir.x != -1) {
+                    head.dir.x = 1;
+                    head.dir.y = 0;
+                } else if(key == "arrowleft" && head.dir.x != 1){
+                    head.dir.x = -1;
+                    head.dir.y = 0;
+                } 
+    
+                if(key == "arrowup" && head.dir.y != 1) {
+                    head.dir.y = -1;
+                    head.dir.x = 0;
+                } else if (key == "arrowdown" && head.dir.y != -1) {
+                    head.dir.y = 1;
+                    head.dir.x = 0;
+                }
+    
+                snake.dirChanges.push({
+                    x: head.x, 
+                    y: head.y,
+                    dirX: head.dir.x,
+                    dirY: head.dir.y,
+                });
+            }
+        });
+
+        document.getElementById("singleBtn").onclick = () => {
+            gameMode = GAME_MODES.SINGLE;
+            hideMenu()
+            runGame = true;
+            init();
+        }
+
+        document.getElementById("twoLocalBtn").onclick = () => {
+            gameMode = GAME_MODES.TWO_LOCAL;
+            runGame = true;
+            hideMenu()
+            init();
+        }
+
+        document.getElementById("twoOnlineBtn").onclick = () => {
+            const onlineMenu = document.querySelector(".onlineMenu");
+            gameMode = GAME_MODES.TWO_ONLINE;
+            onlineMenu.style.pointerEvents = "all";
+            onlineMenu.style.opacity = 1;
+            onlineMenu.style.height = "50px";
+
+            
+        }
+
+        document.getElementById("createGameBtn").onclick = () => {
+            peer = new Peer();
+            peer.on('open', id => {
+                console.log("fdkjajfklad")
+                const joinCodeText = document.getElementById("joinCodeText");
+                joinCodeText.innerText = id;
+                selfID = id;
+            });
+
+            peer.on('connection', incomingConnection => {
+                console.log("connection")
+                conn = incomingConnection;
+                document.getElementById("statusText").innerText = "Connected!";
+            })
+
+            hideMenu();
+            let onlineUI = document.querySelector(".onlineUI");
+            onlineUI.style.display = "block"
+            // runGame = false;
+            // init();
+
+        }
+
+        document.getElementById("joinGameBtn").onclick = () => {
+            peer = new Peer();
+            const joinCode = document.getElementById("gameCode").value;
+            console.log(joinCode)
+            conn = peer.connect(joinCode);
+
+        }
+    </script>
+</body>
+</html>
