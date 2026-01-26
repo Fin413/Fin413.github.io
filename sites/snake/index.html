@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake</title>
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'pixelFont';
+            src: url('./media/Orange\ Kid.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        * {
+            image-rendering: pixelated;
+        }
+
+        body {
+            margin: 0;
+            background-color: black;
+            color: white;
+            font-family: 'pixelFont', monospace;
+            box-shadow: 0 0 5px 1px white inset; 
+            width: 100svw;
+            height: 100svh;
+        }
+
+        canvas {
+            display: block;
+            background-color: black;
+            box-shadow: 0 0 5px 1px white inset; 
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .center {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flexRow{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .loadingText:after {
+            content: '...';
+            animation: loadingAnimation 1.5s steps(4, end) infinite;
+        }
+
+
+        /*==== Main Menu ====*/
+
+        .menu {
+            font-size: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .menu p {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        #title {
+            animation: hover 1.5s steps(3) infinite;
+            width: 500px;
+            margin: -50px 0;
+        }
+
+        button {
+            appearance: none;
+            -webkit-appearance: none;
+            background: transparent;
+
+            padding: 5px 20px;
+
+            font-family: 'pixelFont', monospace;
+            font-size: 1.2rem;
+
+            cursor: pointer;
+        }
+
+        .pixelBorder, button {
+            border: 3px solid transparent;
+            border-image-source: url("./media/border.png");
+            border-image-slice: 27;
+            border-image-width: 3px;
+            border-image-repeat: stretch;
+
+            background-color: white;
+            /* background-size: contain; */
+            /* background: content-box white, content-box white; */
+            /* background-clip: padding-box; */
+        }
+
+        .mainMenuBtnContainer {
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        .mainMenuBtnContainer p {
+            display: none;
+            /* font-size: 50px; */
+            margin: 0;
+            /* margin-bottom: 8px; */
+            margin-right: 10px;
+            line-height: 0;
+            margin-bottom: 7px;
+            animation: blink 0.8s steps(3, start) infinite;
+            font-size: 2rem;
+        }
+
+        .mainMenuBtnContainer:hover p {
+            display: block;
+        }
+
+
+        /*=== Online Menu ===*/
+
+        .onlineMenu button {
+            padding: 2px 10px;
+        }
+
+        .onlineMenu button:hover {
+            opacity: 0.8;
+        }
+
+        #createGameBtn {
+            margin-bottom: 10px;
+        }
+
+        .onlineMenu {
+            opacity: 0;
+            height: 0;
+            transition: all 500ms;
+            pointer-events:none;
+        }
+
+
+        /*=== Game Elements ===*/
+
+        .gameContainer {
+            display: none;
+        }
+
+        .onlineUI {
+            display: none;
+        }
+
+        .onlineUI p {
+            font-size: 20px;
+        }
+
+        .errorText {
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 500ms;
+        }
+
+        .gameOverContainer {
+            display: none;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .gameContainer button {
+            margin: 10px;
+        }
+
+        .gameContainer button:hover {
+            opacity: 0.8;
+        }
+
+        .gameOverUIContainer{
+            visibility: hidden;
+        }
+
+        #gameOverText{
+            opacity: 0;
+            white-space: pre;
+            font-family: monospace;
+            animation: hover 1.5s steps(3) infinite;
+        }
+
+        #loseText {
+            animation: blink 0.8s steps(3, start) infinite;
+        }
+
+        #gameCodeInput {
+            margin-right: 10px;
+            padding: 5px 10px;
+        }
+        #gameCodeInput:focus {
+            outline: none;
+        }
+
+        .countDownContainer {
+            width: 100%;
+            height: 100%;
+        }
+
+        #countDown {
+            /* display: none; */
+            font-size: 100px;
+            margin: 0;
+        }
+
+        .controls {
+            width: 150px;
+            position: absolute;
+        }
+
+        .left {
+            top: 0;
+            left: 0;
+        }
+
+        .right {
+            bottom: 0;
+            right: 0;
+        }
+
+        #playAgainBtn:hover {
+            opacity: 0.8;
+        }
+
+        .settingsContainer {
+            opacity: 0;
+            height: 0;
+            pointer-events: none;
+            transition: all 500ms;
+        }
+
+        .settingsOption {
+            font-size: 20px;
+            justify-content: space-between;
+        }
+        .settingsOption p {
+            margin: 0;
+            margin-right: 10px;
+        }
+        .settingsOption button {
+            padding: 0 20px;
+            margin-top: 10px;
+        }
+        .settingsOption button:hover {
+            opacity: 0.8;
+        }
+        
+
+        
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            /* width: 100%; */
+            height: 5px;
+            background: white;
+            outline: none;
+            /* opacity: 0.7; */
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            background: #0F0;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            background: #0F0;
+            cursor: pointer;
+        }
+
+
+        /* Keyframe Animations */
+
+        @keyframes hover {
+            0% {
+                transform: translateY(-5%);
+            }
+
+            50% {
+                transform: translateY(5%);
+            }
+
+            100% {
+                transform: translateY(-5%);
+            }
+        }
+
+        @keyframes blink {
+            to {
+                visibility: hidden;
+            }
+        }
+
+        @keyframes loadingAnimation {
+            0% {
+                content: ''
+            }
+            25% {
+                content: '.'
+            }
+            50% {
+                content: '..'
+            }
+            75% {
+                content: '...'
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu center">
+        <img id="title" src="media/title.png" alt="">
+        <p>Select Gamemode</p>
+
+        <div class="mainMenuBtnContainer">
+            <p>></p>
+            <button id="twoOnlineBtn">Two Player Online</button>
+        </div>
+
+        <div class="onlineMenu">
+            <button id="createGameBtn">Create Game</button>
+            <div class="flexRow">
+                <input type="text" placeholder="Enter code" id="gameCodeInput" class="pixelBorder">
+                <button id="joinGameBtn">
+                    <span id="joinGameText">Join Game</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="mainMenuBtnContainer">
+            <p>></p>
+            <button id="twoLocalBtn">Two Player Local</button>
+        </div>
+        <div class="mainMenuBtnContainer">
+            <p>></p>
+            <button id="singleBtn">Single Player</button>
+        </div>
+        <div class="mainMenuBtnContainer">
+            <p>></p>
+            <button id="settingsBtn">Settings</button>
+        </div>
+
+        <div class="settingsContainer">
+            <div class="flexRow settingsOption">
+                <p>Speed <span id="speedDisplay">(1)</span></p>
+                <input type="range" id="speedSlider" value="1" min="1" max="30">
+            </div>
+            <div class="flexRow settingsOption">
+                <p>Pixel Size <span id="pixelSizeDisplay">(10)</span></p>
+                <input type="range" id="pixelSizeSlider" value="10" min="1" max="100">
+            </div>
+            <div class="flexRow settingsOption">
+                <p>Length Gain <span id="lengthGainDisplay">(5)</span></p>
+                <input type="range" id="lengthGainSlider" value="5" min="1" max="100">
+            </div>
+            <div class="flexRow settingsOption">
+                <p>Apples Added <span id="applesAddedDisplay">(2)</span></p>
+                <input type="range" id="applesAddedSlider" value="2" min="1" max="100">
+            </div>
+            <div class="settingsOption">
+                <button id="resetSettingsBtn">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="gameContainer">
+        <canvas id="canvas"></canvas>
+
+        <div class="gameOverContainer center">
+            <h1 id="gameOverText">
+ ▗▄▄▖ ▗▄▖ ▗▖  ▗▖▗▄▄▄▖     ▗▄▖ ▗▖  ▗▖▗▄▄▄▖▗▄▄▖ 
+▐▌   ▐▌ ▐▌▐▛▚▞▜▌▐▌       ▐▌ ▐▌▐▌  ▐▌▐▌   ▐▌ ▐▌
+▐▌▝▜▌▐▛▀▜▌▐▌  ▐▌▐▛▀▀▘    ▐▌ ▐▌▐▌  ▐▌▐▛▀▀▘▐▛▀▚▖
+▝▚▄▞▘▐▌ ▐▌▐▌  ▐▌▐▙▄▄▖    ▝▚▄▞▘ ▝▚▞▘ ▐▙▄▄▖▐▌ ▐▌
+            </h1>
+            <div class="gameOverUIContainer">
+                <p id="loseText">Player 1 Loses</p>
+
+                <div class="flexRow">
+                    <button id="playAgainBtn">Play Again</button>
+                    <button id="mainMenuBtn">Main Menu</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="onlineUI center">
+            <p id="statusText" class="loadingText">Waiting for player to join</p>
+            <p id="joinCodeText">Generating join code...</p>
+        </div>
+
+        <div class="countDownContainer flexRow">
+            <img src="media/player1Controls.png" id="player1Controls" class="controls left">
+            <h1 id="countDown" class="center"></h1>
+            <img src="media/player2Controls.png" id="player2Controls" class="controls right">
+        </div>
+
+        <p class="errorText center"></p>
+    </div>
+
+    <!-- <script src="peerjs.min.js"></script> -->
+    <script src="snake.js"></script>
+    <script src="explosion.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

@@ -3,10 +3,8 @@ class Snake {
     dirChanges = [];
     hitSelf = false;
 
-    constructor(x, y, startingDir, color, ctx, speed = 1, pixelSize = 10) {
-        this.startX = x;
-        this.startY = y;
-        this.startingDir = startingDir;
+    constructor(startPos, color, ctx, speed = 5, pixelSize = 10) {
+        this.startPos = startPos;
         this.color = color;
         this.ctx = ctx;
         this.speed = speed;
@@ -18,11 +16,11 @@ class Snake {
     init() {
         for(let i = 0; i < 3; ++i) {
             this.snakeSegments.push({
-                x: this.startX + (this.startingDir.x * this.pixelSize * -i), 
-                y: this.startX + (this.startingDir.y * this.pixelSize * -i), 
+                x: this.startPos.x + (this.startPos.dir.x * this.pixelSize * -i), 
+                y: this.startPos.y + (this.startPos.dir.y * this.pixelSize * -i), 
                 dir: {
-                    x: this.startingDir.x,
-                    y: this.startingDir.y,
+                    x: this.startPos.dir.x,
+                    y: this.startPos.dir.y,
                 }
             });
         }
@@ -62,8 +60,8 @@ class Snake {
                 });
 
                 if (dirChange) {
-                    seg.dir.x = dirChange.dirX;
-                    seg.dir.y = dirChange.dirY;
+                    seg.dir.x = dirChange.dir.x;
+                    seg.dir.y = dirChange.dir.y;
                     seg.x = dirChange.x;
                     seg.y = dirChange.y;
                 }
@@ -82,10 +80,17 @@ class Snake {
 
     hitBoundary() {
         let head = this.snakeSegments[0];
-            
+        let headBox = {
+            x: head.x,
+            y: head.y,
+        }
+
+        if(head.dir.x == 1) headBox.x += this.pixelSize;
+        else if (head.dir.y == 1) headBox.y += this.pixelSize;
+
         // boundary collisions
-        let outOfXBounds = head.x > window.innerWidth || head.x < 0;
-        let outofYBounds = head.y < 0 || head.y > window.innerHeight;
+        let outOfXBounds = headBox.x > this.ctx.canvas.width || headBox.x < 0;
+        let outofYBounds = headBox.y < 0 || headBox.y > this.ctx.canvas.height;
         if(outOfXBounds || outofYBounds) return true;
         return false;
     }
@@ -123,7 +128,7 @@ class Snake {
     }
 
     enemyCollision(segments) {
-        let collision = false
+        let collision = false;
         segments.forEach(seg => {
             if(this.selfCollision(seg)) collision = true;
         });
