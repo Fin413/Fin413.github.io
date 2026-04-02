@@ -1,470 +1,488 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Home</title>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="icon" href="media/favicon.svg">
-        <link rel="stylesheet" href="styles.css">
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-    </head>
+<head>
+    <title>Home</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="media/favicon.svg">
+    <link rel="stylesheet" href="styles.css">
 
-    <body onload="init()">
-        <div class="sectionContainer nameContainer">
-            <h1 id="name" class="notSelectable" aria-label="Finlay Soehn"></h1>
-            <h2 id="description">
-                <span aria-hidden="true">
-                    C:\WINDOWS\system32\>&nbsp;
-                </span>
-                <noscript>Error: JavaScript is not enabled</noscript>
-            </h2>
-           
-            <script>
-                const os = navigator.userAgent;
-                const descriptionText = document.getElementById("description");
-    
-                if (os.indexOf("Mac") != -1){
-                    descriptionText.innerHTML = "Finlays-MacBook:~ Fin$&nbsp;"
-                }else if (os.indexOf("Linux") != -1){
-                    descriptionText.innerHTML = "fin@ubuntu:~$";
-                }
-            </script>
- 
-            <div id="scroll" class="notSelectable">
-                <p>Scroll</p>
-                <i class="downArrow"></i>
-            </div> 
-        </div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+</head>
 
-        <canvas id="upperCanvas"></canvas>
-        
-        <div class="sectionContainer portfolioContainer">
-            <h1 class="title scrambleScroll">Projects</h1>
-            <div class="portfolioGrid">
+<body onload="init()">
+    <div class="sectionContainer nameContainer">
+        <h1 id="name" class="notSelectable" aria-label="Finlay Soehn"></h1>
+        <h2 id="description">
+            <span aria-hidden="true">
+                C:\WINDOWS\system32\>&nbsp;
+            </span>
+            <noscript>Error: JavaScript is not enabled</noscript>
+        </h2>
 
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/snowStorm'" class="siteBtn">
-                        <img src="media/stormStorm.png" class="siteThumbnail notSelectable" aria-label="Snow Storm">
-                    </button>
-                    <p class="siteDescription">A small snow themed particle simulator.</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/oscilloscope'" class="siteBtn">
-                        <img src="media/oscilloscope.png" class="siteThumbnail notSelectable" aria-label="Oscilloscope">
-                    </button>
-                    <p class="siteDescription">An oscilloscope simulator that can visualize oscilloscope music (or any other audio signal).</p>
-                </div>
-
-                <div class="siteContainer intervalFade"> 
-                    <button onclick="window.location='./sites/dragonForce'">
-                        <img src="media/dragonForce.png" class="siteThumbnail notSelectable" aria-label="Dragon Force">
-                    </button>
-                    <p class="siteDescription">An audio visualizer utilizing the JS audio (and canvas) API with sine wave math.</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/tuningCompass'">
-                        <img src="media/tuningCompass.png" class="siteThumbnail notSelectable" aria-label="Tuning Compass">
-                    </button>
-                    <p class="siteDescription">An application to help tune instruments and identify notes from audio frequencies.</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/sudoku'">
-                        <img src="media/sudoku.png" class="siteThumbnail notSelectable" aria-label="Sudoku">
-                    </button>
-                    <p class="siteDescription">Generates and solves Sudoku puzzles using a backtracking algorithm.</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='https://major-lobster-games.itch.io/back-to-rack'">
-                        <img src="media/backToRack.png" class="siteThumbnail notSelectable" aria-label="Back to Rack">
-                    </button>
-                    <p class="siteDescription">My team's entry to the 2025 GMTK Game Jam.</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/snake'">
-                        <img src="media/snake.png" class="siteThumbnail notSelectable" aria-label="1v1 Snake">
-                    </button>
-                    <p class="siteDescription">1v1 version of snake with online and local play using P2P networking.</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='https://itch.io/jam/gmtk-2023/rate/2159594'">
-                        <img src="media/bnb.png" class="siteThumbnail notSelectable" aria-label="Skeleton Bed and Breakfast">
-                    </button>
-                    <p class="siteDescription">My team's entry to the 2023 GMTK Game Jam.</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/pixel'">
-                        <img src="media/pixel.png" class="siteThumbnail notSelectable" aria-label="Pixel Art Generator">
-                    </button>
-                    <p class="siteDescription">A website to convert images into pixel art with specific palettes.</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/pirateGeography'">
-                        <img src="media/pirate.png" class="siteThumbnail notSelectable" aria-label="Pirate Geography">
-                    </button>
-                    <p class="siteDescription">A pirate-themed geography testing website made with <a href="https://www.netzgesta.de/mapper/" target="_blank">mapper.js</a>.</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/crosslord'">
-                        <img src="media/crosslord.png" class="siteThumbnail notSelectable" aria-label="Cross-Lord">
-                    </button>
-                    <p class="siteDescription">An interactive crossword site themed around my school (our mascot was Gaylord the Lion).</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/extension'">
-                        <img src="media/beartracks.png" class="siteThumbnail notSelectable" aria-label="Bear Tracks">
-                    </button>
-                    <p class="siteDescription">A browser extension to show RateMyProf scores when picking classes.</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/GalacticGainz'">
-                        <img src="media/gainz.png" class="siteThumbnail notSelectable" aria-label="Galactic Gainz">
-                    </button>
-                    <p class="siteDescription">My entry to the TWT Code Jam, topic: health.</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/scona-live-3'">
-                        <img src="media/sconaLive.png" class="siteThumbnail notSelectable" aria-label="Scona Live">
-                    </button>
-                    <p class="siteDescription">A site to display upcoming live school sport events using the Vimeo API.</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/kiddle'">
-                        <img src="media/kiddle.png" class="siteThumbnail notSelectable" aria-label="Kiddle">
-                    </button>
-                    <p class="siteDescription">An easier version of Wordle designed for primary school students.</p>
-                </div>
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/progress'">
-                        <img src="media/progressBar.png" class="siteThumbnail notSelectable" aria-label="Progress Bar">
-                    </button>
-                    <p class="siteDescription">A small website to show how much of the year has past.</p>
-                </div> 
-
-                <div class="siteContainer intervalFade">
-                    <button onclick="window.location='./sites/5OClock'">
-                        <img src="media/five.png" class="siteThumbnail notSelectable" aria-label="Five O'Clock Somewhere">
-                    </button>
-                    <p class="siteDescription">A small website that displays where in the world it's currently 5 o'clock using timezone math.</p>
-                </div>
-
-            </div>
-        </div>
-
-        <canvas id="lowerCanvas"></canvas>
-
-        <p id="copyText">Email Copied to Clipboard</p>
-
-        <div class="sectionContainer">
-            <div class="contactContainer">
-                <div class="contactInfo">
-                    <h2 class="fadeScroll title scrambleScroll contactTitle">Contact</h2>
-                    <div class="fadeScroll">
-                        <img class="notSelectable" src="media/mail.png" id="emailImage" aria-label="email icon">
-                        <p>Email</p>
-                    </div>
-                    <button onClick="copyEmail()" class="fadeScroll textHighlight">FinSoehn@gmail.com</button>
-                </div>
-
-                <form class="fadeScroll" id="emailForm" action="https://formspree.io/f/xrgrzdpk" method="POST">
-                    <input placeholder="Your Email" type="email" name="email" />
-                    <textarea placeholder="Enter Message" name="message"></textarea>
-                    <button>Send<img id="plane" src="media/plane.png" aria-label="paper plane icon"></button>
-                    <p id="formStatus">&nbsp</p>
-                </form>
-            </div>
-        </div>
-        
-        <footer class="sectionContainer greenText">
-            <p class="scrambleScroll">- All websites handmade by me -</p>
-        </footer>
-
-        <script src="spaceInvadersDivider.js"></script>
         <script>
-            new SpaceInvaders(document.getElementById("upperCanvas"), "#0E2A35");
-            new SpaceInvaders(document.getElementById("lowerCanvas"), "#FFFFFF");
+            const os = navigator.userAgent;
+            const descriptionText = document.getElementById("description");
 
-            const scrollIndicator = document.getElementById("scroll");
-            const name = document.getElementById("name");
-            const root = document.querySelector(":root");
-            const typeSpeed = 100;
-            
-            var fadeScroll = document.getElementsByClassName("fadeScroll");
-            var intervalScroll = document.getElementsByClassName("intervalFade");
-            var scrambleScroll = document.getElementsByClassName("scrambleScroll");
-            
-            if(window.innerWidth < 600){
-                fadeScroll = [...fadeScroll, ...intervalScroll];
-                intervalScroll = [];
+            if (os.indexOf("Mac") != -1) {
+                descriptionText.innerHTML = "Finlays-MacBook:~ Fin$&nbsp;"
+            } else if (os.indexOf("Linux") != -1) {
+                descriptionText.innerHTML = "fin@ubuntu:~$";
             }
-
-            var allScrambleEls = [];
-
-            function init(){
-                scrollEvents();
-                setTimeout(()=>{
-                    let loop;
-                    typeString(name, "Finlay Soehn.");
-                    startScramble(name, "Finlay Soehn.");
-                }, 500);
-            }
-
-            window.addEventListener("scroll", scrollEvents);
-            for(let i = 0; i < intervalScroll.length; ++i){
-                intervalScroll[i].addEventListener('mouseover', () => {
-                    let textHeight = intervalScroll[i].querySelector(".siteDescription").offsetHeight;
-                    intervalScroll[i].style.marginBottom = (50 + textHeight) + "px";
-                });
-                intervalScroll[i].addEventListener('mouseout', () => {
-                    intervalScroll[i].style.marginBottom = 50 + "px";
-                });
-            }
-
-            function scrollEvents(){
-                var scroll = window.scrollY;
-                
-                for(let el of fadeScroll){
-                    if(el.opacity == 1) continue;
-
-                    let topOffset = el.offsetTop;
-                    let halfHeight = el.offsetHeight/2;
-
-                    if(scroll > (topOffset - window.innerHeight + halfHeight)){
-                        el.style.opacity = 1;
-                        el.style.transform = "translateY(0)";
-                    }
-                }
-
-                if(intervalScroll.length > 0 && intervalScroll[0].style.opacity != 1 && scroll > (intervalScroll[0].offsetTop - window.innerHeight + (intervalScroll[0].offsetHeight/2))){
-                    const showMore = i => {
-                        intervalScroll[i].style.opacity = 1;
-                        intervalScroll[i].style.transform = "translateY(0)";
-                        if(i < intervalScroll.length - 1){
-                            setTimeout(() => {
-                                showMore(i + 1);
-                            }, 400);
-                        }
-                    }
-
-                    showMore(0);
-                }
-
-                for(let el of scrambleScroll){
-                    if(el.getAttribute('doneScramble')) continue;
-
-                    let topOffset = el.offsetTop;
-                    let halfHeight = el.offsetHeight/2;
-
-                    if(scroll > (topOffset - window.innerHeight + halfHeight)){
-                        const text = el.textContent;
-                        el.setAttribute('doneScramble', true);
-
-                        typeString(el);
-                        startScramble(el, text);
-                        setTimeout(() => {
-                            stopScramble(el, 100);
-                            el.onmouseover = () => startScramble(el, text);
-                            el.onmouseleave = () => stopScramble(el, 100);
-                        }, typeSpeed * text.length)
-                    }
-                }
-            }
-
-            function typeString(typeEl, typeString = null){
-                if(!typeString){
-                    typeString = typeEl.textContent;
-                    typeEl.innerText = "";
-                }
-
-                let typeObj = {
-                    target: typeEl,
-                    text: typeString,
-                    typeIndex: 0,
-                    loop: undefined,
-                }
-
-                typeObj.loop = setInterval(() => typeLetter(typeObj), typeSpeed);
-            }
-
-            function typeLetter(typeObj){
-                if(typeObj.typeIndex == typeObj.text.length){
-                    typeIndex = 0;
-                    clearInterval(typeObj.loop);
-
-                    if(typeObj.text === "Finlay Soehn."){ 
-                        stopScramble(name);
-
-                        name.onmouseover = () => {
-                            startScramble(name, "Finlay Soehn.");
-                        }  
-
-                        name.onmouseleave = () => {
-                            stopScramble(name);
-                        };
-
-                        setTimeout(()=>{
-                            scrollIndicator.style.bottom = "25px";
-                            scrollIndicator.style.opacity = 1;
-                            scrollIndicator.style.visibility = "visible";
-
-                            root.style.setProperty('--cursorAnimation', "none");
-                            typeString(descriptionText, "Full Stack Developer.")
-
-                            setTimeout(()=>{
-                                scrollIndicator.style.animation = "upDown 2s ease-in-out infinite";
-                            }, 1000)
-                        }, 1500);
-                    }else if (typeObj.text === "Full Stack Developer.") {
-                        clearInterval(typeObj.loop);
-                        root.style.setProperty('--cursorAnimation', "blink 1s steps(2, start) infinite");
-                    }
-                }else{
-                    typeObj.target.innerHTML += typeObj.text[typeObj.typeIndex];
-                    typeObj.typeIndex++;
-                }
-            }
-
-            function startScramble(target, finalText){
-                allScrambleEls.forEach(obj => {
-                    if(target === obj.target) removeScramble(obj);
-                });
-
-                let obj = {
-                    target: target,
-                    solvedLetters: [],
-                    text: finalText,
-                    scrambleLoop: undefined,
-                    unscrambleLoop: undefined,
-                }
-
-                allScrambleEls.push(obj);
-                obj.scrambleLoop = setInterval(() => scramble(obj), 50);
-            }
-
-            function stopScramble(target, speed = 75){
-                allScrambleEls.forEach((obj, i) => {
-                    console.log(obj.target === target)
-                    console.log(target, obj.target)
-                    if(obj.target === target){
-                        obj.unscrambleLoop = setInterval(() => unscramble(obj), speed);
-                    }
-                })
-            }
-
-            function scramble(obj){
-                const clearCharacters = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890~!@#$%^&*()`-_=+[]{}\\|:\;\"'?/>.<,";
-
-                for(var i = 0; i < obj.target.textContent.length; i++){
-                    let temp = obj.target.textContent;
-                    
-                    if(obj.solvedLetters.includes(i) || temp[i] == " ") continue;
-
-                    let random = Math.floor(Math.random() * (clearCharacters.length)); 
-                    obj.target.innerText = temp.substring(0, i) + clearCharacters[random] + temp.substring(i + 1);
-                }
-            }
-
-            function unscramble(obj){ 
-                let textLength = obj.text.length;
-
-                if(obj.solvedLetters.length == textLength){
-                    removeScramble(obj);
-                    return;
-                }
-
-                let numLettersSolved = Math.floor(Math.random() * 3);
-                if((textLength - obj.solvedLetters.length) == 1) numLettersSolved = 1;
-                
-                for(var i = 0; i < numLettersSolved; i++){
-                    let charIndex = Math.floor(Math.random() * textLength);
-
-                    while(obj.solvedLetters.includes(charIndex)){ 
-                        if(charIndex == textLength - 1) charIndex = 0;
-                        else charIndex++;
-                    }
-                    
-                    obj.solvedLetters.push(charIndex);
-                    
-                    obj.target.innerText = obj.target.innerText.substring(0, charIndex) + obj.text[charIndex] + obj.target.innerText.substring(charIndex + 1);
-                }
-            }
-
-            function removeScramble(obj){
-                clearInterval(obj.unscrambleLoop);
-                clearInterval(obj.scrambleLoop);
-                console.log(allScrambleEls.indexOf(obj))
-
-                let objIndex = allScrambleEls.indexOf(obj);
-                if(objIndex == -1) return;
-
-                allScrambleEls.splice(objIndex, 1);
-            }
-
-            document.getElementById("emailForm").onsubmit = (e) => {
-                e.preventDefault();
-
-                var form = document.getElementById("emailForm");
-                var email = document.getElementsByName("email")[0].value;
-                var message = document.getElementsByName("message")[0].value;
-                var status = document.getElementById("formStatus");
-
-                if(message == "" || email == ""){
-                    status.innerText = "Please fill out all fields.";
-                    status.style.opacity = 1;
-                    return;
-                }
-
-                document.getElementById("plane").style.animation = "fly 2.5s";
-
-                var data = new FormData(event.target);
-
-                fetch(event.target.action, {
-                    method: form.method,
-                    body: data,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                }).then(response => {
-                    status.innerHTML = "Message sent";
-                    status.style.opacity = 1;
-                    form.reset();
-                }).catch(error => {
-                    status.innerHTML = "Oops! There was a problem sending your message";
-                    status.style.opacity = 1;
-                    console.log(error);
-                });
-            }
-
-            var animationOver = true;
-            function copyEmail(){
-                navigator.clipboard.writeText("FinSoehn@gmail.com");
-                if(!animationOver) return;
-                animationOver = false;
-                let copyText = document.getElementById("copyText");
-                copyText.style.top = 0;
-                setTimeout(() => {
-                    animationOver = true;
-                    copyText.style.top = "-150px";
-                }, 1500);
-            }
-
-
         </script>
-    </body>
+
+        <div id="scroll" class="notSelectable">
+            <p>Scroll</p>
+            <i class="downArrow"></i>
+        </div>
+    </div>
+
+    <canvas id="upperCanvas"></canvas>
+
+    <div class="sectionContainer portfolioContainer">
+        <h1 class="title scrambleScroll">Projects</h1>
+        <div class="portfolioGrid">
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/mandelbrot'" class="siteBtn">
+                    <img src="media/mandelbrot.png" class="siteThumbnail notSelectable" aria-label="Mandelbrot">
+                </button>
+                <p class="siteDescription">A Mandelbrot exploration tool that preforms live calculations to navigate
+                    through infinite fractals.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/snowStorm'" class="siteBtn">
+                    <img src="media/stormStorm.png" class="siteThumbnail notSelectable" aria-label="Snow Storm">
+                </button>
+                <p class="siteDescription">A small snow themed particle simulator.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/oscilloscope'" class="siteBtn">
+                    <img src="media/oscilloscope.png" class="siteThumbnail notSelectable" aria-label="Oscilloscope">
+                </button>
+                <p class="siteDescription">An oscilloscope simulator that can visualize oscilloscope music (or any other
+                    audio signal).</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/dragonForce'">
+                    <img src="media/dragonForce.png" class="siteThumbnail notSelectable" aria-label="Dragon Force">
+                </button>
+                <p class="siteDescription">An audio visualizer utilizing the JS audio (and canvas) API with sine wave
+                    math.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/tuningCompass'">
+                    <img src="media/tuningCompass.png" class="siteThumbnail notSelectable" aria-label="Tuning Compass">
+                </button>
+                <p class="siteDescription">An application to help tune instruments and identify notes from audio
+                    frequencies.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/sudoku'">
+                    <img src="media/sudoku.png" class="siteThumbnail notSelectable" aria-label="Sudoku">
+                </button>
+                <p class="siteDescription">Generates and solves Sudoku puzzles using a backtracking algorithm.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='https://major-lobster-games.itch.io/back-to-rack'">
+                    <img src="media/backToRack.png" class="siteThumbnail notSelectable" aria-label="Back to Rack">
+                </button>
+                <p class="siteDescription">My team's entry to the 2025 GMTK Game Jam.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/snake'">
+                    <img src="media/snake.png" class="siteThumbnail notSelectable" aria-label="1v1 Snake">
+                </button>
+                <p class="siteDescription">1v1 version of snake with online and local play using P2P networking.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='https://itch.io/jam/gmtk-2023/rate/2159594'">
+                    <img src="media/bnb.png" class="siteThumbnail notSelectable"
+                        aria-label="Skeleton Bed and Breakfast">
+                </button>
+                <p class="siteDescription">My team's entry to the 2023 GMTK Game Jam.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/pixel'">
+                    <img src="media/pixel.png" class="siteThumbnail notSelectable" aria-label="Pixel Art Generator">
+                </button>
+                <p class="siteDescription">A website to convert images into pixel art with specific palettes.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/pirateGeography'">
+                    <img src="media/pirate.png" class="siteThumbnail notSelectable" aria-label="Pirate Geography">
+                </button>
+                <p class="siteDescription">A pirate-themed geography testing website made with <a
+                        href="https://www.netzgesta.de/mapper/" target="_blank">mapper.js</a>.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/crosslord'">
+                    <img src="media/crosslord.png" class="siteThumbnail notSelectable" aria-label="Cross-Lord">
+                </button>
+                <p class="siteDescription">An interactive crossword site themed around my school (our mascot was Gaylord
+                    the Lion).</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/extension'">
+                    <img src="media/beartracks.png" class="siteThumbnail notSelectable" aria-label="Bear Tracks">
+                </button>
+                <p class="siteDescription">A browser extension to show RateMyProf scores when picking classes.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/GalacticGainz'">
+                    <img src="media/gainz.png" class="siteThumbnail notSelectable" aria-label="Galactic Gainz">
+                </button>
+                <p class="siteDescription">My entry to the TWT Code Jam, topic: health.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/scona-live-3'">
+                    <img src="media/sconaLive.png" class="siteThumbnail notSelectable" aria-label="Scona Live">
+                </button>
+                <p class="siteDescription">A site to display upcoming live school sport events using the Vimeo API.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/kiddle'">
+                    <img src="media/kiddle.png" class="siteThumbnail notSelectable" aria-label="Kiddle">
+                </button>
+                <p class="siteDescription">An easier version of Wordle designed for primary school students.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/progress'">
+                    <img src="media/progressBar.png" class="siteThumbnail notSelectable" aria-label="Progress Bar">
+                </button>
+                <p class="siteDescription">A small website to show how much of the year has past.</p>
+            </div>
+
+            <div class="siteContainer intervalFade">
+                <button onclick="window.location='./sites/5OClock'">
+                    <img src="media/five.png" class="siteThumbnail notSelectable" aria-label="Five O'Clock Somewhere">
+                </button>
+                <p class="siteDescription">A small website that displays where in the world it's currently 5 o'clock
+                    using timezone math.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <canvas id="lowerCanvas"></canvas>
+
+    <p id="copyText">Email Copied to Clipboard</p>
+
+    <div class="sectionContainer">
+        <div class="contactContainer">
+            <div class="contactInfo">
+                <h2 class="fadeScroll title scrambleScroll contactTitle">Contact</h2>
+                <div class="fadeScroll">
+                    <img class="notSelectable" src="media/mail.png" id="emailImage" aria-label="email icon">
+                    <p>Email</p>
+                </div>
+                <button onClick="copyEmail()" class="fadeScroll textHighlight">FinSoehn@gmail.com</button>
+            </div>
+
+            <form class="fadeScroll" id="emailForm" action="https://formspree.io/f/xrgrzdpk" method="POST">
+                <input placeholder="Your Email" type="email" name="email" />
+                <textarea placeholder="Enter Message" name="message"></textarea>
+                <button>Send<img id="plane" src="media/plane.png" aria-label="paper plane icon"></button>
+                <p id="formStatus">&nbsp</p>
+            </form>
+        </div>
+    </div>
+
+    <footer class="sectionContainer greenText">
+        <p class="scrambleScroll">- All websites handmade by me -</p>
+    </footer>
+
+    <script src="spaceInvadersDivider.js"></script>
+    <script>
+        new SpaceInvaders(document.getElementById("upperCanvas"), "#0E2A35");
+        new SpaceInvaders(document.getElementById("lowerCanvas"), "#FFFFFF");
+
+        const scrollIndicator = document.getElementById("scroll");
+        const name = document.getElementById("name");
+        const root = document.querySelector(":root");
+        const typeSpeed = 100;
+
+        var fadeScroll = document.getElementsByClassName("fadeScroll");
+        var intervalScroll = document.getElementsByClassName("intervalFade");
+        var scrambleScroll = document.getElementsByClassName("scrambleScroll");
+
+        if (window.innerWidth < 600) {
+            fadeScroll = [...fadeScroll, ...intervalScroll];
+            intervalScroll = [];
+        }
+
+        var allScrambleEls = [];
+
+        function init() {
+            scrollEvents();
+            setTimeout(() => {
+                let loop;
+                typeString(name, "Finlay Soehn.");
+                startScramble(name, "Finlay Soehn.");
+            }, 500);
+        }
+
+        window.addEventListener("scroll", scrollEvents);
+        for (let i = 0; i < intervalScroll.length; ++i) {
+            intervalScroll[i].addEventListener('mouseover', () => {
+                let textHeight = intervalScroll[i].querySelector(".siteDescription").offsetHeight;
+                intervalScroll[i].style.marginBottom = (50 + textHeight) + "px";
+            });
+            intervalScroll[i].addEventListener('mouseout', () => {
+                intervalScroll[i].style.marginBottom = 50 + "px";
+            });
+        }
+
+        function scrollEvents() {
+            var scroll = window.scrollY;
+
+            for (let el of fadeScroll) {
+                if (el.opacity == 1) continue;
+
+                let topOffset = el.offsetTop;
+                let halfHeight = el.offsetHeight / 2;
+
+                if (scroll > (topOffset - window.innerHeight + halfHeight)) {
+                    el.style.opacity = 1;
+                    el.style.transform = "translateY(0)";
+                }
+            }
+
+            if (intervalScroll.length > 0 && intervalScroll[0].style.opacity != 1 && scroll > (intervalScroll[0].offsetTop - window.innerHeight + (intervalScroll[0].offsetHeight / 2))) {
+                const showMore = i => {
+                    intervalScroll[i].style.opacity = 1;
+                    intervalScroll[i].style.transform = "translateY(0)";
+                    if (i < intervalScroll.length - 1) {
+                        setTimeout(() => {
+                            showMore(i + 1);
+                        }, 400);
+                    }
+                }
+
+                showMore(0);
+            }
+
+            for (let el of scrambleScroll) {
+                if (el.getAttribute('doneScramble')) continue;
+
+                let topOffset = el.offsetTop;
+                let halfHeight = el.offsetHeight / 2;
+
+                if (scroll > (topOffset - window.innerHeight + halfHeight)) {
+                    const text = el.textContent;
+                    el.setAttribute('doneScramble', true);
+
+                    typeString(el);
+                    startScramble(el, text);
+                    setTimeout(() => {
+                        stopScramble(el, 100);
+                        el.onmouseover = () => startScramble(el, text);
+                        el.onmouseleave = () => stopScramble(el, 100);
+                    }, typeSpeed * text.length)
+                }
+            }
+        }
+
+        function typeString(typeEl, typeString = null) {
+            if (!typeString) {
+                typeString = typeEl.textContent;
+                typeEl.innerText = "";
+            }
+
+            let typeObj = {
+                target: typeEl,
+                text: typeString,
+                typeIndex: 0,
+                loop: undefined,
+            }
+
+            typeObj.loop = setInterval(() => typeLetter(typeObj), typeSpeed);
+        }
+
+        function typeLetter(typeObj) {
+            if (typeObj.typeIndex == typeObj.text.length) {
+                typeIndex = 0;
+                clearInterval(typeObj.loop);
+
+                if (typeObj.text === "Finlay Soehn.") {
+                    stopScramble(name);
+
+                    name.onmouseover = () => {
+                        startScramble(name, "Finlay Soehn.");
+                    }
+
+                    name.onmouseleave = () => {
+                        stopScramble(name);
+                    };
+
+                    setTimeout(() => {
+                        scrollIndicator.style.bottom = "25px";
+                        scrollIndicator.style.opacity = 1;
+                        scrollIndicator.style.visibility = "visible";
+
+                        root.style.setProperty('--cursorAnimation', "none");
+                        typeString(descriptionText, "Full Stack Developer.")
+
+                        setTimeout(() => {
+                            scrollIndicator.style.animation = "upDown 2s ease-in-out infinite";
+                        }, 1000)
+                    }, 1500);
+                } else if (typeObj.text === "Full Stack Developer.") {
+                    clearInterval(typeObj.loop);
+                    root.style.setProperty('--cursorAnimation', "blink 1s steps(2, start) infinite");
+                }
+            } else {
+                typeObj.target.innerHTML += typeObj.text[typeObj.typeIndex];
+                typeObj.typeIndex++;
+            }
+        }
+
+        function startScramble(target, finalText) {
+            allScrambleEls.forEach(obj => {
+                if (target === obj.target) removeScramble(obj);
+            });
+
+            let obj = {
+                target: target,
+                solvedLetters: [],
+                text: finalText,
+                scrambleLoop: undefined,
+                unscrambleLoop: undefined,
+            }
+
+            allScrambleEls.push(obj);
+            obj.scrambleLoop = setInterval(() => scramble(obj), 50);
+        }
+
+        function stopScramble(target, speed = 75) {
+            allScrambleEls.forEach((obj, i) => {
+                console.log(obj.target === target)
+                console.log(target, obj.target)
+                if (obj.target === target) {
+                    obj.unscrambleLoop = setInterval(() => unscramble(obj), speed);
+                }
+            })
+        }
+
+        function scramble(obj) {
+            const clearCharacters = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890~!@#$%^&*()`-_=+[]{}\\|:\;\"'?/>.<,";
+
+            for (var i = 0; i < obj.target.textContent.length; i++) {
+                let temp = obj.target.textContent;
+
+                if (obj.solvedLetters.includes(i) || temp[i] == " ") continue;
+
+                let random = Math.floor(Math.random() * (clearCharacters.length));
+                obj.target.innerText = temp.substring(0, i) + clearCharacters[random] + temp.substring(i + 1);
+            }
+        }
+
+        function unscramble(obj) {
+            let textLength = obj.text.length;
+
+            if (obj.solvedLetters.length == textLength) {
+                removeScramble(obj);
+                return;
+            }
+
+            let numLettersSolved = Math.floor(Math.random() * 3);
+            if ((textLength - obj.solvedLetters.length) == 1) numLettersSolved = 1;
+
+            for (var i = 0; i < numLettersSolved; i++) {
+                let charIndex = Math.floor(Math.random() * textLength);
+
+                while (obj.solvedLetters.includes(charIndex)) {
+                    if (charIndex == textLength - 1) charIndex = 0;
+                    else charIndex++;
+                }
+
+                obj.solvedLetters.push(charIndex);
+
+                obj.target.innerText = obj.target.innerText.substring(0, charIndex) + obj.text[charIndex] + obj.target.innerText.substring(charIndex + 1);
+            }
+        }
+
+        function removeScramble(obj) {
+            clearInterval(obj.unscrambleLoop);
+            clearInterval(obj.scrambleLoop);
+            console.log(allScrambleEls.indexOf(obj))
+
+            let objIndex = allScrambleEls.indexOf(obj);
+            if (objIndex == -1) return;
+
+            allScrambleEls.splice(objIndex, 1);
+        }
+
+        document.getElementById("emailForm").onsubmit = (e) => {
+            e.preventDefault();
+
+            var form = document.getElementById("emailForm");
+            var email = document.getElementsByName("email")[0].value;
+            var message = document.getElementsByName("message")[0].value;
+            var status = document.getElementById("formStatus");
+
+            if (message == "" || email == "") {
+                status.innerText = "Please fill out all fields.";
+                status.style.opacity = 1;
+                return;
+            }
+
+            document.getElementById("plane").style.animation = "fly 2.5s";
+
+            var data = new FormData(event.target);
+
+            fetch(event.target.action, {
+                method: form.method,
+                body: data,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                status.innerHTML = "Message sent";
+                status.style.opacity = 1;
+                form.reset();
+            }).catch(error => {
+                status.innerHTML = "Oops! There was a problem sending your message";
+                status.style.opacity = 1;
+                console.log(error);
+            });
+        }
+
+        var animationOver = true;
+        function copyEmail() {
+            navigator.clipboard.writeText("FinSoehn@gmail.com");
+            if (!animationOver) return;
+            animationOver = false;
+            let copyText = document.getElementById("copyText");
+            copyText.style.top = 0;
+            setTimeout(() => {
+                animationOver = true;
+                copyText.style.top = "-150px";
+            }, 1500);
+        }
+
+
+    </script>
+</body>
+
 </html>
