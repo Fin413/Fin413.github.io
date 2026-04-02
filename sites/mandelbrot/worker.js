@@ -61,9 +61,9 @@ self.onmessage = function (event) {
 
             const idx = (j * width + i) * 4;
             if (iterations == MAX_ITERATIONS) {
-                data[idx] = 255;
-                data[idx + 1] = 255;
-                data[idx + 2] = 255;
+                data[idx] = 0;
+                data[idx + 1] = 0;
+                data[idx + 2] = 0;
                 data[idx + 3] = 255;
             } else {
 
@@ -105,9 +105,6 @@ function getColor(theme, iterations, max) {
             color = hslToRgb((iterations / max) * 255, (iterations / max) * 255, (iterations / max) * 255);
             color = [color[0], color[1], color[2], 255];
             break;
-        case "Test":
-            color[0] = color[1] = color[2] = 0;
-            color[3] = (iterations / max) * 255;
     }
 
     return color;
