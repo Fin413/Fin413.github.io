@@ -183,7 +183,7 @@ function toggleInfo() {
     } else {
         infoVisible = true;
         content.style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)';
-        content.style.height = "305px";
+        content.style.height = "306px";
 
     }
 }
