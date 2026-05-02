@@ -5,28 +5,200 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Garageband -> MIDI</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-smooth: never;
+            -webkit-font-smoothing : none;
+            margin: 0;
+            /* padding: 10px; */
+            font-family: monospace;
+            width: 100%;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-top: 2.5svw;
+        }
+
+        #sig_beats, #sig_note {
+            width: 25px;
+        }
+
+        #bpm {
+            width: 50px;
+        }
+
+        #downloadBtn {
+            display: none;
+        }
+
+        button {
+            padding: 4px 8px;
+            box-shadow:   -2px 0 0 0 white,
+                            2px 0 0 0 white,
+                            0 -2px 0 0 white,
+                            0 2px 0 0 white ;
+            border: none;
+            color: black;
+            background-color: white;
+            
+            transform: scale(1);
+            font-family: monospace;
+            margin-top: 25px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        
+        h1{
+            /* white-space: pre; */
+            font-family: monospace;
+            /* margin-top: -20px; */
+            /* margin-bottom: -15px; */
+            /* width: 425px; */
+            font-size: 20px;
+            font-weight: normal;
+            margin-top: 0;
+        }
+
+        .data {
+            /* width: 100%; */
+            font-family: monospace;
+            color: rgb(0, 255, 0);
+            word-break: break-all;
+        }
+
+        .data::after{
+            content: "\00a0";
+            display: block;
+            animation: 1s dotdotdot infinite;
+        }
+
+        .data.stop-animation::after {
+            animation: none;
+        }
+
+        #controlContainer {
+            margin-bottom: 3svw;
+        }
+
+        #controlContainer, .data {
+            padding: 10px;
+            /* margin: 10px; */
+            margin-top: -5px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(
+                rgba(117, 117, 117, 0.2) 1px, /* Darker line */
+                transparent 1px /* Transparent line */
+            );
+            background-size: 100% 3px; /* Controls the height of each scanline pair (dark + transparent) */
+            pointer-events: none; /* Allows interaction with elements beneath the overlay */
+        }
+
+        #converter {
+            margin-right: 3.3%;
+            margin-bottom: 3svw;
+        }
+
+        .columnContainer {
+            width: 45%;
+            height: fit-content;
+        }
+
+        @keyframes dotdotdot {
+            0% {
+                content: "\00a0";
+            }
+            25% {
+                content: ".";
+            }
+            50% {
+                content: "..";
+            }
+            75% {
+                content: "...";
+            }
+        } 
+    </style>
 </head>
 
 <body>
-    <div>
-        <label for="bpm">Tempo</label>
-        <input type="number" name="bpm" id="bpm" placeholder="Enter tempo in BPM" value="140">
+    <div id="converter" class="columnContainer">
+        <h1>Garageband MIDI Converter</h1>
+        <div id="controlContainer">
+            <div>
+                <label for="bpm">Tempo</label>
+                <input type="number" name="bpm" id="bpm" placeholder="Enter tempo in BPM" value="140" min="1">
+            </div>
+        
+            <div>
+                <label for="time signature">Time Signature</label>
+                <input type="number" name="time signature" id="sig_beats" value="4" min="1" max="100">
+                <label for="time signature">/</label>
+                <input type="number" name="time signature" id="sig_note" value="4" min="1" max="100">
+            </div>
+        
+            <button id="convertBtn">Convert from clipboard</button>
+
+            <p id="status"></p>
+            <button id="downloadBtn">Download MIDI</button>
+        </div>
+    
+        <div>
+            <h1>Clipboard Contents</h1>
+            <p id="clip_contents" class="data"></p>
+        </div>
     </div>
 
-    <button>Convert from clipboard</button>
+    <div class="columnContainer">
+        <h1>Conversion Output</h1>
+        <p id="output" class="data"></p>
+    </div>
 
     <script src="./midi-writer-js"></script>
     <script>
-        document.querySelector("button").onclick = convert;
-        var TEMPO = 140;
-        const BEATS_PER_BAR = 4;
+        const statusText = document.getElementById("status");
+        const TICKS_PER_QUARTER = 960;
 
-        const TICKS_PER_BEAT = 960;
-        const DIVISIONS_PER_BEAT = 4;
+        var dataURI = null;
+        
+        var TICKS_PER_BEAT = 960;
+
+        var TEMPO = 140;
+        var BEATS_PER_BAR = 4;
+        var DIVISIONS_PER_BEAT = 4;
+        var TIME_SIGNATURE = [4, 4];
+
+        document.querySelector("#convertBtn").onclick = convert;
+        document.querySelector("#downloadBtn").onclick = () => {
+            window.open(dataURI);
+        }
 
         async function convert() {
             const rawMidi = await getClipboardData();
             const parsedMidi = parseMidiText(rawMidi);
+
+            document.getElementById("clip_contents").innerText = rawMidi;
+            document.getElementById("output").innerText = "";
+            document.getElementById("clip_contents").classList.add('stop-animation');
+
+            if(parsedMidi.length == 0){
+                showStatus("Error: Can't covert clipboard contents");
+                return;
+            }
+
             console.log(rawMidi)
             console.log(parsedMidi)
 
@@ -82,14 +254,15 @@
 
             var file = MIDIfw.createFile({
                 tempo: TEMPO, // optional (default=60)
-                ticksPerBeat: TICKS_PER_BEAT, // optional (default=96)
-                timeSignature: [4, 4] // optional (default=[4,4])
+                ticksPerBeat: TICKS_PER_QUARTER, // optional (default=96)
+                timeSignature: TIME_SIGNATURE // optional (default=[4,4])
             });
 
             file.addTrack(track);
 
-            var dataURI = file.getDataURI();
-            window.open(dataURI);
+            showStatus("SUCCESS!", true);
+
+            dataURI = file.getDataURI();
         }
 
         function getStartTicks(note) {
@@ -141,25 +314,45 @@
                 const clipboardContents = await navigator.clipboard.read();
 
                 console.log(clipboardContents)
+
                 for (const item of clipboardContents) {
                     const blob = await item.getType("text/plain");
                     const blobText = await blob.text();
                     return blobText;
 
-
-
-                    // if (!item.types.includes("image/png")) {
-                    //     throw new Error("Clipboard does not contain PNG image data.");
-                    // }
-                    // const blob = await item.getType("image/png");
-                    // destinationImage.src = URL.createObjectURL(blob);
+                    if (!item.types.includes("text/plain")) {
+                        console.log("Incorrect data type in clipboard.");
+                        showStatus("ERROR: Incorrect clipboard content");
+                    }
                 }
             } catch (error) {
                 console.log(error.message);
             }
         }
+
         document.getElementById("bpm").oninput = (e) => {
             TEMPO = e.target.value;
+        }
+
+        document.getElementById("sig_beats").oninput = (e) => {
+            BEATS_PER_BAR = e.target.value;
+            TIME_SIGNATURE[0] = Number(e.target.value);
+        }
+
+        document.getElementById("sig_note").oninput = (e) => {
+            TICKS_PER_BEAT = TICKS_PER_QUARTER * (4 / e.target.value);
+            TIME_SIGNATURE[1] = Number(e.target.value);
+        }
+
+        function showStatus(text, success = false) {
+            statusText.innerText = text;
+            statusText.style.visible = true;
+            if(success){
+                statusText.style.color = "#0F0";
+                document.getElementById("download").style.display = "block";
+            } else {
+                statusText.style.color = "rgb(156, 24, 24)";
+            }
         }
     </script>
 </body>
