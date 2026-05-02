@@ -194,7 +194,7 @@ var MIDIfw = (function () {
             if (properties !== undefined && properties.time !== undefined && properties.note !== undefined) {
                 var time = properties.time;
                 var type = 0; // note ON
-                printString += `NOTE ON\tTIME: ${time}`;
+                printString += `NOTE ON \tTIME: ${time} `;
                 var note = parseNote(properties.note);
                 var velocity = properties.velocity || DEFAULT_VELOCITY;
                 if (note >= 0 && note <= MAX_NOTE && velocity >= 0 && velocity <= MAX_VELOCITY) {
@@ -207,7 +207,7 @@ var MIDIfw = (function () {
         this.noteOff = function (properties) {
             if (properties !== undefined && properties.time !== undefined && properties.note !== undefined) {
                 var time = properties.time;
-                printString += `NOTE OFF\tTIME: ${time}`;
+                printString += `NOTE OFF\tTIME: ${time} `;
                 var note = parseNote(properties.note);
                 var type = 1; // note OFF
                 var velocity = 0;

@@ -10,19 +10,22 @@
             background-color: black;
             color: white;
             font-smooth: never;
-            -webkit-font-smoothing : none;
+            -webkit-font-smoothing: none;
             margin: 0;
-            /* padding: 10px; */
             font-family: monospace;
             width: 100%;
+        }
 
+        .mainContainer {
             display: flex;
             flex-direction: row;
             justify-content: center;
             margin-top: 2.5svw;
+            width: 100%;
         }
 
-        #sig_beats, #sig_note {
+        #sig_beats,
+        #sig_note {
             width: 25px;
         }
 
@@ -32,45 +35,75 @@
 
         #downloadBtn {
             display: none;
+            animation: 1s scale infinite steps(2);
         }
 
         button {
             padding: 4px 8px;
-            box-shadow:   -2px 0 0 0 white,
-                            2px 0 0 0 white,
-                            0 -2px 0 0 white,
-                            0 2px 0 0 white ;
+            box-shadow: -2px 0 0 0 white,
+                2px 0 0 0 white,
+                0 -2px 0 0 white,
+                0 2px 0 0 white;
             border: none;
             color: black;
             background-color: white;
-            
+
             transform: scale(1);
             font-family: monospace;
-            margin-top: 25px;
             margin-left: 10px;
             margin-right: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
         }
 
-        
-        h1{
-            /* white-space: pre; */
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .sectionHeading {
             font-family: monospace;
-            /* margin-top: -20px; */
-            /* margin-bottom: -15px; */
-            /* width: 425px; */
             font-size: 20px;
             font-weight: normal;
             margin-top: 0;
+            margin-bottom: -17px;
+            background-color: #1a1a1a;
+            width: fit-content;
+            margin-left: 5px;
+            padding: 5px 10px;
+            position: relative;
+            z-index: 2;           
+        }
+
+        /* Top border */
+        .sectionHeading::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: white;
+        }
+
+        /* Side borders (half height) */
+        .sectionHeading::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 99.3%;
+            height: 50%;
+            border-left: 1px solid white;
+            border-right: 1px solid white;
+            pointer-events: none;
         }
 
         .data {
-            /* width: 100%; */
             font-family: monospace;
             color: rgb(0, 255, 0);
-            word-break: break-all;
         }
 
-        .data::after{
+        .data::after {
             content: "";
             display: block;
             animation: 1s dotdotdot infinite;
@@ -84,26 +117,38 @@
             margin-bottom: 3svw;
         }
 
-        #controlContainer, .data {
+        #output {
+            white-space: pre-wrap;
+        }
+
+        #controlContainer,
+        .data {
             padding: 10px;
+            padding-top: 20px;
             margin-top: -5px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: #1a1a1a;
+            border: 1px solid white;
+            z-index: -1;
         }
 
 
         body::after {
+            z-index: 10;
             content: '';
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: linear-gradient(
-                rgba(117, 117, 117, 0.2) 1px, /* Darker line */
-                transparent 1px /* Transparent line */
-            );
-            background-size: 100% 3px; /* Controls the height of each scanline pair (dark + transparent) */
-            pointer-events: none; /* Allows interaction with elements beneath the overlay */
+            background-image: linear-gradient(rgba(117, 117, 117, 0.2) 1px,
+                    /* Darker line */
+                    transparent 1px
+                    /* Transparent line */
+                );
+            background-size: 100% 3px;
+            /* Controls the height of each scanline pair (dark + transparent) */
+            pointer-events: none;
+            /* Allows interaction with elements beneath the overlay */
         }
 
         #converter {
@@ -116,60 +161,118 @@
             height: fit-content;
         }
 
+        .center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 35px;
+        }
+
         @keyframes dotdotdot {
             0% {
                 content: "\00a0";
             }
+
             25% {
                 content: ".";
             }
+
             50% {
                 content: "..";
             }
+
             75% {
                 content: "...";
             }
+
             85% {
                 content: "...";
             }
+
             100% {
                 content: "\00a0";
             }
-        } 
+        }
+
+        @keyframes scale {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        #status {
+            display: none;
+        }
+
+        #header {
+            white-space: pre;
+            font-size: 5px;
+            text-align: center;
+            margin-top: 2.5svw;
+        }
+
+         @media screen and (max-width: 570px) {
+            .mainContainer {
+                flex-direction: column;
+            }
+
+            .columnContainer {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <div id="converter" class="columnContainer">
-        <h1>Garageband MIDI Converter</h1>
-        <div id="controlContainer">
-            <div>
-                <label for="bpm">Tempo</label>
-                <input type="number" name="bpm" id="bpm" placeholder="Enter tempo in BPM" value="140" min="1">
-            </div>
-        
-            <div>
-                <label for="time signature">Time Signature</label>
-                <input type="number" name="time signature" id="sig_beats" value="4" min="1" max="100">
-                <label for="time signature">/</label>
-                <input type="number" name="time signature" id="sig_note" value="4" min="1" max="100">
-            </div>
-        
-            <button id="convertBtn">Convert from clipboard</button>
+    <h1 id="header">
+  ░██████                                                       ░██                                     ░██    ░███     ░███ ░██████░███████   ░██████     ░██████                                                          ░██                        
+ ░██   ░██                                                      ░██                                     ░██    ░████   ░████   ░██  ░██   ░██    ░██      ░██   ░██                                                         ░██                        
+░██         ░██████   ░██░████  ░██████    ░████████  ░███████  ░████████   ░██████   ░████████   ░████████    ░██░██ ░██░██   ░██  ░██    ░██   ░██     ░██         ░███████  ░████████  ░██    ░██  ░███████  ░██░████ ░████████  ░███████  ░██░████ 
+░██  █████       ░██  ░███           ░██  ░██    ░██ ░██    ░██ ░██    ░██       ░██  ░██    ░██ ░██    ░██    ░██ ░████ ░██   ░██  ░██    ░██   ░██     ░██        ░██    ░██ ░██    ░██ ░██    ░██ ░██    ░██ ░███        ░██    ░██    ░██ ░███     
+░██     ██  ░███████  ░██       ░███████  ░██    ░██ ░█████████ ░██    ░██  ░███████  ░██    ░██ ░██    ░██    ░██  ░██  ░██   ░██  ░██    ░██   ░██     ░██        ░██    ░██ ░██    ░██  ░██  ░██  ░█████████ ░██         ░██    ░█████████ ░██      
+ ░██  ░███ ░██   ░██  ░██      ░██   ░██  ░██   ░███ ░██        ░███   ░██ ░██   ░██  ░██    ░██ ░██   ░███    ░██       ░██   ░██  ░██   ░██    ░██      ░██   ░██ ░██    ░██ ░██    ░██   ░██░██   ░██        ░██         ░██    ░██        ░██      
+  ░█████░█  ░█████░██ ░██       ░█████░██  ░█████░██  ░███████  ░██░█████   ░█████░██ ░██    ░██  ░█████░██    ░██       ░██ ░██████░███████   ░██████     ░██████   ░███████  ░██    ░██    ░███     ░███████  ░██          ░████  ░███████  ░██      
+                                                 ░██                                                                                                                                                                                                   
+                                           ░███████                                                                                                                                                                                                    
+    </h1>
+    <div class="mainContainer">
+        <div id="converter" class="columnContainer">
+            <h1 class="sectionHeading">Control</h1>
+            <div id="controlContainer">
+                <div>
+                    <label for="bpm">Tempo</label>
+                    <input type="number" name="bpm" id="bpm" placeholder="Enter tempo in BPM" value="140" min="1">
+                </div>
 
-            <p id="status"></p>
-            <button id="downloadBtn">Download MIDI</button>
-        </div>
-    
-        <div>
-            <h1>Clipboard Contents</h1>
-            <p id="clip_contents" class="data"></p>
-        </div>
-    </div>
+                <div>
+                    <label for="time signature">Time Signature</label>
+                    <input type="number" name="time signature" id="sig_beats" value="4" min="1" max="100">
+                    <label for="time signature">/</label>
+                    <input type="number" name="time signature" id="sig_note" value="4" min="1" max="100">
+                </div>
 
-    <div class="columnContainer">
-        <h1>Conversion Output</h1>
-        <p id="output" class="data"></p>
+                <div class="center">
+                    <button id="convertBtn">Convert from clipboard</button>
+
+                    <p id="status"></p>
+                    <button id="downloadBtn">Download MIDI</button>
+                </div>
+            </div>
+
+            <div>
+                <h1 class="sectionHeading">Clipboard Contents</h1>
+                <p id="clip_contents" class="data"></p>
+            </div>
+        </div>
+
+        <div class="columnContainer">
+            <h1 class="sectionHeading">Conversion Output</h1>
+            <p id="output" class="data"></p>
+        </div>
     </div>
 
     <script src="./midi-writer-js"></script>
@@ -178,7 +281,7 @@
         const TICKS_PER_QUARTER = 960;
 
         var dataURI = null;
-        
+
         var TICKS_PER_BEAT = 960;
 
         var TEMPO = 140;
@@ -199,7 +302,7 @@
             document.getElementById("output").innerText = "";
             document.getElementById("clip_contents").classList.add('stop-animation');
 
-            if(parsedMidi.length == 0){
+            if (parsedMidi.length == 0) {
                 showStatus("Error: Can't covert clipboard contents");
                 return;
             }
@@ -321,14 +424,14 @@
                 console.log(clipboardContents)
 
                 for (const item of clipboardContents) {
+                    if (!item.types.includes("text/plain")) {
+                        console.log("Incorrect data type in clipboard.");
+                        showStatus("ERROR: Incompatible clipboard content");
+                    }
+
                     const blob = await item.getType("text/plain");
                     const blobText = await blob.text();
                     return blobText;
-
-                    if (!item.types.includes("text/plain")) {
-                        console.log("Incorrect data type in clipboard.");
-                        showStatus("ERROR: Incorrect clipboard content");
-                    }
                 }
             } catch (error) {
                 console.log(error.message);
@@ -350,12 +453,15 @@
         }
 
         function showStatus(text, success = false) {
+            statusText.style.display = "block";
             statusText.innerText = text;
             statusText.style.visible = true;
-            if(success){
+            if (success) {
                 statusText.style.color = "#0F0";
-                document.getElementById("download").style.display = "block";
+                document.getElementById("downloadBtn").style.display = "block";
+                document.getElementById("output").classList.add('stop-animation');
             } else {
+                document.getElementById("downloadBtn").style.display = "none";
                 statusText.style.color = "rgb(156, 24, 24)";
             }
         }
