@@ -71,7 +71,7 @@
         }
 
         .data::after{
-            content: "\00a0";
+            content: "";
             display: block;
             animation: 1s dotdotdot infinite;
         }
@@ -86,7 +86,6 @@
 
         #controlContainer, .data {
             padding: 10px;
-            /* margin: 10px; */
             margin-top: -5px;
             background-color: rgba(255, 255, 255, 0.1);
         }
@@ -129,6 +128,12 @@
             }
             75% {
                 content: "...";
+            }
+            85% {
+                content: "...";
+            }
+            100% {
+                content: "\00a0";
             }
         } 
     </style>
