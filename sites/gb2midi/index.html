@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garageband -> MIDI</title>
+</head>
+
+<body>
+    <div>
+        <label for="bpm">Tempo</label>
+        <input type="number" name="bpm" id="bpm" placeholder="Enter tempo in BPM" value="140">
+    </div>
+
+    <button>Convert from clipboard</button>
+
+    <script src="./midi-writer-js"></script>
+    <script>
+        document.querySelector("button").onclick = convert;
+        var TEMPO = 140;
+        const BEATS_PER_BAR = 4;
+
+        const TICKS_PER_BEAT = 960;
+        const DIVISIONS_PER_BEAT = 4;
+
+        async function convert() {
+            const rawMidi = await getClipboardData();
+            const parsedMidi = parseMidiText(rawMidi);
+            console.log(rawMidi)
+            console.log(parsedMidi)
+
+            var track = MIDIfw.createTrack({ channel: 0 });
+
+            let events = [];
+
+            parsedMidi.forEach(note => {
+                let start = getStartTicks(note);
+                let duration = getDurationTicks(note.duration);
+                let end = start + duration;
+
+                events.push({
+                    type: 'on',
+                    time: start,
+                    note: note.name
+                });
+
+                events.push({
+                    type: 'off',
+                    time: end,
+                    note: note.name
+                });
+            });
+
+            events.sort((a, b) => {
+                if (a.time === b.time) {
+                    // noteOff before noteOn avoids stuck notes
+                    if (a.type === 'off' && b.type === 'on') return -1;
+                    if (a.type === 'on' && b.type === 'off') return 1;
+                    return 0;
+                }
+                return a.time - b.time;
+            });
+
+            let lastTime = 0;
+            events.forEach(event => {
+                let delta = event.time - lastTime;
+                lastTime = event.time;
+
+                if (event.type === 'on') {
+                    track.noteOn({
+                        time: delta,
+                        note: event.note
+                    });
+                } else {
+                    track.noteOff({
+                        time: delta,
+                        note: event.note
+                    });
+                }
+            });
+
+            var file = MIDIfw.createFile({
+                tempo: TEMPO, // optional (default=60)
+                ticksPerBeat: TICKS_PER_BEAT, // optional (default=96)
+                timeSignature: [4, 4] // optional (default=[4,4])
+            });
+
+            file.addTrack(track);
+
+            var dataURI = file.getDataURI();
+            window.open(dataURI);
+        }
+
+        function getStartTicks(note) {
+            let barTicks = ((note.bar - 1) * BEATS_PER_BAR * TICKS_PER_BEAT);
+            let beatTicks = ((note.beat - 1) * TICKS_PER_BEAT);
+            let divisionTicks = ((note.division - 1) * (TICKS_PER_BEAT / DIVISIONS_PER_BEAT));
+            return barTicks + beatTicks + divisionTicks + note.ticks;
+        }
+
+        function getDurationTicks(duration) {
+            return (duration.bar * BEATS_PER_BAR * TICKS_PER_BEAT) +
+                (duration.beat * TICKS_PER_BEAT) +
+                (duration.division * (TICKS_PER_BEAT / DIVISIONS_PER_BEAT));
+        }
+
+        const parseMidiText = (text) => {
+            text = text
+                .replace(/♯/g, '#')
+                .replace(/♭/g, 'b'); // remove incorrect unicode characters
+            const lines = text.split("\n").filter(l => l.trim());
+
+            return lines.map(line => {
+                const match = line.match(
+                    /^\s*(\d+)\.\s*(\d+)\.\s*(\d+)\.\s*(\d+)\s+Note#EvE\s+(\d+)\s+([A-G♯#0-9]+)\s+(\d+)\s+(\d+)\.\s*(\d+)\.\s*(\d+)\.\s*(\d+)/
+                );
+
+                if (!match) return null;
+
+                return {
+                    bar: Number(match[1]),
+                    beat: Number(match[2]),
+                    division: Number(match[3]),
+                    ticks: Number(match[4]),
+                    channel: Number(match[5]),
+                    name: match[6],
+                    velocity: Number(match[7]),
+                    duration: {
+                        bar: Number(match[8]),
+                        beat: Number(match[9]),
+                        division: Number(match[10]),
+                    },
+                    release: Number(match[11])
+                };
+            }).filter(Boolean);
+        };
+
+        async function getClipboardData() {
+            try {
+                const clipboardContents = await navigator.clipboard.read();
+
+                console.log(clipboardContents)
+                for (const item of clipboardContents) {
+                    const blob = await item.getType("text/plain");
+                    const blobText = await blob.text();
+                    return blobText;
+
+
+
+                    // if (!item.types.includes("image/png")) {
+                    //     throw new Error("Clipboard does not contain PNG image data.");
+                    // }
+                    // const blob = await item.getType("image/png");
+                    // destinationImage.src = URL.createObjectURL(blob);
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+        document.getElementById("bpm").oninput = (e) => {
+            TEMPO = e.target.value;
+        }
+    </script>
+</body>
+
+</html>
