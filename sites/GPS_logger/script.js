@@ -63,11 +63,26 @@ async function exportData() {
     let file_name = prompt('Enter File Name:');
 
     const jsonContent = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonContent], { type: "application/json;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
+    const file = new File([jsonContent], "location_data.json", {
+        type: "application/json"
+    });
 
-    if (!navigator.canShare || !navigator.canShare({ files: [] })) {
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+            await navigator.share({
+                title: file_name,
+                text: "Export GPS data as JSON.",
+                files: [file],
+            });
+    
+            logText("Share was successful.", [0, 255, 0])
+        } catch (err) {
+            logError(`Encounted an error while saving: ${err}`)
+        }
+    } else {
         alert("File sharing is not supported on this browser, downloading instead.");
+        const blob = new Blob([jsonContent], { type: "application/json;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
 
         const a = document.createElement("a");
         a.href = url;
@@ -80,18 +95,6 @@ async function exportData() {
         URL.revokeObjectURL(url);
 
         logText(`Downloaded ${file_name}.json.`, [0, 255, 0])
-    } else {
-        try {
-            await navigator.share({
-                title: file_name,
-                text: "Export GPS data as JSON.",
-                files: [file],
-            });
-    
-            logText("Share was successful.", [0, 255, 0])
-        } catch (err) {
-            logError(`Encounted an error while saving: ${err}`)
-        }
     }
 
 
