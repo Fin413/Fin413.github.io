@@ -7,24 +7,12 @@ var watch_id = null;
 var update_interval;
 
 // enable navigation prompt
-// window.onbeforeunload = function() {
-//     return true;
-// };
+window.onbeforeunload = function() {
+    return true;
+};
 
 function logData(position) {
-    let temp = {
-        timestamp: position.timestamp,
-        location: {
-            accuracy: position.coords.accuracy,
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            speed: position.coords.speed,
-        },
-    };
-    console.log(temp);
-
-    data.push(temp);
-
+    data.push(position);
     log_count++;
 }
 
@@ -159,7 +147,17 @@ function startLogging() {
     if ("geolocation" in navigator) {
         watch_id = navigator.geolocation.watchPosition(
             (position) => {
-                logData(position);
+                // log immediately
+                const record = {
+                    timestamp: position.timestamp,
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    accuracy: position.coords.accuracy,
+                    speed: position.coords.speed,
+                    heading: position.coords.heading,
+                };
+
+                logData(record);
             },
             (error) => {
                 switch (error.code) {
@@ -179,7 +177,7 @@ function startLogging() {
             },
             {
                 enableHighAccuracy: true,
-                timeout: 5000,
+                timeout: Infinity,
                 maximumAge: 0,
             }
         );
