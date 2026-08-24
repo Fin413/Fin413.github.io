@@ -6,10 +6,12 @@ var log_count = 0;
 var watch_id = null;
 var update_interval;
 
+var file_name = null;
+
 // enable navigation prompt
-window.onbeforeunload = function() {
-    return true;
-};
+// window.onbeforeunload = function() {
+//     return true;
+// };
 
 function logData(position) {
     data.push(position);
@@ -48,10 +50,11 @@ async function exportData() {
         return;
     }
 
-    let file_name = prompt('Enter File Name:');
+    if(file_name == null)
+        file_name = prompt('Enter File Name:');
 
     const jsonContent = JSON.stringify(data, null, 2);
-    const file = new File([jsonContent], "location_data.json", {
+    const file = new File([jsonContent], `${file_name}.json`, {
         type: "application/json"
     });
 
@@ -136,6 +139,8 @@ function stopLogging() {
 }
 
 function startLogging() {
+    file_name = prompt('Enter File Name:');
+    
     btn.innerText = "Stop logging";
     btn.style.animation = "none";
     btn.onclick = stopLogging;
