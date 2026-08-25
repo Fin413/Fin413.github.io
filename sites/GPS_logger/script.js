@@ -6,7 +6,7 @@ var log_count = 0;
 var watch_id = null;
 var update_interval;
 
-var file_name = null;
+var fileName = null;
 
 // enable navigation prompt
 // window.onbeforeunload = function() {
@@ -19,7 +19,7 @@ function logData(position) {
 }
 
 function logText(text, color=[255, 255, 255]) {
-    let timestamp = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    let timestamp = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
     let string = `<span style="color: rgb(${color});"><br> ${timestamp}: ${text}</span>`;
     dataTxt.innerHTML += string;
 }
@@ -31,6 +31,24 @@ function saveData() {
     else tempData = tempData.concat(data);
 
     window.localStorage.setItem("data", JSON.stringify(tempData));
+}
+
+
+function downloadData(jsonContent) {
+    const blob = new Blob([jsonContent], { type: "application/json;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${fileName}.json`;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    logText(`Downloaded ${fileName}.json.`, [0, 255, 0])
 }
   
 
@@ -50,18 +68,18 @@ async function exportData() {
         return;
     }
 
-    if(file_name == null)
-        file_name = prompt('Enter File Name:');
+    if(fileName == null)
+        fileName = prompt('Enter File Name:');
 
     const jsonContent = JSON.stringify(data, null, 2);
-    const file = new File([jsonContent], `${file_name}.json`, {
+    const file = new File([jsonContent], `${fileName}.json`, {
         type: "application/json"
     });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
             await navigator.share({
-                title: file_name,
+                title: fileName,
                 text: "Export GPS data as JSON.",
                 files: [file],
             });
@@ -69,31 +87,20 @@ async function exportData() {
             logText("Share was successful.", [0, 255, 0])
         } catch (err) {
             logError(`Encounted an error while saving: ${err}`)
+            logText("Downloading data instead...")
+            downloadData(jsonContent);
         }
     } else {
         alert("File sharing is not supported on this browser, downloading instead.");
-        const blob = new Blob([jsonContent], { type: "application/json;charset=utf-8;" });
-        const url = URL.createObjectURL(blob);
-
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${file_name}.json`;
-        a.style.display = "none";
-        document.body.appendChild(a);
-        a.click();
-
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        logText(`Downloaded ${file_name}.json.`, [0, 255, 0])
+        downloadData(jsonContent);
     }
-
 
     exportBtn.innerText = "Exported! :)";
     setTimeout(() => {
         exportBtn.innerText = "Export";
     }, 2000);
 
+    localStorage.clear();
     logText("Cleared saved data.", [255, 255, 0]);
 }
 
@@ -110,8 +117,8 @@ async function requestWakeLock() {
             console.log('Wake Lock released');
             logText('Wake Lock released', [255, 0, 0])
         });
-            console.log('Wake Lock active');
-            logText('Wake Lock active', [0, 255, 0])
+        console.log('Wake Lock active');
+        logText('Wake Lock active', [0, 255, 0]);
     } catch (err) {
         console.error(`${err.name}, ${err.message}`);
     }
@@ -139,15 +146,15 @@ function stopLogging() {
 }
 
 function startLogging() {
-    file_name = prompt('Enter File Name:');
-    
+    if(fileName == null) fileName = prompt('Enter File Name:');
+
     btn.innerText = "Stop logging";
     btn.style.animation = "none";
     btn.onclick = stopLogging;
 
     exportBtn.style.display = "block";
 
-    logText("LOCATION RECORDING STARTED", [0, 255, 0]);
+    logText(`LOCATION RECORDING STARTED ON "${fileName}"`, [0, 255, 0]);
 
     if ("geolocation" in navigator) {
         watch_id = navigator.geolocation.watchPosition(
