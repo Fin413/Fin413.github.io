@@ -31,6 +31,8 @@ function saveData() {
     else tempData = tempData.concat(data);
 
     window.localStorage.setItem("data", JSON.stringify(tempData));
+
+    data = []
 }
 
 
