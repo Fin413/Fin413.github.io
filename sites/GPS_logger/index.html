@@ -3,137 +3,736 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Logger</title>
+    <title>Tetra Trax</title>
     <style>
         body {
             background-color: black;
             color: white;
+            font-family: monospace;
+
             font-smooth: never;
             -webkit-font-smoothing : none;
-            margin: 0;
-            font-family: monospace;
-            width: 100%;
+
         }
-        .error {
-            color: rgb(156, 24, 24)
+
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            text-shadow: 3px 3px 2px #ffffff9a;
+
+        }
+
+        .section {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            min-width: 250px;
+            box-shadow: rgba(255, 255, 255, 0.16) 3px 3px 5px, rgba(255, 255, 255, 0.23) 3px 3px 5px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .section:first-child {
+            margin-bottom: 20px;
+        }
+
+        h2{
+            margin-top: 0;
+        }
+
+        .statusIndicators {
+            display: flex;
+            justify-content: space-evenly;
+            margin-top: -10px;
+            width: 100%;
+            
+            margin-bottom: 15px;
+        }
+
+        .indicatorLight {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        .indicatorLight::before{
+            content: '';
+            display: block;
+            width: 10px;
+            height: 10px;
+
+            border-radius: 50%;
+            margin-right: 10px;
+            margin-left: 15px;
+            border: 2px solid grey;
+        }
+
+        .online::before {
+            background-color: rgba(0, 255, 0);
+            background: radial-gradient(circle at center, #ffffff 0%, #00bb00 75%);
+            box-shadow: rgba(0, 25, 0, 0.5) 0px 0px 6px 0px, rgba(0, 255, 0, 0.5) 0px 0px 10px 0px;     
+        }
+
+        .offline::before {
+            background-color: red;
+            background: radial-gradient(circle at center, #ffffff 0%, #ff0000 75%);
+
+            box-shadow: rgba(255, 0, 0, 0.5) 0px 0px 6px 0px, rgba(255, 0, 0, 0.5) 0px 0px 10px 0px;       
+        }
+
+        @keyframes dotdotdot {
+            0% {
+                content: "\00a0";
+            }
+            25% {
+                content: ".";
+            }
+            50% {
+                content: "..";
+            }
+            75% {
+                content: "...";
+            }
+            85% {
+                content: "...";
+            }
+            100% {
+                content: "\00a0";
+            }
+        }
+
+        #statusText {
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            font-family: monospace;
+            word-break: break-all;
+            max-height: 40vh;
+
+            overflow-y: hidden;
+            overflow-y: auto;
+
+            display: flex;
+            flex-direction: column-reverse;
+
+            max-width: 50vw;
+
+            box-shadow: rgb(0, 0, 0) -3px -3px 6px 0px inset, rgba(0, 0, 0, 0.5) 3px 3px 6px 1px inset;
+        }
+
+        #statusText span {
+            margin: 0;
+        }
+
+
+
+        #placeHolderText {
+            display: flex;
+            align-items: center;
+        }
+        #placeHolderText::after {
+            animation: dotdotdot 1s infinite;
+            content: '';
+            display: block;
+            margin-left: 2px;
+        }
+
+        .flexRow {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .mainContainer {
+            display: flex;
+            justify-content: center;
+        }
+
+        #endBtn {
+            display: none;
+        }
+
+        .savedRun {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .savedRun div:first-child {
+            margin-right: 25px;
+        }
+
+        .savedRun button {
+            margin-right: 0;
+            margin-left: 20px;
+            margin-top: 0;
         }
 
         button {
             padding: 4px 8px;
-            box-shadow:   -2px 0 0 0 white,
-                            2px 0 0 0 white,
-                            0 -2px 0 0 white,
-                            0 2px 0 0 white ;
+            box-shadow: -2px 0 0 0 white, 2px 0 0 0 white, 0 -2px 0 0 white, 0 2px 0 0 white;
             border: none;
             color: black;
             background-color: white;
-            
             transform: scale(1);
             font-family: monospace;
+            /* margin: 10px 15px; */        
+            cursor: pointer;
+            height: min-content;
+        }
+
+        #exportAll {
             margin-top: 25px;
-            margin-left: 10px;
-            margin-right: 10px;
         }
 
-
-        @keyframes blink {
-            50% {
-                transform: scale(1.05);
+        @media only screen and (max-width: 830px) {
+            .mainContainer {
+                flex-direction: column;
             }
-        }  
 
-        h1{
-            white-space: pre;
-            font-family: monospace;
-            margin-top: -20px;
-            margin-bottom: -15px;
-            width: 425px;
-            font-size: 15px;
-            font-weight: normal;
-        }
-
-        #heading {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        #data {
-            width: 100%;
-            font-family: monospace;
-            word-break: break-all;
-        }
-
-        .scanlines-container {
-            position: relative;
-            width: 100%;
-            height: 100svh;
-            overflow-x: hidden;
-        }
-
-        .scanlines-container::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: linear-gradient(
-                rgba(117, 117, 117, 0.2) 1px, /* Darker line */
-                transparent 1px /* Transparent line */
-            );
-            background-size: 100% 3px; /* Controls the height of each scanline pair (dark + transparent) */
-            pointer-events: none; /* Allows interaction with elements beneath the overlay */
-        }
-
-        .divider {
-            white-space: pre;
-        }
-
-        #btn {
-            animation: blink 1.5s step-start 0s infinite;
-        }
-
-        #exportBtn{
-            display: none;
-        }
-
-        #btnContainer {
-            display: flex;
-        }
-
-        @media screen and (max-width: 500px) {
-            h1{
-                font-size: 13px;
-                width: 367px;
-            }
-            .divider {
-                font-size: 10px;
+            #statusText {
+                max-width: none;
             }
         }
     </style>
 </head>
 <body>
-    <div class="scanlines-container">
-        <div id="heading">
-            <p class="divider">---------------====================---------------</p>
-            <h1>
-  _______   _               _______             
- |__   __| | |             |__   __|            
-    | | ___| |_ _ __ __ _     | |_ __ __ ___  __
-    | |/ _ \ __| '__/ _` |    | | '__/ _` \ \/ /
-    | |  __/ |_| | | (_| |    | | | | (_| |>  < 
-    |_|\___|\__|_|  \__,_|    |_|_|  \__,_/_/\_\                                                          
-            </h1>
-            <p class="divider">.......------------------------------------------------.......</p>
-            <div id="btnContainer">
-                <button id="btn">Start logging</button>
-                <button id="exportBtn">Export</button>
+    <h1>- Tetra Trax -</h1>
+
+    <div class="mainContainer">
+        <div>
+            <div class="section">
+                <h2>Controls</h2>
+                <div class="flexRow">
+                    <button id="startBtn">Start Logging</button>
+                    <button id="endBtn">End Run</button>
+                </div>
+            </div>
+        
+            <div class="section">
+                <h2>Finished Runs</h2>
+
+                
+                <div id="savedRunsContainer"></div>
+                
+                <div class="flexRow">
+                    <p id="savedRunsPlaceHolder">No runs saved.</p>
+                    <button id="exportAll">Export all</button>
+                </div>
             </div>
         </div>
-        <p id="data"></p>
+    
+        <div class="section">
+            <h2>Status</h2>
+            <div class="statusIndicators">
+                <p id="loggingStatus" class="indicatorLight">Status: Ready</p>
+                <p id="wakeLockStatus" class="indicatorLight">Wake lock: Disabled</p>
+            </div>
+
+            <p id="runName"></p>
+            <p id="freq"></p>
+            <div id="statusText">
+                <p id="placeHolderText">Tracker not started</p>
+            </div>
+        </div>
     </div>
-    <script src="script.js"></script>
+
+
+    <script src="./jzip.min.js"></script>
+    <script>
+        const startBtn = document.getElementById("startBtn");
+        const endBtn = document.getElementById("endBtn")
+        const exportBtn = document.getElementById("exportBtn");
+        const exportAllBtn = document.getElementById("exportAll");
+
+        const dataTxt = document.getElementById("statusText");
+        const freqTxt = document.getElementById("freq");
+        const savedRunsPlaceholderTxt = document.getElementById("savedRunsPlaceHolder")
+        const runNameTxt = document.getElementById("runName");
+
+        const savedRunsContainer = document.getElementById("savedRunsContainer")
+
+        const loggingStatus = document.getElementById("loggingStatus");
+        const wakeLockStatus = document.getElementById("wakeLockStatus");
+
+        var runData = {
+            name: null,
+            ts: null,
+            data: []
+        };
+        var log_count = 0;
+        var watch_id = null;
+        var update_interval;
+
+        window.onbeforeunload = function() {
+            saveData();
+        };
+
+        window.onfocus = () => {
+            requestWakeLock();
+        }
+
+
+
+        function logData(position) {
+            console.log(runData)
+            runData.data.push(position);
+            log_count++;
+        }
+
+        function logText(text, color=[255, 255, 255]) {
+            let timestamp = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+            let string = `<span style="color: rgb(${color});"><br> ${timestamp}: ${text}</span>`;
+            dataTxt.innerHTML = string + dataTxt.innerHTML;
+        }
+
+        function saveData() {
+            if(runData.name) {
+                let tempData = JSON.parse(window.localStorage.getItem("CurrentRun"));
+
+                if(tempData == null) tempData = runData;
+                else tempData.data.concat(runData.data);
+
+                window.localStorage.setItem("CurrentRun", JSON.stringify(tempData));
+
+                runData = {
+                    name: runData.name,
+                    ts: runData.ts,
+                    data: []
+                }
+            }
+        }
+
+
+        function downloadData(run, jsonContent) {
+            const blob = new Blob([jsonContent], { type: "application/json;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${run.name}.json`;
+            a.style.display = "none";
+            document.body.appendChild(a);
+            a.click();
+
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            logText(`Downloaded ${run.name}.json.`, [0, 255, 0]);
+        }
+        
+
+        function logError(errorText){
+            let string =  "[ERROR] " + errorText;
+            logText(string, [255, 0, 0]);
+        }
+
+        async function requestWakeLock() {
+            if (wakeLock && !wakeLock.released) {
+                console.log("Wake lock is already enabled.");
+                return;
+            }
+
+            if (!("wakeLock" in navigator)) {
+                console.warn("Screen Wake Lock API is not supported.");
+                return;
+            }
+
+            try {
+                wakeLock = await navigator.wakeLock.request("screen");
+
+                wakeLock.addEventListener("release", () => {
+                    wakeLockStatus.innerText = "Wake lock: Disabled";
+                    wakeLockStatus.className = "indicatorLight offline";
+
+                    logText("Wake Lock released", [255, 0, 0]);
+                });
+
+                wakeLockStatus.innerText = "Wake lock: Enabled";
+                wakeLockStatus.className = "indicatorLight online";
+
+                logText("Wake Lock active", [0, 255, 0]);
+            } catch (err) {
+                console.error(`${err.name}, ${err.message}`);
+            }
+        }
+        
+
+        function logDataUpdate(time_elapsed){
+            logText(`Saved ${log_count} points in the last ${time_elapsed} seconds`);
+
+            freqTxt.innerText = `Estimated frequency: ${(log_count / time_elapsed).toFixed(2)}hz`;
+            log_count = 0;
+
+            saveData();
+        }
+
+        function stopLogging() {
+            saveData();
+
+            if (watch_id !== null) {
+                navigator.geolocation.clearWatch(watch_id);
+                watch_id = null;
+                logText("Stopped tracking", [255, 255, 0]);
+
+                loggingStatus.innerText = "Status: Stopped";
+                loggingStatus.classList = "indicatorLight offline"
+
+                startBtn.innerText = "Continue logging";
+                startBtn.style.animation = "none";
+                startBtn.onclick = startLogging;
+
+                clearInterval(update_interval)
+            }
+        }
+
+        function endRun() {
+            // console.log(data)
+            // if(data.length == 0) {
+            //     logError("Cannot end, run contains no data.")
+            //     return;
+            // }
+
+            // saves run 
+            stopLogging();
+
+            let saveRun = confirm("Are you sure you would like to end this run? (All data is saved)");
+
+            if(saveRun) {
+                let currentRun = JSON.parse(window.localStorage.getItem("CurrentRun"));
+                let oldRuns = JSON.parse(window.localStorage.getItem("SavedRuns"));
+    
+                if(oldRuns == null) oldRuns = [currentRun];
+                else oldRuns.push(currentRun);
+
+                appendSavedRun(currentRun);
+    
+                window.localStorage.setItem("SavedRuns", JSON.stringify(oldRuns));
+                window.localStorage.setItem("CurrentRun", null);
+
+                freqTxt.innerText = "";
+                runNameTxt.innerText = "";
+                startBtn.innerText = "Start logging";
+
+                runData = {
+                    name: null,
+                    ts: null,
+                    data: []
+                }
+
+                endBtn.style.display = "none";
+                savedRunsPlaceholderTxt.style.display = "none";
+                exportAllBtn.style.display = "block";
+
+                logText(`ENDED AND SAVED RUN.`, [0, 255, 0]);
+            }
+        }
+
+        function pageLoadAnimation() {
+            let blinkCount = 0;
+            const blinkInterval = setInterval(() => {
+                if(blinkCount > 3) {
+                    clearInterval(blinkInterval);
+                }
+
+                if(wakeLockStatus.classList == "indicatorLight") {
+                    wakeLockStatus.classList = "indicatorLight offline";
+                    loggingStatus.classList = "indicatorLight offline";
+                } else {
+                    wakeLockStatus.classList = "indicatorLight";
+                    loggingStatus.classList = "indicatorLight";
+                }
+
+                blinkCount++;
+            }, 300);
+        }
+
+        function startLogging() {
+            if(runData.name == null) {
+                while (!runData.name) {
+                    runData.name = prompt('Enter File Name:');
+                    if (runData.name == null) return;
+                    
+                    runData.name = runData.name.trim();
+                }
+            }
+
+            if(runData.ts == null) {
+                let tempDate = new Date();
+                formattedDate = tempDate.toLocaleDateString("en-CA").replaceAll("/", "-");;
+                formattedTime = tempDate.toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit', hour12: false });
+                runData.ts = `${formattedDate}/${formattedTime}`;
+            }
+
+            loggingStatus.innerText = "Status: Logging";
+            loggingStatus.classList = "indicatorLight online"
+
+            endBtn.style.display = "block";
+
+            startBtn.innerText = "Stop logging";
+            startBtn.style.animation = "none";
+            startBtn.onclick = stopLogging;
+
+            runNameTxt.innerText = `Run name: "${runData.name}"`;
+
+            logText(`LOCATION RECORDING STARTED ON "${runData.name}"`, [0, 255, 0]);
+
+            if ("geolocation" in navigator) {
+                watch_id = navigator.geolocation.watchPosition(
+                    (position) => {
+                        document.getElementById("placeHolderText").style.display = "None"
+
+                        // log immediately
+                        const record = {
+                            timestamp: position.timestamp,
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                            accuracy: position.coords.accuracy,
+                            speed: position.coords.speed,
+                            heading: position.coords.heading,
+                        };
+
+                        logData(record);
+                    },
+                    (error) => {
+                        switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            logError("User denied the request for Geolocation.");
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            logError("Location information is unavailable.");
+                            break;
+                        case error.TIMEOUT:
+                            logError("The request to get user location timed out.");
+                            break;
+                        case error.UNKNOWN_ERROR:
+                            logError("An unknown error occurred.");
+                            break;
+                        }
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: Infinity,
+                        maximumAge: 0,
+                    }
+                );
+            } else {
+                logError("Geolocation not available :(");
+            }
+
+            let wakeLock = null;
+
+            document.addEventListener('visibilitychange', () => {
+                if (wakeLock !== null && document.visibilityState === 'visible') {
+                    requestWakeLock();
+                }
+            });
+
+            requestWakeLock();
+
+            // update display every log_interval ms
+            log_interval = 5000;
+            update_interval = setInterval(() => logDataUpdate(log_interval / 1000), log_interval);
+        }
+
+        function loadOldRuns(){
+            savedRuns = JSON.parse(window.localStorage.getItem("SavedRuns"));
+            currentRun = JSON.parse(window.localStorage.getItem("CurrentRun"));
+
+            if (currentRun) {
+                runData = currentRun;
+                endBtn.style.display = "inline-block";
+                logText(`RETRIEVED UNFINISHED RUN DATA`, [0, 255, 0]);
+                runNameTxt.innerText = `Run name: "${runData.name}"`;
+                startBtn.innerText = "Continue logging"
+            }
+            
+            if (savedRuns && savedRuns.length > 0) {
+                savedRunsPlaceholderTxt.style.display = "None";
+                savedRuns.forEach(run => {
+                    appendSavedRun(run);
+                });
+            } else {
+                exportAllBtn.style.display = "none";
+            }
+        }
+
+        function appendSavedRun(run) {
+            let container = document.createElement("div");
+            container.classList = "savedRun";
+
+            let infoDiv = document.createElement("div");
+
+            let bytes = new TextEncoder().encode(JSON.stringify(run)).length;
+
+            let units = "MB";
+            let runSize = (bytes / (1024 * 1024)).toFixed(2); // mb
+
+            if (runSize < 1) {
+                units = "KB";
+                runSize = (bytes / 1024).toFixed(2); // kb
+            }
+
+            let name = document.createElement("p");
+            name.innerText = `${run.name} (${runSize}${units})`;
+
+            let ts = document.createElement("p");
+            ts.classList = "savedRunTimestamp";
+            ts.innerText = run.ts;
+
+            let btnDiv = document.createElement("div");
+
+            let exportBtn = document.createElement("button");
+            exportBtn.innerText = "Export"
+            exportBtn.onclick = () => exportRun(run);
+
+            let deleteBtn = document.createElement("button");
+            deleteBtn.innerText = "Delete"
+            deleteBtn.onclick = () => deleteRun(run);
+
+            
+            infoDiv.appendChild(name);
+            infoDiv.appendChild(ts);
+            container.appendChild(infoDiv);
+            btnDiv.appendChild(exportBtn);
+            btnDiv.appendChild(deleteBtn);
+            container.appendChild(btnDiv);
+            savedRunsContainer.appendChild(container);
+        }
+
+        async function exportRun(run) {
+            console.log(run.name)
+            stopLogging();
+            saveData();
+            console.log(`${run.name}.json`)
+
+            const jsonContent = JSON.stringify(run.data, null, 2);
+            const file = new File([jsonContent], `${run.name}.json`, {
+                type: "application/json"
+            });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        title: run.name,
+                        text: "Export GPS data as JSON.",
+                        files: [file],
+                    });
+            
+                    logText("Export was successful.", [0, 255, 0])
+                } catch (err) {
+                    logError(`Encounted an error while saving: ${err}`)
+                    logText("Downloading data instead...")
+                    downloadData(run, jsonContent);
+                }
+            } else {
+                alert("File sharing is not supported on this browser, downloading instead.");
+                downloadData(run, jsonContent);
+            }
+        }
+
+        async function exportAll() {
+            stopLogging();
+            saveData();
+
+            const savedRuns = JSON.parse(window.localStorage.getItem("SavedRuns") || "[]");
+
+            const zip = new JSZip();
+
+            savedRuns.forEach((run, index) => {
+                const jsonContent = JSON.stringify(run.data, null, 2);
+                zip.file(`${run.name}.json`, jsonContent);
+            });
+
+            const now = new Date();
+
+            const date = now.toISOString()
+                .slice(0, 10)
+                .replace(/-/g, "");
+
+            const time = now.toTimeString()
+                .slice(0, 8)
+                .replace(/:/g, "");
+
+            const fileName = `TetraTraxExport_${date}_${time}.zip`;
+
+            const zipBlob = await zip.generateAsync({
+                type: "blob",
+                compression: "DEFLATE",
+                compressionOptions: { level: 6 }
+            });
+
+            const file = new File([zipBlob], fileName, {
+                type: "application/zip"
+            });
+
+            if (navigator.canShare?.({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        title: "TetraTrax Export",
+                        text: "Exported GPS data.",
+                        files: [file]
+                    });
+
+                    logText("Export was successful.", [0, 255, 0]);
+                    return;
+                } catch (error) {
+                    logError(`Error sharing export: ${error}`);
+                }
+            }
+
+            logText("Downloading data instead...");
+
+            const url = URL.createObjectURL(zipBlob);
+            const link = document.createElement("a");
+
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+            URL.revokeObjectURL(url);
+            logText("Export downloaded.", [0, 255, 0]);
+        }
+
+        function deleteRun(run) {
+            let deleteRun = confirm(`Are you sure you would like to delete run ${run.name}?`);
+            if(!deleteRun) return;
+            
+            let savedRuns = JSON.parse(window.localStorage.getItem("SavedRuns"))
+            let deletedIndex = savedRuns.findIndex(
+                saved => JSON.stringify(saved) === JSON.stringify(run)
+            );
+            savedRuns.pop(deletedIndex)
+
+            window.localStorage.setItem("SavedRuns", JSON.stringify(savedRuns));
+
+            savedRunElements = document.getElementsByClassName("savedRun");
+            console.log(savedRunElements)
+            for (let i = 0; i < savedRunElements.length; i++) {
+                console.log(savedRunElements[i])
+                let content = savedRunElements[i].innerHTML;
+                if (content.includes(run.name) && content.includes(run.ts)) {
+                    if(savedRunElements.length == 1) {
+                        savedRunsPlaceholderTxt.style.display = "block";
+                        exportAllBtn.style.display = "none";
+                    }
+                    savedRunElements[i].remove();
+                    break;
+                }
+            }
+
+            logText(`Successfully deleted ${run.name}`, [0, 255, 0]);
+        }
+
+        pageLoadAnimation();
+        loadOldRuns();
+
+        startBtn.onclick = startLogging;
+        endBtn.onclick = endRun;
+        exportAllBtn.onclick = exportAll;
+
+    </script>
 </body>
 </html>
