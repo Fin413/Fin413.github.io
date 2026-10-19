@@ -65,6 +65,8 @@
             margin-right: 10px;
             margin-left: 15px;
             border: 2px solid grey;
+
+            flex: 0 0 auto;
         }
 
         .online::before {
@@ -167,6 +169,13 @@
             margin-top: 0;
         }
 
+        .savedRunsBtnContainer {
+            display: flex;
+            align-items: right;
+        }   
+
+
+
         button {
             padding: 4px 8px;
             box-shadow: -2px 0 0 0 white, 2px 0 0 0 white, 0 -2px 0 0 white, 0 2px 0 0 white;
@@ -191,6 +200,17 @@
 
             #statusText {
                 max-width: none;
+            }
+
+
+        }
+
+        @media only screen and (max-width: 400px) {
+            .savedRunsBtnContainer {
+                flex-direction: column;
+            }   
+            .savedRun button:first-of-type {
+                margin-bottom: 10px;
             }
         }
     </style>
@@ -519,7 +539,7 @@
             } else {
                 logError("Geolocation not available :(");
             }
-            
+
             requestWakeLock();
 
             // update display every log_interval ms
@@ -573,6 +593,7 @@
             ts.innerText = run.ts;
 
             let btnDiv = document.createElement("div");
+            btnDiv.classList = "savedRunsBtnContainer";
 
             let exportBtn = document.createElement("button");
             exportBtn.innerText = "Export"
