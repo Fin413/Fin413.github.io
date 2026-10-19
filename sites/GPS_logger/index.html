@@ -307,23 +307,27 @@
         }
 
         function saveData() {
-            if(runData.name) {
-                let tempData = JSON.parse(window.localStorage.getItem("CurrentRun"));
+            if (!runData.name || runData.data.length === 0) return;
 
-                if(tempData == null) tempData = runData;
-                else tempData.data.concat(runData.data);
+            let tempData = JSON.parse(
+                window.localStorage.getItem("CurrentRun")
+            );
 
-                window.localStorage.setItem("CurrentRun", JSON.stringify(tempData));
-
-                runData = {
+            if (tempData === null) {
+                tempData = {
                     name: runData.name,
                     ts: runData.ts,
                     data: []
-                }
+                };
             }
+
+            tempData.data = tempData.data.concat(runData.data);
+
+            window.localStorage.setItem("CurrentRun", JSON.stringify(tempData));
+
+            runData.data = [];
         }
-
-
+        
         function downloadData(run, jsonContent) {
             const blob = new Blob([jsonContent], { type: "application/json;charset=utf-8;" });
             const url = URL.createObjectURL(blob);
