@@ -70,13 +70,12 @@
         .online::before {
             background-color: rgba(0, 255, 0);
             background: radial-gradient(circle at center, #ffffff 0%, #00bb00 75%);
-            box-shadow: rgba(0, 25, 0, 0.5) 0px 0px 6px 0px, rgba(0, 255, 0, 0.5) 0px 0px 10px 0px;     
+            box-shadow: rgba(0, 243, 0, 0.5) 0px 0px 6px 0px, rgba(0, 255, 0, 0.5) 0px 0px 10px 0px;     
         }
 
         .offline::before {
             background-color: red;
             background: radial-gradient(circle at center, #ffffff 0%, #ff0000 75%);
-
             box-shadow: rgba(255, 0, 0, 0.5) 0px 0px 6px 0px, rgba(255, 0, 0, 0.5) 0px 0px 10px 0px;       
         }
 
@@ -263,6 +262,7 @@
         var log_count = 0;
         var watch_id = null;
         var update_interval;
+        var wakeLock;
 
         window.onbeforeunload = function() {
             saveData();
@@ -519,15 +519,7 @@
             } else {
                 logError("Geolocation not available :(");
             }
-
-            let wakeLock = null;
-
-            document.addEventListener('visibilitychange', () => {
-                if (wakeLock !== null && document.visibilityState === 'visible') {
-                    requestWakeLock();
-                }
-            });
-
+            
             requestWakeLock();
 
             // update display every log_interval ms
