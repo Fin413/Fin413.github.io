@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tangram</title>
+
+    <style>
+        body {
+            border: 5px solid black;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <p id="timer">10:00</p>
+
+    <script>
+        const timerEl = document.getElementById("timer");
+        var timeRemaining = 600;
+        var timerInterval = setInterval(() => {
+            timeRemaining--;
+            let mins = Math.trunc(timeRemaining / 60);
+            let secs = timeRemaining % 60;
+            timerEl.innerText = `${mins}:${secs}`;
+        }, 1000);
+    </script>
+</body>
+</html>
