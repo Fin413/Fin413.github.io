@@ -10,10 +10,46 @@
             border: 5px solid black;
             margin: 0;
         }
+        .shape {
+            /* zoom: 0.5; */
+            /* margin: 0; */
+            position: absolute;
+            transition: transform 250ms;
+        }
+
+        polygon {
+            cursor: pointer;
+        }
+
+        #timer {
+            text-align: center;
+        }
+        #gameArea {
+            border-top: 5px solid black;
+            border-bottom: 5px solid black;
+        }
     </style>
 </head>
 <body>
     <p id="timer">10:00</p>
+    <div id="gameArea">
+
+    </div>
+    <div id="pieceContainer">
+        <svg draggable="true" class="shape" width="200" height="100">
+            <polygon points="0,0 100,100 200,0" style="fill:lime;stroke:purple;stroke-width:3" />
+        </svg>
+        <svg draggable="true" class="shape" width="200" height="100">
+            <polygon points="0,0 100,100 200,0" style="fill:lime;stroke:purple;stroke-width:3" />
+        </svg>
+        <!-- <img class="shape" src="./shapes/blue.png">
+        <img class="shape" src="./shapes/green.png">
+        <img class="shape" src="./shapes/grey.png">
+        <img class="shape" src="./shapes/orange.png">
+        <img class="shape" src="./shapes/purple.png">
+        <img class="shape" src="./shapes/red.png">
+        <img class="shape" src="./shapes/yellow.png"> -->
+    </div>
 
     <script>
         const timerEl = document.getElementById("timer");
@@ -24,6 +60,56 @@
             let secs = timeRemaining % 60;
             timerEl.innerText = `${mins}:${secs}`;
         }, 1000);
+
+        const allShapes = [];
+        window.addEventListener('DOMContentLoaded', () => {
+            const shapeElements = Array.from(document.getElementsByClassName("shape"));
+
+            shapeElements.forEach((shapeEl, index) => {
+                let tempShape = {
+                    el: shapeEl,
+                    mouseDown: false,
+                    justDragged: false,
+                    rotation: 0,
+                    x: 0,
+                    y: 0,
+                    cursorOffset: [0, 0],
+                };
+                allShapes.push(tempShape);
+
+                shapeEl.onmousedown = (event) => {
+                    let shape = allShapes[index];
+                    shape.mouseDown = true;
+                    shape.cursorOffset = [event.offsetX, event.offsetY]
+                };
+
+                shapeEl.onclick = (event) => {
+                    let shape = allShapes[index];
+                    if (!shape.justDragged) {
+                        shape.rotation += 90;
+                        event.currentTarget.style.transform = `rotate(${allShapes[index].rotation}deg)`;
+                    } else {
+                        shape.justDragged = false;
+                    }
+                };
+            });
+        });
+
+        window.addEventListener("mousemove", event => {
+            allShapes.forEach(shape => {
+                if (shape.mouseDown) {
+                    shape.justDragged = true;
+                    shape.el.style.top = `${event.clientY - shape.cursorOffset[1]}px`;
+                    shape.el.style.left = `${event.clientX - shape.cursorOffset[0]}px`;
+                }
+            });
+        });
+
+        window.onmouseup = (event) => {
+            allShapes.forEach(shape => {
+                shape.mouseDown = false;
+            });
+        }
     </script>
 </body>
 </html>
