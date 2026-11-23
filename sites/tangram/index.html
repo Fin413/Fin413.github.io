@@ -4,11 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tangram</title>
-
+    <script src="https://kit.fontawesome.com/08bea279a4.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&amp;display=swap" rel="stylesheet">
     <style>
         body {
             border: 5px solid black;
+            border-radius: 10px;
             margin: 0;
+
+            font-family: 'Open Sans';
         }
         .shape {
             /* zoom: 0.5; */
@@ -17,30 +23,99 @@
             transition: transform 250ms;
         }
 
-        polygon {
+        .intractable {
             cursor: pointer;
+            z-index: 1;
+        }
+
+        #header {
+            text-align: center;
+            font-size: 25px;
+            margin: 10px 0;
         }
 
         #timer {
-            text-align: center;
+            font-weight: bold;
         }
         #gameArea {
             border-top: 5px solid black;
-            border-bottom: 5px solid black;
+            border-bottom: 5px dashed black;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        #pieceContainer {
+            height: 125px;
+        }
+        #prevPuzzle {
+            visibility: hidden;
+        }
+
+        button {
+            margin: 0 10px;
+            cursor: pointer;
+            padding: 0;
+            border: none;
+            background: transparent;
+        }
+
+        button:hover {
+            opacity: 0.70;
+        }
+
+        i {
+            font-size: 50px;
+        }
+
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.75);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <p id="timer">10:00</p>
+    <div id="overlay">
+        <h1>Time's Up!</h1>
+        <p>Continue onto the next page.</p>
+    </div>
+    <p id="header">Puzzle <span id="puzzleNum">1</span> - <span id="timer">10:00</span></p>
     <div id="gameArea">
-
+        <button id="prevPuzzle"><i class="fa-solid fa-arrow-left"></i></button>
+        <button id="nextPuzzle"><i class="fa-solid fa-arrow-right"></i></button>
     </div>
     <div id="pieceContainer">
         <svg draggable="true" class="shape" width="200" height="100">
-            <polygon points="0,0 100,100 200,0" style="fill:lime;stroke:purple;stroke-width:3" />
+            <polygon class="intractable" points="0,0 100,100 200,0" style="fill:#E54D42;" />
         </svg>
         <svg draggable="true" class="shape" width="200" height="100">
-            <polygon points="0,0 100,100 200,0" style="fill:lime;stroke:purple;stroke-width:3" />
+            <polygon class="intractable" points="0,0 100,100 200,0" style="fill:#3999D9;" />
+        </svg>
+        <svg draggable="true" class="shape" width="100" height="50">
+            <polygon class="intractable" points="0,0 50,50 100,0" style="fill:#9B5CB5;" />
+        </svg>
+        <svg draggable="true" class="shape" width="100" height="50">
+            <polygon class="intractable" points="0,0 50,50 100,0" style="fill:#F0C42E;" />
+        </svg>
+        <svg draggable="true" class="shape" width="100" height="100">
+            <polygon class="intractable" points="0,0 0,100 100,100" style="fill:#E37F31;" />
+        </svg>
+        <svg draggable="true" class="shape" width="70.7" height="70.7">
+            <polygon class="intractable" points="0,0 0,70.7 70.7,70.7 70.7,0" style="fill:#39CA75;" />
+        </svg>
+        <svg draggable="true" class="shape" width="150" height="50">
+            <polygon class="intractable" points="0,0 100,0 150,50 50,50" style="fill:#354A5C;" />
         </svg>
         <!-- <img class="shape" src="./shapes/blue.png">
         <img class="shape" src="./shapes/green.png">
@@ -52,22 +127,83 @@
     </div>
 
     <script>
+        // separate into easy to load levels and level states
+        // make shape you're currently dragging have highest z index
+        // win condition checking and piece rounding (make easier to place)
+        // check for shapes that can be used inplace of eachother (same shapes)
+
+        const gameArea = document.getElementById("gameArea");
         const timerEl = document.getElementById("timer");
+        const nextBtn = document.getElementById("nextPuzzle");
+        const prevBtn = document.getElementById("prevPuzzle");
+
+
         var timeRemaining = 600;
         var timerInterval = setInterval(() => {
             timeRemaining--;
-            let mins = Math.trunc(timeRemaining / 60);
-            let secs = timeRemaining % 60;
+            let mins = String(Math.trunc(timeRemaining / 60)).padStart(2, '0');
+            let secs = String(timeRemaining % 60).padStart(2, '0');
             timerEl.innerText = `${mins}:${secs}`;
+
+            if(mins == "00" && secs == "10") {
+                timerEl.style.color = "rgb(255, 0, 0)";
+            }
+
+            if(mins == "00" && secs == "00") {
+                clearInterval(timerInterval);
+                document.getElementById("overlay").style.display = "flex"
+            }
         }, 1000);
 
-        const allShapes = [];
+        const startPosition = [{id:0,x:430,y:0,rotation:180},{id:1,x:315,y:0,rotation:0},{id:2,x:50,y:50,rotation:45},{id:3,x:220,y:15,rotation:225},{id:4,x:300,y:0,rotation:0},{id:5,x:0,y:15,rotation:0},{id:6,x:110,y:30,rotation:0}];
+
+        var allShapes = [];
+        var puzzles = [
+            {endState: [{id:5,x:0,y:0,rotation:0}]},
+            {endState: [{id:4,x:100,y:0,rotation:0},{id:5,x:30,y:30,rotation:0},{id:6,x:0,y:100,rotation:0}]},
+            {endState: [{id:1,x:0,y:100,rotation:0},{id:4,x:200,y:0,rotation:90},{id:5,x:130,y:30,rotation:0}]}
+        ]
+
+        var puzzleIndex = 0;
+
+        var currentPuzzle;
+        var max_zIndex = 0;
+
+        function setPuzzle(index) {
+            currentPuzzle = puzzles[index];
+
+
+            // set to initial game state if player has not started puzzle
+            if (!currentPuzzle.shapeState) {
+                buildSilhouette(true);
+                currentPuzzle.shapeState = structuredClone(startPosition);
+
+                let width = getStateWidth(startPosition);
+                console.log(width)
+                let startX = roundToGrid((window.innerWidth / 2) - (width / 2));
+                let startY = roundToGrid(330);
+                updateStateOrigin(startX, startY, currentPuzzle.shapeState);
+            } else {
+                buildSilhouette();
+            }
+
+            // load saved shape state
+            allShapes.forEach(shape => {
+                let matchingShape = currentPuzzle.shapeState.find(savedShape => savedShape.id === shape.id);
+                shape.x = matchingShape.x;
+                shape.y = matchingShape.y;
+                shape.rotation = matchingShape.rotation;
+                updateShapePos(shape);
+            })
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             const shapeElements = Array.from(document.getElementsByClassName("shape"));
 
             shapeElements.forEach((shapeEl, index) => {
                 let tempShape = {
-                    el: shapeEl,
+                    id: index,
+                    domEl: shapeEl,
                     mouseDown: false,
                     justDragged: false,
                     rotation: 0,
@@ -79,6 +215,7 @@
 
                 shapeEl.onmousedown = (event) => {
                     let shape = allShapes[index];
+                    cycle_z_index(shape);
                     shape.mouseDown = true;
                     shape.cursorOffset = [event.offsetX, event.offsetY]
                 };
@@ -86,30 +223,207 @@
                 shapeEl.onclick = (event) => {
                     let shape = allShapes[index];
                     if (!shape.justDragged) {
-                        shape.rotation += 90;
+                        shape.rotation += 45;
                         event.currentTarget.style.transform = `rotate(${allShapes[index].rotation}deg)`;
                     } else {
                         shape.justDragged = false;
                     }
                 };
             });
+
+            setPuzzle(0);
         });
 
         window.addEventListener("mousemove", event => {
             allShapes.forEach(shape => {
                 if (shape.mouseDown) {
-                    shape.justDragged = true;
-                    shape.el.style.top = `${event.clientY - shape.cursorOffset[1]}px`;
-                    shape.el.style.left = `${event.clientX - shape.cursorOffset[0]}px`;
+                    shape.justDragged = true; 
+                    shape.x = event.clientX - shape.cursorOffset[0];
+                    shape.y = event.clientY - shape.cursorOffset[1];
+                    shape.domEl.style.left = `${shape.x}px`;
+                    shape.domEl.style.top = `${shape.y}px`;
                 }
             });
         });
 
         window.onmouseup = (event) => {
-            allShapes.forEach(shape => {
+            allShapes.forEach((shape, i) => {
                 shape.mouseDown = false;
+                shape.x = roundToGrid(shape.x);
+                shape.y = roundToGrid(shape.y);
+                updateShapePos(shape);
+            });
+            checkSolved();
+        }
+
+        function cycle_z_index(shape) {
+            max_zIndex++;
+            shape.domEl.style.zIndex = max_zIndex;
+        }
+
+        function updateShapePos(shape) {
+            shape.domEl.style.left = `${shape.x}px`;
+            shape.domEl.style.top = `${shape.y}px`;
+            shape.domEl.style.transform = `rotate(${shape.rotation}deg)`;
+        }
+
+        function getBaseRotation(rot) {
+            if (rot >= 360) {
+                let numRotations = Math.floor(rot / 360);
+                return rot - (360 * numRotations);
+            }
+            return rot;
+        }
+
+        function checkSolved() {
+            const correctThreshold = 10;
+            var numCorrect = 0;
+            currentPuzzle.endState.forEach((levelShape, i) => {
+                let matchingShape = allShapes.find(shp => shp.id === levelShape.id);
+                if (matchingShape != -1) {
+                    let xDist = Math.abs(levelShape.x - matchingShape.x);
+                    let yDist = Math.abs(levelShape.y - matchingShape.y);
+                    let rot = getBaseRotation(matchingShape.rotation);
+
+                    if (rot == levelShape.rotation && xDist < correctThreshold && yDist < correctThreshold) {
+                        matchingShape.x = levelShape.x;
+                        matchingShape.y = levelShape.y;
+                        updateShapePos(matchingShape);
+                        numCorrect++;
+                    }
+                }
+            });
+
+            if(numCorrect == currentPuzzle.endState.length) {
+                console.log("LEVEL SOLVED");
+            }
+        }
+
+        function buildSilhouette(isFirstTime = false) {
+            origin = {
+                x: roundToGrid((window.innerWidth / 2) - getStateWidth(currentPuzzle.endState) / 2), 
+                y: roundToGrid(85)
+            };
+    
+            gameArea.querySelectorAll(':scope > .shape').forEach(child => child.remove());
+
+            currentPuzzle.endState.forEach((levelShape, i) => {
+                allShapes.forEach(shape => {
+                    if (levelShape.id == shape.id) {
+                        let copy = shape.domEl.cloneNode(true);
+                        copy.firstElementChild.style.fill = "rgb(150, 150, 150)";
+                        copy.firstElementChild.classList = "";
+
+                        // only set to origin if first time
+                        let newX, newY;
+                        if (isFirstTime) {
+                            newX = levelShape.x + origin.x;
+                            newY = levelShape.y + origin.y;     
+                            levelShape.x = newX;
+                            levelShape.y = newY;
+                        } else {
+                            newX = levelShape.x;
+                            newY = levelShape.y;     
+                        }
+                        
+                        copy.style.left = `${newX}px`;
+                        copy.style.top = `${newY}px`;
+                        copy.style.transform = `rotate(${levelShape.rotation}deg)`;
+
+                        gameArea.appendChild(copy);
+                    }
+                });
             });
         }
+
+        function roundToGrid(value) {
+            const gridSize = 5;
+            return Math.round(value / gridSize) * gridSize;
+        }
+
+        function getStateWidth(shapeState) {
+            let minX = Infinity;
+            let maxX = 0;
+            shapeState.forEach(shape => {
+                if (shape.x < minX) minX = shape.x;
+                let matchingShape = allShapes.find(shp => shp.id === shape.id);    
+                let width = matchingShape.domEl.width.baseVal.value;
+                // console.log(width.baseVal.value)
+                if (shape.x + width > maxX) maxX = shape.x + width;
+
+            });
+            return maxX - minX;
+        }
+
+        function updateStateOrigin(x, y, state) {
+            state.forEach(shape => {
+                shape.x += x;
+                shape.y += y;
+            });
+        }
+
+        async function generatePuzzle() {
+            let minX = 2000;
+            let minY = 2000;
+            let endState = [];
+
+            const heightLimit = 200;
+            allShapes.forEach(shape => {
+                // assume shape isn't part of the puzzle if its way at the bottom
+                if (shape.y < heightLimit) {
+                    if(shape.x < minX) minX = shape.x;
+                    if(shape.y < minY) minY = shape.y
+                }
+            });
+
+            allShapes.forEach(shape => {
+                let temp = {
+                    id: shape.id,
+                    x: shape.x - minX,
+                    y: shape.y - minY,
+                    rotation: shape.rotation,
+                }
+                endState.push(temp);
+            });
+
+            console.log(endState)
+
+            let output = "[";
+            endState.forEach(shape => {
+                if (shape.y < heightLimit) {
+                    output += `{id:${shape.id},x:${shape.x},y:${shape.y},rotation:${shape.rotation}},`;
+                }
+            })
+            output += "]";
+            console.log(output.trim());
+        }
+
+        nextBtn.onclick = () => incrementPuzzle(1);
+        prevBtn.onclick = () => incrementPuzzle(-1);
+        function incrementPuzzle(amount) {
+            // save the current puzzle state
+            allShapes.forEach(shape => {
+                let matchingShape = currentPuzzle.shapeState.find(savedShape => savedShape.id === shape.id);
+                matchingShape.x = shape.x;
+                matchingShape.y = shape.y;
+                matchingShape.rotation = shape.rotation;
+            })
+
+            puzzleIndex += amount;
+
+            document.getElementById("puzzleNum").innerText = puzzleIndex + 1;
+
+            if(puzzleIndex == puzzles.length - 1) {
+                nextBtn.style.visibility = "hidden";
+            } else if (puzzleIndex == 0) {
+                prevBtn.style.visibility = "hidden";
+            }
+
+            if (amount > 0) prevBtn.style.visibility = "visible";
+            else if (amount < 0) nextBtn.style.visibility = "visible";
+
+            setPuzzle(puzzleIndex);
+        }   
     </script>
 </body>
 </html>
