@@ -13,14 +13,20 @@
             border: 5px solid black;
             border-radius: 10px;
             margin: 0;
-
+            position: relative;
             font-family: 'Open Sans';
         }
         .shape {
-            /* zoom: 0.5; */
-            /* margin: 0; */
             position: absolute;
+            transform-box: fill-box;
+            transform-origin: center;
             transition: transform 250ms;
+            pointer-events: none;
+        }
+
+        .shape polygon {
+            pointer-events: visiblePainted;
+            cursor: pointer;
         }
 
         .intractable {
@@ -32,6 +38,10 @@
             text-align: center;
             font-size: 25px;
             margin: 10px 0;
+
+            -webkit-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none; 
         }
 
         #timer {
@@ -111,8 +121,8 @@
         <svg draggable="true" class="shape" width="100" height="100">
             <polygon class="intractable" points="0,0 0,100 100,100" style="fill:#E37F31;" />
         </svg>
-        <svg draggable="true" class="shape" width="70.7" height="70.7">
-            <polygon class="intractable" points="0,0 0,70.7 70.7,70.7 70.7,0" style="fill:#39CA75;" />
+        <svg draggable="true" class="shape" width="70" height="70">
+            <polygon class="intractable" points="0,0 0,70 70,70 70,0" style="fill:#39CA75;" />
         </svg>
         <svg draggable="true" class="shape" width="150" height="50">
             <polygon class="intractable" points="0,0 100,0 150,50 50,50" style="fill:#354A5C;" />
@@ -127,8 +137,6 @@
     </div>
 
     <script>
-        // separate into easy to load levels and level states
-        // make shape you're currently dragging have highest z index
         // win condition checking and piece rounding (make easier to place)
         // check for shapes that can be used inplace of eachother (same shapes)
 
@@ -136,6 +144,8 @@
         const timerEl = document.getElementById("timer");
         const nextBtn = document.getElementById("nextPuzzle");
         const prevBtn = document.getElementById("prevPuzzle");
+
+        const gridSize = 5;
 
 
         var timeRemaining = 600;
@@ -194,6 +204,10 @@
                 shape.y = matchingShape.y;
                 shape.rotation = matchingShape.rotation;
                 updateShapePos(shape);
+                setTimeout(() => {
+                shape.domEl.style.transition = "transform 250ms";
+
+                }, 50)
             })
         }
 
@@ -213,11 +227,16 @@
                 };
                 allShapes.push(tempShape);
 
-                shapeEl.onmousedown = (event) => {
+                shapeEl.firstElementChild.onmousedown = (event) => {
                     let shape = allShapes[index];
+
+                    shape.cursorOffset = [
+                        event.clientX - shape.x,
+                        event.clientY - shape.y
+                    ];
+
                     cycle_z_index(shape);
                     shape.mouseDown = true;
-                    shape.cursorOffset = [event.offsetX, event.offsetY]
                 };
 
                 shapeEl.onclick = (event) => {
@@ -234,6 +253,44 @@
             setPuzzle(0);
         });
 
+        function snapShapeToGrid(shape) {
+            const polygon = shape.domEl.querySelector("polygon");
+
+            const points = polygon.points;
+            const angle = shape.rotation * Math.PI / 180;
+
+            // get center of shape
+            const cx = shape.domEl.width.baseVal.value / 2;
+            const cy = shape.domEl.height.baseVal.value / 2;
+
+            let minX = Infinity;
+            let minY = Infinity;
+
+            for (let i = 0; i < points.numberOfItems; i++) {
+                const point = points.getItem(i);
+
+                // point dist from center
+                const dx = point.x - cx;
+                const dy = point.y - cy;
+
+                // calculate new rotated x and y vals
+                const rotatedX = cx + dx * Math.cos(angle) - dy * Math.sin(angle);
+                const rotatedY = cy + dx * Math.sin(angle) + dy * Math.cos(angle);
+
+                minX = Math.min(minX, rotatedX);
+                minY = Math.min(minY, rotatedY);
+            }
+
+            // calculate the nearest grid position
+            const offsetX = Math.round((shape.x + minX) / gridSize) * gridSize - (shape.x + minX);
+            const offsetY = Math.round((shape.y + minY) / gridSize) * gridSize - (shape.y + minY);
+
+            shape.x += offsetX;
+            shape.y += offsetY;
+
+            updateShapePos(shape);
+        }
+
         window.addEventListener("mousemove", event => {
             allShapes.forEach(shape => {
                 if (shape.mouseDown) {
@@ -246,15 +303,14 @@
             });
         });
 
-        window.onmouseup = (event) => {
-            allShapes.forEach((shape, i) => {
+        window.onmouseup = () => {
+            allShapes.forEach(shape => {
                 shape.mouseDown = false;
-                shape.x = roundToGrid(shape.x);
-                shape.y = roundToGrid(shape.y);
-                updateShapePos(shape);
+                snapShapeToGrid(shape);
             });
+
             checkSolved();
-        }
+        };
 
         function cycle_z_index(shape) {
             max_zIndex++;
@@ -325,7 +381,7 @@
                             newX = levelShape.x;
                             newY = levelShape.y;     
                         }
-                        
+                        copy.style.zIndex = "0";
                         copy.style.left = `${newX}px`;
                         copy.style.top = `${newY}px`;
                         copy.style.transform = `rotate(${levelShape.rotation}deg)`;
@@ -337,7 +393,6 @@
         }
 
         function roundToGrid(value) {
-            const gridSize = 5;
             return Math.round(value / gridSize) * gridSize;
         }
 
@@ -407,6 +462,8 @@
                 matchingShape.x = shape.x;
                 matchingShape.y = shape.y;
                 matchingShape.rotation = shape.rotation;
+
+                shape.domEl.style.transition = "none";
             })
 
             puzzleIndex += amount;
