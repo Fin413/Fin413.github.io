@@ -15,6 +15,11 @@
             margin: 0;
             position: relative;
             font-family: 'Open Sans';
+
+            -webkit-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none; 
+            overflow: hidden;
         }
         .shape {
             position: absolute;
@@ -29,6 +34,18 @@
             cursor: pointer;
         }
 
+        .silhouette {
+            z-index: 0;
+            pointer-events: none;
+            overflow: visible;
+            transition: none;
+        }
+
+        .silhouette polygon {
+            cursor: default;
+            overflow: visible;
+        }
+
         .intractable {
             cursor: pointer;
             z-index: 1;
@@ -39,9 +56,7 @@
             font-size: 25px;
             margin: 10px 0;
 
-            -webkit-user-select: none; 
-            -ms-user-select: none; 
-            user-select: none; 
+           
         }
 
         #timer {
@@ -50,7 +65,7 @@
         #gameArea {
             border-top: 5px solid black;
             border-bottom: 5px dashed black;
-            height: 250px;
+            height: 300px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -74,9 +89,11 @@
             opacity: 0.70;
         }
 
-        i {
+        #gameArea i {
             font-size: 50px;
         }
+
+        
 
         #overlay {
             position: absolute;
@@ -92,6 +109,22 @@
             flex-direction: column;
             color: white;
             display: none;
+        }
+
+        #controls {
+            display: flex;
+            justify-content: space-evenly;
+            padding: 10px 0;
+        }
+
+        .controlIcon {
+            border: 2px solid black;
+            border-radius: 5px;
+            width: 20px;
+            aspect-ratio: 1 / 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -127,13 +160,16 @@
         <svg draggable="true" class="shape" width="150" height="50">
             <polygon class="intractable" points="0,0 100,0 150,50 50,50" style="fill:#354A5C;" />
         </svg>
-        <!-- <img class="shape" src="./shapes/blue.png">
-        <img class="shape" src="./shapes/green.png">
-        <img class="shape" src="./shapes/grey.png">
-        <img class="shape" src="./shapes/orange.png">
-        <img class="shape" src="./shapes/purple.png">
-        <img class="shape" src="./shapes/red.png">
-        <img class="shape" src="./shapes/yellow.png"> -->
+    </div>
+    <div id="controls">
+        <div>
+            <i class="fa-solid fa-computer-mouse controlIcon"></i>
+            <i class="fa-solid fa-rotate"></i>
+        </div>
+        <div>
+            <i class="fa-solid fa-f controlIcon"></i>
+            <i class="fa-solid fa-arrow-right-arrow-left"></i>  
+        </div>
     </div>
 
     <script>
@@ -146,7 +182,38 @@
         const prevBtn = document.getElementById("prevPuzzle");
 
         const gridSize = 5;
+        const startPosition = [{id:0,x:430,y:0,rotation:180},{id:1,x:315,y:0,rotation:0},{id:2,x:50,y:50,rotation:45},{id:3,x:220,y:15,rotation:225},{id:4,x:300,y:0,rotation:0},{id:5,x:0,y:15,rotation:0},{id:6,x:110,y:30,rotation:0}];
+        
+        var lastPiece;
+        var max_zIndex = 0;
 
+        var puzzleIndex = 0;
+        var currentPuzzle;
+        var allShapes = [];
+        var allSilhouetteShapes = [];
+        var puzzles;
+        var easy_puzzles = [
+            // helicopter
+            {endState: [{id:0,x:140,y:150,rotation:360},{id:1,x:140,y:50,rotation:180},{id:2,x:73,y:143,rotation:225},{id:3,x:108,y:178,rotation:405},{id:4,x:261,y:0,rotation:135},{id:5,x:0,y:80,rotation:0},{id:6,x:90,y:0,rotation:0}]},
+            
+            // sail boat
+            {endState: [{id:0,x:0,y:0,rotation:270},{id:1,x:50,y:50,rotation:180},{id:2,x:78,y:178,rotation:45},{id:3,x:-27,y:143,rotation:225},{id:4,x:131,y:100,rotation:315},{id:5,x:40,y:150,rotation:0},{id:6,x:176,y:160,rotation:135}]},
+            {endState: [{id:5,x:0,y:0,rotation:0}]},
+            {endState: [{id:4,x:100,y:0,rotation:0},{id:5,x:30,y:30,rotation:0},{id:6,x:0,y:100,rotation:0}]},
+            {endState: [{id:1,x:0,y:100,rotation:0},{id:4,x:200,y:0,rotation:90},{id:5,x:130,y:30,rotation:0}]}
+        ]
+
+        var hard_puzzles = [
+            // house
+            {endState: [{id:0,x:74,y:40,rotation:180},{id:1,x:39,y:140,rotation:180},{id:2,x:139,y:140,rotation:0},{id:3,x:164,y:165,rotation:90},{id:4,x:39,y:140,rotation:90},{id:5,x:74,y:0,rotation:0},{id:6,x:0,y:80,rotation:135}]},
+            // square
+            {endState: [{id:0,x:71,y:0,rotation:225,inverted:false},{id:1,x:0,y:70,rotation:45,inverted:false},{id:2,x:280,y:113,rotation:-315,inverted:true},{id:3,x:209,y:7,rotation:225,inverted:false},{id:4,x:156,y:35,rotation:225,inverted:false},{id:5,x:277,y:15,rotation:0,inverted:false},{id:6,x:202,y:95,rotation:135,inverted:false},]},
+            
+            // heart
+            {endState: [{id:0,x:0,y:0,rotation:180,inverted:false},{id:1,x:0,y:100,rotation:0,inverted:false},{id:2,x:100,y:200,rotation:0,inverted:false},{id:3,x:225,y:75,rotation:270,inverted:false},{id:4,x:100,y:100,rotation:270,inverted:false},{id:5,x:165,y:15,rotation:45,inverted:false},{id:6,x:150,y:100,rotation:90,inverted:false},]},
+            {endState: [{id:4,x:100,y:0,rotation:0},{id:5,x:30,y:30,rotation:0},{id:6,x:0,y:100,rotation:0}]},
+            {endState: [{id:1,x:0,y:100,rotation:0},{id:4,x:200,y:0,rotation:90},{id:5,x:130,y:30,rotation:0}]}
+        ]
 
         var timeRemaining = 600;
         var timerInterval = setInterval(() => {
@@ -161,27 +228,114 @@
 
             if(mins == "00" && secs == "00") {
                 clearInterval(timerInterval);
-                document.getElementById("overlay").style.display = "flex"
+                document.getElementById("overlay").style.display = "flex";
             }
         }, 1000);
 
-        const startPosition = [{id:0,x:430,y:0,rotation:180},{id:1,x:315,y:0,rotation:0},{id:2,x:50,y:50,rotation:45},{id:3,x:220,y:15,rotation:225},{id:4,x:300,y:0,rotation:0},{id:5,x:0,y:15,rotation:0},{id:6,x:110,y:30,rotation:0}];
+        const params = new URLSearchParams(window.location.search);
+        var difficulty = params.get("mode"); // e for easy or h for hard
+        if(!difficulty || difficulty == "e") puzzles = easy_puzzles;
+        else puzzles = hard_puzzles;
 
-        var allShapes = [];
-        var puzzles = [
-            {endState: [{id:5,x:0,y:0,rotation:0}]},
-            {endState: [{id:4,x:100,y:0,rotation:0},{id:5,x:30,y:30,rotation:0},{id:6,x:0,y:100,rotation:0}]},
-            {endState: [{id:1,x:0,y:100,rotation:0},{id:4,x:200,y:0,rotation:90},{id:5,x:130,y:30,rotation:0}]}
-        ]
+        window.addEventListener('DOMContentLoaded', () => {
+            const shapeElements = Array.from(document.getElementsByClassName("shape"));
 
-        var puzzleIndex = 0;
+            // Set window events
+            window.addEventListener("mousemove", event => {
+                allShapes.forEach(shape => {
+                    if (shape.mouseDown) {
+                        shape.justDragged = true; 
+                        shape.x = event.clientX - shape.cursorOffset[0];
+                        shape.y = event.clientY - shape.cursorOffset[1];
+                        shape.domEl.style.left = `${shape.x}px`;
+                        shape.domEl.style.top = `${shape.y}px`;
+                    }
+                });
+            });
 
-        var currentPuzzle;
-        var max_zIndex = 0;
+            window.onmouseup = () => {
+                allShapes.forEach(shape => {
+                    shape.mouseDown = false;
+
+                    // if(shape.id == 2 || shape.id == 3) {
+                    //     snapShapeToGrid(shape);
+                    // } else {
+                    //     shape.x = roundToGrid(shape.x);
+                    //     shape.y = roundToGrid(shape.y);
+                    //     updateShapePos(shape);
+                    //     snapShapeToGrid(shape);
+                    // }
+                });
+
+                checkSolved();
+
+                snapByPoints(allShapes[lastPiece])
+            };
+
+            window.onkeypress = event => {
+                // console.log(event.key.toLowerCase()
+                if(event.key.toLowerCase() == "f") {
+                    console.log("f")
+                    if(lastPiece != undefined) {
+                        console.log(lastPiece)
+                        let shape = allShapes[lastPiece];
+                        if(shape.inverted) {
+                            shape.inverted = false
+                        } else {
+                            shape.inverted = true;
+                        }
+                        // allShapes[lastPiece].inverted = !allShapes[lastPiece].inverted;
+                        updateShapePos(allShapes[lastPiece]);
+                    }
+                }
+            }
+
+            // Set shape events
+            shapeElements.forEach((shapeEl, index) => {
+                let tempShape = {
+                    id: index,
+                    domEl: shapeEl,
+                    mouseDown: false,
+                    justDragged: false,
+                    inverted: false,
+                    rotation: 0,
+                    x: 0,
+                    y: 0,
+                    cursorOffset: [0, 0],
+                };
+                allShapes.push(tempShape);
+
+                shapeEl.firstElementChild.onmousedown = (event) => {
+                    let shape = allShapes[index];
+
+                    shape.cursorOffset = [
+                        event.clientX - shape.x,
+                        event.clientY - shape.y
+                    ];
+
+                    cycle_z_index(shape);
+                    shape.mouseDown = true;
+
+                    lastPiece = shape.id;
+                };
+
+                shapeEl.onclick = (event) => {
+                    let shape = allShapes[index];
+                    if (!shape.justDragged) {
+                        if (shape.inverted) shape.rotation -= 45;
+                        else shape.rotation += 45;
+                        updateShapePos(shape);
+                    } else {
+                        shape.justDragged = false;
+                    }
+                };
+            });
+
+            setPuzzle(0);
+        });
 
         function setPuzzle(index) {
             currentPuzzle = puzzles[index];
-
 
             // set to initial game state if player has not started puzzle
             if (!currentPuzzle.shapeState) {
@@ -190,8 +344,8 @@
 
                 let width = getStateWidth(startPosition);
                 console.log(width)
-                let startX = roundToGrid((window.innerWidth / 2) - (width / 2));
-                let startY = roundToGrid(330);
+                let startX = (window.innerWidth / 2) - (width / 2);
+                let startY = 380;
                 updateStateOrigin(startX, startY, currentPuzzle.shapeState);
             } else {
                 buildSilhouette();
@@ -210,48 +364,6 @@
                 }, 50)
             })
         }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const shapeElements = Array.from(document.getElementsByClassName("shape"));
-
-            shapeElements.forEach((shapeEl, index) => {
-                let tempShape = {
-                    id: index,
-                    domEl: shapeEl,
-                    mouseDown: false,
-                    justDragged: false,
-                    rotation: 0,
-                    x: 0,
-                    y: 0,
-                    cursorOffset: [0, 0],
-                };
-                allShapes.push(tempShape);
-
-                shapeEl.firstElementChild.onmousedown = (event) => {
-                    let shape = allShapes[index];
-
-                    shape.cursorOffset = [
-                        event.clientX - shape.x,
-                        event.clientY - shape.y
-                    ];
-
-                    cycle_z_index(shape);
-                    shape.mouseDown = true;
-                };
-
-                shapeEl.onclick = (event) => {
-                    let shape = allShapes[index];
-                    if (!shape.justDragged) {
-                        shape.rotation += 45;
-                        event.currentTarget.style.transform = `rotate(${allShapes[index].rotation}deg)`;
-                    } else {
-                        shape.justDragged = false;
-                    }
-                };
-            });
-
-            setPuzzle(0);
-        });
 
         function snapShapeToGrid(shape) {
             const polygon = shape.domEl.querySelector("polygon");
@@ -291,46 +403,6 @@
             updateShapePos(shape);
         }
 
-        window.addEventListener("mousemove", event => {
-            allShapes.forEach(shape => {
-                if (shape.mouseDown) {
-                    shape.justDragged = true; 
-                    shape.x = event.clientX - shape.cursorOffset[0];
-                    shape.y = event.clientY - shape.cursorOffset[1];
-                    shape.domEl.style.left = `${shape.x}px`;
-                    shape.domEl.style.top = `${shape.y}px`;
-                }
-            });
-        });
-
-        window.onmouseup = () => {
-            allShapes.forEach(shape => {
-                shape.mouseDown = false;
-                snapShapeToGrid(shape);
-            });
-
-            checkSolved();
-        };
-
-        function cycle_z_index(shape) {
-            max_zIndex++;
-            shape.domEl.style.zIndex = max_zIndex;
-        }
-
-        function updateShapePos(shape) {
-            shape.domEl.style.left = `${shape.x}px`;
-            shape.domEl.style.top = `${shape.y}px`;
-            shape.domEl.style.transform = `rotate(${shape.rotation}deg)`;
-        }
-
-        function getBaseRotation(rot) {
-            if (rot >= 360) {
-                let numRotations = Math.floor(rot / 360);
-                return rot - (360 * numRotations);
-            }
-            return rot;
-        }
-
         function checkSolved() {
             const correctThreshold = 10;
             var numCorrect = 0;
@@ -355,41 +427,159 @@
             }
         }
 
-        function buildSilhouette(isFirstTime = false) {
+        function mergeShilhouette() {
+            const silhouetteColor = "rgb(150, 150, 150)";
+            const seamStrokeWidth = 2;
+
             origin = {
-                x: roundToGrid((window.innerWidth / 2) - getStateWidth(currentPuzzle.endState) / 2), 
-                y: roundToGrid(85)
+                x: window.innerWidth / 2 - getStateWidth(currentPuzzle.endState) / 2,
+                y: 85
             };
-    
-            gameArea.querySelectorAll(':scope > .shape').forEach(child => child.remove());
 
-            currentPuzzle.endState.forEach((levelShape, i) => {
-                allShapes.forEach(shape => {
-                    if (levelShape.id == shape.id) {
-                        let copy = shape.domEl.cloneNode(true);
-                        copy.firstElementChild.style.fill = "rgb(150, 150, 150)";
-                        copy.firstElementChild.classList = "";
+            // remove silhouette copies
+            gameArea.querySelectorAll(':scope > [data-silhouette="true"]').forEach(child => child.remove());
 
-                        // only set to origin if first time
-                        let newX, newY;
-                        if (isFirstTime) {
-                            newX = levelShape.x + origin.x;
-                            newY = levelShape.y + origin.y;     
-                            levelShape.x = newX;
-                            levelShape.y = newY;
-                        } else {
-                            newX = levelShape.x;
-                            newY = levelShape.y;     
-                        }
-                        copy.style.zIndex = "0";
-                        copy.style.left = `${newX}px`;
-                        copy.style.top = `${newY}px`;
-                        copy.style.transform = `rotate(${levelShape.rotation}deg)`;
+            const fragment = document.createDocumentFragment();
 
-                        gameArea.appendChild(copy);
-                    }
+            currentPuzzle.endState.forEach(levelShape => {
+                const shape = allShapes.find(tmp => tmp.id == levelShape.id);
+
+                if (!shape) return;
+
+                const copy = shape.domEl.cloneNode(true);
+                copy.onclick = "";
+                copy.classList = "silhouette shape"
+                copy.dataset.silhouette = "true";
+                copy.removeAttribute("id");
+                copy.setAttribute("aria-hidden", "true");
+
+                let polygon = copy.firstElementChild;
+                Object.assign(polygon.style, {
+                    fill: silhouetteColor,
+                    stroke: silhouetteColor,
+                    strokeWidth: `${seamStrokeWidth}px`,
+                    strokeLinejoin: "round",
+                    strokeLinecap: "round",
+                    strokeDasharray: "none",
+                    fillOpacity: "1",
+                    strokeOpacity: "1",
+                    opacity: "1",
+                    vectorEffect: "non-scaling-stroke",
+                    pointerEvents: "none",
+                    zIndex: 0,
                 });
+
+                let newX = levelShape.x;
+                let newY = levelShape.y;
+
+                if (isFirstTime) {
+                    newX += origin.x;
+                    newY += origin.y;
+
+                    levelShape.x = newX;
+                    levelShape.y = newY;
+                }
+
+                copy.style.left = `${newX}px`;
+                copy.style.top = `${newY}px`;
+
+                if(levelShape.inverted) copy.style.transform = `scaleX(-1) rotate(${levelShape.rotation}deg)`;
+                else copy.style.transform = `rotate(${levelShape.rotation}deg)`;
+
+                fragment.appendChild(copy);
             });
+
+            gameArea.appendChild(fragment);
+        }
+
+        function buildSilhouette(isFirstTime = false) {
+            const silhouetteColor = "rgb(150, 150, 150)";
+            const seamStrokeWidth = 2   ;
+
+            origin = {
+                x: window.innerWidth / 2 - getStateWidth(currentPuzzle.endState) / 2,
+                y: 85
+            };
+
+            // remove silhouette copies
+            gameArea.querySelectorAll(':scope > [data-silhouette="true"]').forEach(child => child.remove());
+
+            const fragment = document.createDocumentFragment();
+
+            currentPuzzle.endState.forEach(levelShape => {
+                const shape = allShapes.find(tmp => tmp.id == levelShape.id);
+
+                if (!shape) return;
+
+                const copy = shape.domEl.cloneNode(true);
+                copy.onclick = "";
+                copy.classList = "silhouette shape"
+                copy.dataset.silhouette = "true";
+                copy.removeAttribute("id");
+                copy.setAttribute("aria-hidden", "true");
+
+                let polygon = copy.firstElementChild;
+                Object.assign(polygon.style, {
+                    fill: silhouetteColor,
+                    stroke: silhouetteColor,
+                    strokeWidth: `${seamStrokeWidth}px`,
+                    strokeLinejoin: "round",
+                    strokeLinecap: "round",
+                    strokeDasharray: "none",
+                    fillOpacity: "1",
+                    strokeOpacity: "1",
+                    opacity: "1",
+                    vectorEffect: "non-scaling-stroke",
+                    pointerEvents: "none",
+                    zIndex: 0,
+                });
+
+                let newX = levelShape.x;
+                let newY = levelShape.y;
+
+                if (isFirstTime) {
+                    newX += origin.x;
+                    newY += origin.y;
+
+                    levelShape.x = newX;
+                    levelShape.y = newY;
+                }
+
+                copy.style.left = `${newX}px`;
+                copy.style.top = `${newY}px`;
+
+                if(levelShape.inverted) copy.style.transform = `scaleX(-1) rotate(${levelShape.rotation}deg)`;
+                else copy.style.transform = `rotate(${levelShape.rotation}deg)`;
+
+                fragment.appendChild(copy);
+            });
+
+            gameArea.appendChild(fragment);
+        }
+
+        // Helper functions
+
+        function cycle_z_index(shape) {
+            max_zIndex++;
+            shape.domEl.style.zIndex = max_zIndex;
+        }
+
+        function updateShapePos(shape) {
+            shape.domEl.style.left = `${shape.x}px`;
+            shape.domEl.style.top = `${shape.y}px`;
+            if(shape.inverted) {
+                shape.domEl.style.transform = `scaleX(-1) rotate(${shape.rotation}deg)`;
+            } else {
+                shape.domEl.style.transform = `rotate(${shape.rotation}deg)`;
+            }
+        }
+
+        function getBaseRotation(rot) {
+            if (rot >= 360) {
+                let numRotations = Math.floor(rot / 360);
+                return rot - (360 * numRotations);
+            }
+            return rot;
         }
 
         function roundToGrid(value) {
@@ -399,6 +589,7 @@
         function getStateWidth(shapeState) {
             let minX = Infinity;
             let maxX = 0;
+            console.log(shapeState)
             shapeState.forEach(shape => {
                 if (shape.x < minX) minX = shape.x;
                 let matchingShape = allShapes.find(shp => shp.id === shape.id);    
@@ -422,7 +613,7 @@
             let minY = 2000;
             let endState = [];
 
-            const heightLimit = 200;
+            const heightLimit = 1000;
             allShapes.forEach(shape => {
                 // assume shape isn't part of the puzzle if its way at the bottom
                 if (shape.y < heightLimit) {
@@ -434,9 +625,10 @@
             allShapes.forEach(shape => {
                 let temp = {
                     id: shape.id,
-                    x: shape.x - minX,
-                    y: shape.y - minY,
-                    rotation: shape.rotation,
+                    x: Math.round(shape.x - minX),
+                    y: Math.round(shape.y - minY),
+                    rotation: getBaseRotation(shape.rotation),
+                    inverted: shape.inverted,
                 }
                 endState.push(temp);
             });
@@ -446,13 +638,14 @@
             let output = "[";
             endState.forEach(shape => {
                 if (shape.y < heightLimit) {
-                    output += `{id:${shape.id},x:${shape.x},y:${shape.y},rotation:${shape.rotation}},`;
+                    output += `{id:${shape.id},x:${shape.x},y:${shape.y},rotation:${shape.rotation},inverted:${shape.inverted}},`;
                 }
             })
             output += "]";
             console.log(output.trim());
         }
 
+        // Next and prev button logic
         nextBtn.onclick = () => incrementPuzzle(1);
         prevBtn.onclick = () => incrementPuzzle(-1);
         function incrementPuzzle(amount) {
@@ -462,6 +655,7 @@
                 matchingShape.x = shape.x;
                 matchingShape.y = shape.y;
                 matchingShape.rotation = shape.rotation;
+                matchingShape.inverted = shape.inverted
 
                 shape.domEl.style.transition = "none";
             })
@@ -481,6 +675,91 @@
 
             setPuzzle(puzzleIndex);
         }   
+
+        function getShapePoints(shape) {
+            const polygon = shape.domEl.firstElementChild;
+            const matrix = polygon.getScreenCTM();
+
+            const svg = polygon.ownerSVGElement;
+            const points = [];
+
+            for (let i = 0; i < polygon.points.numberOfItems; i++) {
+                const vertex = polygon.points.getItem(i);
+                const svgPoint = svg.createSVGPoint();
+
+                svgPoint.x = vertex.x;
+                svgPoint.y = vertex.y;
+
+                const transformed = svgPoint.matrixTransform(matrix);
+                points.push({ x: transformed.x, y: transformed.y });
+            }
+
+            return points;
+        }
+
+        function getDist(p1, p2) {
+            return Math.hypot(p1.x - p2.x, p1.y - p2.y);
+        }
+
+        function getVector(p1, p2) {
+            return {x: p1.x - p2.x, y: p1.y - p2.y}
+        }
+
+        // snap shape to point that is cloestest to another point
+        function snapByPoints(refShape) {
+            console.log(`Testing points in ${refShape.id}`)
+            const thresh = 10; // if its within 10px snap it
+
+            let refPoints = getShapePoints(refShape);
+
+            pointPairs = []
+            closeDists = []
+
+            let snappableShapes = [...allShapes];
+            
+            let temp = document.getElementsByClassName("silhouette");
+            for(shape of temp) {
+                snappableShapes.push({
+                    id: "sil",
+                    domEl: shape,
+                })
+            }
+
+            for(shape of snappableShapes) {
+                if(shape.id == refShape.id) continue;
+
+                let points = getShapePoints(shape);
+                for(point of points) {
+                    for(refPoint of refPoints) {
+                        let dist = getDist(point, refPoint);
+                        if(dist < thresh) {
+                            pointPairs.push([point, refPoint]);
+                            closeDists.push(dist);
+                        }
+                    }
+                };
+            };
+
+            if(pointPairs.length > 0) {
+                // select closest points
+                let closePoints = pointPairs[closeDists.indexOf(Math.min(...closeDists))]
+
+                // snap shape to that point
+                let moveVec = getVector(closePoints[0], closePoints[1]);
+                console.log("raw: ", moveVec)
+
+                // round movement vector to be closer to the shape to prevent subpixel gaps
+                if(moveVec.x > 0) moveVec.x = Math.ceil(moveVec.x);
+                else moveVec.x = Math.floor(moveVec.x);
+
+                if(moveVec.y > 0) moveVec.y = Math.ceil(moveVec.y);
+                else moveVec.y = Math.floor(moveVec.y);
+
+                refShape.x += moveVec.x;
+                refShape.y += moveVec.y;
+                updateShapePos(refShape);
+            }
+        }
     </script>
 </body>
 </html>
